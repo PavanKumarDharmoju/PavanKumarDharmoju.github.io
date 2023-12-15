@@ -252,6 +252,13 @@ a:hover, a:active {
     color: #f03824;  /* sets the icon color on hover */
 }
 
+.icon:hover .fas.fa-language {
+    color: #f03824;  /* sets the icon color on hover */
+}
+
+.icon:hover .fas.fa-network-wired {
+    color: #f03824;  /* sets the icon color on hover */
+}
 
 
 /* Social Button */
