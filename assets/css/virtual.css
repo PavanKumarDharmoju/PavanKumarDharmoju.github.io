@@ -1487,3 +1487,7 @@ a:hover, a:active {
 .theme-purple .theme-list li::before {
     border-color: #6f42c1;
 }
+.instagram-embed-container {
+    display: flex;
+    justify-content: center; /* Centers the child horizontally */
+}
