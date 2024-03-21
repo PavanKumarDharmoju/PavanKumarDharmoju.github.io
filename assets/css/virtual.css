@@ -1490,4 +1490,5 @@ a:hover, a:active {
 .instagram-embed-container {
     display: flex;
     justify-content: center; /* Centers the child horizontally */
+    background-color: #f0e3c5;
 }
