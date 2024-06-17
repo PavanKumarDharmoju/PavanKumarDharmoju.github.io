@@ -1490,4 +1490,16 @@ a:hover, a:active {
 .instagram-embed-container {
     display: flex;
     justify-content: center; /* Centers the child horizontally */
+    background-color: #f0e3c5;
 }
+.footer-column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  @media (max-width: 992px) {
+    .footer-column {
+      margin-bottom: 20px; /* Adds space between columns on smaller screens */
+    }
+  }
+  
