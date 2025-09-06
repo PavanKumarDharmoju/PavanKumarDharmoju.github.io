@@ -5,33 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work - Pavan Kumar Dharmoju</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-        body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            font-optical-sizing: auto;
-            letter-spacing: -0.01em;
-            font-size: 16px;
-        }
-        .company-title {
-            font-size: 22px;
-            font-weight: 700;
-        }
-        .role-title {
-            font-size: 17px;
-            font-weight: 600;
-        }
-        .description-text {
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        .date-text {
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body class="bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-8">
@@ -52,6 +25,7 @@
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
                         </nav>
                     </div>
@@ -62,170 +36,243 @@
             <main class="flex-1 min-h-screen">
                 <div class="max-w-2xl">
                     <div class="space-y-12 my-2">
-                        
-                        <!-- Work Experience -->
-                        <div class="space-y-8">
+                        <!-- Header -->
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-bold text-gray-900 mb-2">Work</h1>
+                            <p class="text-gray-600">A commit-style log of things I've been building and breaking</p>
+                        </div>
+
+                        <!-- Commit-style Entries -->
+                        <div class="space-y-6">
                             
-                            <!-- Chan Zuckerberg Biohub -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Machine Learning Engineer Intern</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Chan Zuckerberg Biohub • June - August 2024</p>
+                            <!-- Recent Commits -->
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">3d2f8a1</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-09-03">3 days ago</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Engineered scalable machine learning pipelines and RAG systems for biomedical research. Developed data pipeline using Python and Airflow to ingest 6M+ research papers via PMC API. Built scalable RAG system for inference with LLaMA 3.1 and GPT-4, reducing response latency by 65%. Generated text embeddings in FAISS vector database, achieving 45% faster document retrieval.
+                                <h3 class="font-medium text-gray-900 mb-2">feat: auto-commit message generator using OpenAI API</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Tired of writing "fix bug" for the 100th time. Built a tool that analyzes git diffs and suggests meaningful commit messages. 
+                                    It's surprisingly good at understanding what actually changed. Works with conventional commits format.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Machine Learning</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">RAG Systems</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">LLaMA 3.1</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">FAISS</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Python</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Airflow</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">OpenAI API</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">CLI Tool</span>
                                 </div>
                             </div>
 
-                            <!-- Healee -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Data Science Consultant</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Healee • December 2023 - June 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">a7b9c8d</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-08-30">1 week ago</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Applied data science techniques to optimize marketing strategies. Developed Bayesian Marketing Mix Models analyzing 8-channel marketing spend, optimizing ROI by 27%. Developed lead scoring with Pipedrive and Google Analytics, boosting qualified lead conversion by 35%. Built Tableau dashboards and improved forecasting accuracy by 20%.
+                                <h3 class="font-medium text-gray-900 mb-2">refactor: migrated ML pipeline from Airflow to Prefect</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Airflow was overkill for our attribution modeling pipeline. Prefect has better Python integration and the flow syntax is 
+                                    much cleaner. Cut deployment time from 30 minutes to 5. Sometimes simpler is actually better.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Data Science</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Marketing Mix Models</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Bayesian Analysis</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Lead Scoring</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Tableau</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Google Analytics</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Prefect</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">MLOps</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Migration</span>
                                 </div>
                             </div>
 
-                            <!-- Feinberg School of Medicine -->
-                            <div class="mb-6">
-                                <div class="flex items-center mb-2">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 flex items-center justify-center bg-white">
-                                            <div class="w-8 h-8 bg-red-600 rounded flex items-center justify-center text-white font-bold text-sm">FM</div>
-                                        </div>
-                                        <div class="absolute top-12 left-1/2 transform -translate-x-1/2 w-0.5 h-6 bg-black"></div>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="company-title">Feinberg School of Medicine</div>
-                                    </div>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">e4f1a9b</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-08-23">2 weeks ago</span>
                                 </div>
-                                
-                            <!-- Feinberg School of Medicine -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Machine Learning Engineer Intern</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Feinberg School of Medicine • September 2023 - December 2023</p>
-                                </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Developed high-accuracy ML models for medical imaging to support early ocular disease detection. Developed geographic atrophy detection models (ResNet18/34) achieving 95% accuracy on 10,000+ images. Led team of 3 in Grad-CAM evaluation, boosting model interpretability by 25%. Applied StyleGAN2-ADA, increasing robustness by 20% for minority classes.
+                                <h3 class="font-medium text-gray-900 mb-2">fix: reduced SQL query time from 45s to 2s with proper indexing</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Our attribution queries were taking forever. Turns out we were doing full table scans on 50M+ rows. 
+                                    Added composite indexes on timestamp + user_id columns. Classic case of "database fundamentals matter."
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Medical Imaging</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">ResNet</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Grad-CAM</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">StyleGAN2</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Computer Vision</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">PostgreSQL</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Performance</span>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">Database</span>
                                 </div>
                             </div>
 
-                            <!-- Center for Advancing Safety of Machine Intelligence -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Machine Learning Engineer Intern</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Center for Advancing Safety of Machine Intelligence • January - June 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">b2c3d4e</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-08-16">3 weeks ago</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Built bias evaluation and scalable testing frameworks for LLM recommendation systems. Collected and processed 100K+ user profiles for bias evaluation. Constructed experimentation pipeline on AWS EC2 with MLflow and Docker. Compared LLM with traditional models, revealing 20% increase in accuracy for balanced results.
+                                <h3 class="font-medium text-gray-900 mb-2">feat: implemented real-time ML model monitoring dashboard</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Built monitoring for our attribution models using Streamlit and MLflow. Now we can see model drift, 
+                                    prediction accuracy, and feature importance in real-time. Caught 3 data quality issues in the first week.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">LLM Evaluation</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Bias Testing</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">AWS EC2</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">MLflow</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Docker</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Streamlit</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">MLflow</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Monitoring</span>
                                 </div>
                             </div>
 
-                            <!-- Northwestern University -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Master of Science in Artificial Intelligence</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Northwestern University • Completed December 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">c5d6e7f</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-08-06">1 month ago</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Completed Master's degree in AI from McCormick School of Engineering. Engaged in multiple research projects including content alignment systems, fleet optimization, and biomedical AI applications. Focused on machine learning, deep learning, and AI safety research.
+                                <h3 class="font-medium text-gray-900 mb-2">docs: created technical documentation for attribution models</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Spent a week documenting our multi-touch attribution algorithms. Includes mathematical formulations, 
+                                    code examples, and decision rationale. Future me (and the team) will thank present me.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Artificial Intelligence</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Machine Learning</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Deep Learning</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">AI Safety</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Research</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Documentation</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Technical Writing</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Knowledge Transfer</span>
                                 </div>
                             </div>
 
-                            <!-- Deloitte Consulting -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Business Technology Analyst - Consultant</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Deloitte Consulting • October 2021 - October 2023</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-indigo-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">f8g9h0i</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-07-23">6 weeks ago</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    Led customer service optimization and automation projects. Analyzed 100M+ annual customer interactions, identifying key trends to improve response strategies. Created automated Tableau dashboards for 3 departments, reducing manual reporting time by 40%. Enhanced case handling with Einstein AI models, reducing resolution time by 10%. Mentored 5 associate analysts, reducing onboarding time by 30%. Awarded SPOT Excellence Award (2022) for Salesforce Service Cloud optimizations.
+                                <h3 class="font-medium text-gray-900 mb-2">feat: deployed first attribution model to production</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    After months of development, our first multi-touch attribution model is live. Using Shapley values to 
+                                    fairly distribute credit across marketing touchpoints. Initial results show 23% improvement in budget allocation accuracy.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Business Analysis</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Salesforce</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Tableau</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Einstein AI</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Automation</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Consulting</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Production</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Machine Learning</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Shapley Values</span>
                                 </div>
                             </div>
 
-                            <!-- Education -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Additional Education</h2>
-                                    <p class="text-sm text-gray-500 mb-3">Academic Excellence</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-pink-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">j1k2l3m</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-07-06">2 months ago</span>
                                 </div>
-                                <div class="space-y-4">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">Diploma in Data Science</h3>
-                                        <p class="text-sm text-gray-500">IIT Madras • May 2023</p>
-                                        <p class="text-gray-600 text-sm mt-1">
-                                            Advanced coursework in statistical learning, machine learning algorithms, and data mining techniques from one of India's premier technical institutes.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">Bachelor of Engineering in EEE</h3>
-                                        <p class="text-sm text-gray-500">CBIT, Osmania University • June 2021</p>
-                                        <p class="text-gray-600 text-sm mt-1">
-                                            Bachelor's degree in Electrical and Electronics Engineering. Engaged in AI/ML projects and research initiatives during undergraduate studies.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mt-4">
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Data Science</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Statistical Learning</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Engineering</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Research</span>
+                                <h3 class="font-medium text-gray-900 mb-2">refactor: rewrote data pipeline for 10x performance improvement</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Our original pipeline was processing 1M events/hour. Rewrote with vectorized operations and better data structures. 
+                                    Now handling 10M+ events/hour. Sometimes you need to throw away the first version and start fresh.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Data Engineering</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Performance</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Optimization</span>
                                 </div>
                             </div>
 
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">n4o5p6q</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-06-06">3 months ago</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: built prototype attribution modeling system</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Started at Marketing Attribution LLC. First task: understand how marketing spend translates to conversions. 
+                                    Built initial prototype using time-decay and position-based models. Foundation for everything that came after.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Attribution Modeling</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Prototype</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Marketing Analytics</span>
+                                </div>
+                            </div>
+
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-teal-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">r7s8t9u</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-05-06">4 months ago</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">docs: completed MS thesis on biomedical text processing</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Finished my MS in AI at Northwestern. Thesis focused on using transformer models for biomedical entity extraction. 
+                                    Learned that domain-specific data matters more than model architecture. Graduated with distinction.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Thesis</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">NLP</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Biomedical AI</span>
+                                </div>
+                            </div>
+
+                            <!-- Education/Research Timeline -->
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">a1b2c3d</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Summer 2024</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">research: internship at Northwestern's biomedical AI lab</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Spent summer working on CRISPR guide prediction using machine learning. Published paper on virtual screening methods. 
+                                    First time diving deep into computational biology. Academic research moves differently than industry.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Research</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">CRISPR</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Machine Learning</span>
+                                </div>
+                            </div>
+
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-gray-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">v0w1x2y</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500 relative-time" data-date="2025-03-06">6 months ago</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">docs: published CRISPR guide prediction research paper</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Co-authored paper on using ML for CRISPR guide prediction. 
+                                    Not my main expertise but learned computational biology. 
+                                    Peer review process is brutal but educational. Now have academic publication credentials.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Publication</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">CRISPR</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Computational Biology</span>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     </div>
+    
+    <!-- Copyright Footer -->
+    <footer class="mt-16 py-6 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 Pavan Kumar Dharmoju. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/relative-time.js"></script>
 </body>
 </html>
