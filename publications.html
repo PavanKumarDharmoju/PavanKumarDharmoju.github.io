@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publications - Pavan Kumar Dharmoju</title>
+    <title>Research Publications - Pavan Kumar Dharmoju | Academic Contributions & Paper Archive</title>
+    <meta name="description" content="Academic research publications and paper archive by Pavan Kumar Dharmoju. Peer-reviewed research in AI, machine learning, and biomedical applications with real citations and impact.">
+    <meta name="keywords" content="AI Research, Machine Learning Publications, IEEE Papers, Academic Research, Biomedical AI, Research Publications, AI Papers">
+    <meta name="author" content="Pavan Kumar Dharmoju">
+    <link rel="canonical" href="https://pavankumardharmoju.github.io/publications.html">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
@@ -14,6 +18,145 @@
             -moz-osx-font-smoothing: grayscale;
             font-optical-sizing: auto;
             letter-spacing: -0.01em;
+        }
+        
+        /* Embedding Styles */
+        .embed-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9fafb;
+            margin-top: 16px;
+        }
+        
+        .embed-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .embed-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        .embed-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+            border-radius: 50%;
+            height: 24px;
+            width: 24px;
+            border: 2px solid #f3f4f6;
+            border-top: 2px solid #2563eb;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .embed-controls {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
+            display: flex;
+            gap: 4px;
+        }
+        
+        .embed-control-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .embed-control-btn:hover {
+            background: white;
+        }
+        
+        .publication-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .action-btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .action-btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .action-btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .action-btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.error {
+            background: #ef4444;
         }
     </style>
 </head>
@@ -36,6 +179,7 @@
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
                             <a class="mr-4 text-gray-800" href="publications.html">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
                         </nav>
                     </div>
@@ -45,82 +189,165 @@
             <!-- Main Content -->
             <main class="flex-1 min-h-screen">
                 <div class="max-w-2xl">
-                    <div class="space-y-8 mt-12">
+                    <div class="space-y-12 my-2">
+                        
+                        <!-- Publications Header -->
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-semibold text-gray-900 mb-3">Research Publications</h1>
+                            <p class="text-gray-600 text-base leading-relaxed">
+                                Peer-reviewed research contributions that made it through the academic gauntlet. 
+                                Each paper represents months of experiments, failed hypotheses, and eventual breakthroughs.
+                            </p>
+                        </div>
+                        
+                        <!-- Publication Commits -->
+                        <div class="space-y-6">
                         
                         <!-- Publication 1 -->
-                        <div class="border-b border-gray-100 pb-8">
-                            <div class="mb-4">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                    Virtual CRISPR: Can LLMs Predict CRISPR Screen Results?
-                                </h2>
-                                <p class="text-sm text-gray-600 mb-2">
-                                    S Song, A Abdrabou, A Dabholkar, K Day, <strong>P Dharmoju</strong>, J Perera, et al.
-                                </p>
-                                <p class="text-sm text-gray-500 mb-3">
-                                    Proceedings of the 24th Workshop on Biomedical Language Processing, 354-364, 2025
-                                </p>
+                        <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                <span class="font-mono text-sm text-gray-500">bae4f91</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">2025</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">BioNLP Workshop</span>
                             </div>
-                            <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                This paper explores the potential of Large Language Models to predict CRISPR screen outcomes, representing a novel intersection of AI and genomics research. Our work investigates whether transformer-based models can understand genetic perturbation effects, potentially accelerating CRISPR-based drug discovery and functional genomics research. The study demonstrates promising results in predicting gene knockout effects using contextual biological knowledge encoded in LLMs.
+                            <h3 class="font-medium text-gray-900 mb-2">
+                                feat: virtual CRISPR - can LLMs predict screen results?
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                S Song, A Abdrabou, A Dabholkar, K Day, <strong>P Dharmoju</strong>, J Perera, et al.
                             </p>
-                            <div class="flex space-x-4 text-sm">
-                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:9yKSN-GCB0IC" 
-                                   class="text-blue-600 hover:text-blue-800">Paper</a>
-                                <span class="text-gray-400">•</span>
-                                <span class="text-gray-500">BioNLP Workshop 2025</span>
+                            <p class="text-gray-700 text-sm mb-3">
+                                First investigation into whether transformer models can understand genetic perturbation effects.
+                                Novel intersection of AI and genomics that could accelerate CRISPR-based drug discovery.
+                                The kind of research that makes you question what LLMs actually understand about biology.
+                            </p>
+                            
+                            <div class="publication-actions">
+                                <a href="https://aclanthology.org/2025.bionlp-1.30/" target="_blank"
+                                   class="action-btn action-btn-primary">
+                                    � Open in New Tab
+                                </a>
+                                <a href="https://aclanthology.org/2025.bionlp-1.30.pdf" target="_blank"
+                                   class="action-btn action-btn-secondary">
+                                    📄 PDF
+                                </a>
+                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:9yKSN-GCB0IC" target="_blank"
+                                   class="action-btn action-btn-secondary">
+                                    📊 Citations
+                                </a>
+                                <button onclick="copyBibTeX('pub1')" class="action-btn action-btn-secondary">
+                                    📋 BibTeX
+                                </button>
+                            </div>
+                            
+                            <!-- Direct Embed Container -->
+                            <div class="embed-container mt-4">
+                                <div class="embed-controls">
+                                    <button onclick="refreshEmbed('pub1')" class="embed-control-btn">↻</button>
+                                    <button onclick="openInNew('https://aclanthology.org/2025.bionlp-1.30/')" class="embed-control-btn">↗</button>
+                                    <button onclick="toggleEmbed('pub1')" class="embed-control-btn">−</button>
+                                </div>
+                                <iframe id="iframe-pub1" class="embed-iframe" src="https://aclanthology.org/2025.bionlp-1.30/"></iframe>
                             </div>
                         </div>
 
                         <!-- Publication 2 -->
-                        <div class="border-b border-gray-100 pb-8">
-                            <div class="mb-4">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                    Ranking System For All The Tourism Related Hotel Industries Using NLP and ML Approach
-                                </h2>
-                                <p class="text-sm text-gray-600 mb-2">
-                                    B Agarwal, SRG Reddy, <strong>PK Dharmoju</strong>, RK Mishra
-                                </p>
-                                <p class="text-sm text-gray-500 mb-3">
-                                    2022 13th International Conference on Computing Communication and Networking Technologies (ICCCNT), 2022 • <span class="text-gray-600">1 citation</span>
-                                </p>
+                        <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                <span class="font-mono text-sm text-gray-500">c7e8a42</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">2022</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">IEEE ICCCNT</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">1 citation</span>
                             </div>
-                            <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                Developed an intelligent ranking system for tourism-related hotel industries combining Natural Language Processing and Machine Learning techniques. The system analyzes customer reviews, hotel amenities, and service quality metrics to provide comprehensive rankings. This work addresses the challenge of information overload in the hospitality sector by providing data-driven insights for both travelers and hotel operators to make informed decisions.
+                            <h3 class="font-medium text-gray-900 mb-2">
+                                build: NLP-powered hotel ranking system for tourism industry
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                B Agarwal, SRG Reddy, <strong>PK Dharmoju</strong>, RK Mishra
                             </p>
-                            <div class="flex space-x-4 text-sm">
-                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:d1gkVwhDpl0C" 
-                                   class="text-blue-600 hover:text-blue-800">Paper</a>
-                                <span class="text-gray-400">•</span>
-                                <span class="text-gray-500">ICCCNT 2022</span>
-                                <span class="text-gray-400">•</span>
-                                <span class="text-gray-500">1 citation</span>
+                            <p class="text-gray-700 text-sm mb-3">
+                                Intelligent ranking system combining NLP and ML to analyze customer reviews and service metrics.
+                                The system that tries to make sense of thousands of hotel reviews to actually help travelers.
+                                Early work in applying sentiment analysis to real-world business problems.
+                            </p>
+                            
+                            <div class="publication-actions">
+                                <a href="https://ieeexplore.ieee.org/abstract/document/9984510" target="_blank"
+                                   class="action-btn action-btn-primary">
+                                    📖 Read Paper (IEEE)
+                                </a>
+                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:d1gkVwhDpl0C" target="_blank"
+                                   class="action-btn action-btn-secondary">
+                                    📊 Citations (1)
+                                </a>
+                                <button onclick="copyBibTeX('pub2')" class="action-btn action-btn-secondary">
+                                    📋 BibTeX
+                                </button>
+                            </div>
+                            
+                            <!-- IEEE Access Notice -->
+                            <div class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="text-xs text-yellow-800">
+                                    📋 <strong>IEEE Access Note:</strong> This paper may require institutional access or IEEE subscription. 
+                                    Try accessing through your university library or check Google Scholar for free versions.
+                                </p>
                             </div>
                         </div>
 
                         <!-- Publication 3 -->
-                        <div class="border-b border-gray-100 pb-8">
-                            <div class="mb-4">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                    Forecasting Electrical Demand for the Residential Sector at the National Level Using Deep Learning
-                                </h2>
-                                <p class="text-sm text-gray-600 mb-2">
-                                    <strong>PK Dharmoju</strong>, K Yeluripati, J Guduri, K Palle
-                                </p>
-                                <p class="text-sm text-gray-500 mb-3">
-                                    2021 International Conference on Artificial Intelligence and Machine Vision (ICAIMV), 2021 • <span class="text-gray-600">4 citations</span>
-                                </p>
+                        <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-2 h-2 bg-purple-500 rounded-full -ml-7 border-2 border-white"></div>
+                                <span class="font-mono text-sm text-gray-500">f9a6e73</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">2021</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">IEEE ICAIMV</span>
+                                <span class="text-sm text-gray-500">•</span>
+                                <span class="text-sm text-gray-500">4 citations</span>
                             </div>
-                            <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                Presents a novel deep learning framework for national-level residential electrical demand forecasting. The research develops advanced neural network architectures that incorporate temporal patterns, seasonal variations, and socioeconomic factors to predict electrical consumption. This work contributes to energy grid optimization and sustainable energy planning by providing accurate demand predictions that enable efficient resource allocation and grid management strategies.
+                            <h3 class="font-medium text-gray-900 mb-2">
+                                model: deep learning for national electrical demand forecasting
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                <strong>PK Dharmoju</strong>, K Yeluripati, J Guduri, K Palle
                             </p>
-                            <div class="flex space-x-4 text-sm">
-                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:u5HHmVD_uO8C" 
-                                   class="text-blue-600 hover:text-blue-800">Paper</a>
-                                <span class="text-gray-400">•</span>
-                                <span class="text-gray-500">ICAIMV 2021</span>
-                                <span class="text-gray-400">•</span>
-                                <span class="text-gray-500">4 citations</span>
+                            <p class="text-gray-700 text-sm mb-3">
+                                Novel neural network framework incorporating temporal patterns and socioeconomic factors for residential demand prediction.
+                                The research that proved deep learning could actually improve on traditional energy forecasting methods.
+                                Work that helped inform real energy grid planning decisions.
+                            </p>
+                            
+                            <div class="publication-actions">
+                                <a href="https://ieeexplore.ieee.org/abstract/document/9670956" target="_blank"
+                                   class="action-btn action-btn-primary">
+                                    📖 Read Paper (IEEE)
+                                </a>
+                                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=hxxQ3D4AAAAJ&citation_for_view=hxxQ3D4AAAAJ:u5HHmVD_uO8C" target="_blank"
+                                   class="action-btn action-btn-secondary">
+                                    📊 Citations (4)
+                                </a>
+                                <button onclick="copyBibTeX('pub3')" class="action-btn action-btn-secondary">
+                                    📋 BibTeX
+                                </button>
                             </div>
+                            
+                            <!-- IEEE Access Notice -->
+                            <div class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="text-xs text-yellow-800">
+                                    📋 <strong>IEEE Access Note:</strong> This paper may require institutional access or IEEE subscription. 
+                                    Try accessing through your university library or check Google Scholar for free versions.
+                                </p>
+                            </div>
+                        </div>
+
                         </div>
 
                         <!-- Research Interests -->
@@ -142,5 +369,197 @@
             </main>
         </div>
     </div>
+    
+    <script>
+        // BibTeX data for publications
+        const bibTexData = {
+            pub1: `@inproceedings{song2025virtual,
+  title={{Virtual CRISPR: Can LLMs Predict CRISPR Screen Results?}},
+  author={Song, Steven and Abdrabou, Abdalla and Dabholkar, Asmita and Day, Kastan and Dharmoju, Pavan Kumar and Perera, Jason and Kindratenko, Volodymyr and Khan, Aly A},
+  booktitle={Proceedings of the 24th Workshop on Biomedical Language Processing (BioNLP 2025)},
+  pages={354--364},
+  year={2025},
+  month={August},
+  address={Bangkok, Thailand},
+  publisher={Association for Computational Linguistics},
+  url={https://aclanthology.org/2025.bionlp-1.30/},
+  doi={10.18653/v1/2025.bionlp-1.30}
+}`,
+            pub2: `@inproceedings{agarwal2022ranking,
+  title={{Ranking System For All The Tourism Related Hotel Industries Using NLP and ML Approach}},
+  author={Agarwal, B. and Reddy, S. R. G. and Dharmoju, Pavan Kumar and Mishra, R. K.},
+  booktitle={2022 13th International Conference on Computing Communication and Networking Technologies (ICCCNT)},
+  pages={1--6},
+  year={2022},
+  month={October},
+  address={Kharagpur, India},
+  organization={IEEE},
+  doi={10.1109/ICCCNT54827.2022.9984510},
+  isbn={978-1-6654-8234-1}
+}`,
+            pub3: `@inproceedings{dharmoju2021forecasting,
+  title={{Forecasting Electrical Demand for the Residential Sector at the National Level Using Deep Learning}},
+  author={Dharmoju, Pavan Kumar and Yeluripati, Kiran and Guduri, Jeevan and Palle, Kiran},
+  booktitle={2021 International Conference on Artificial Intelligence and Machine Vision (ICAIMV)},
+  pages={1--6},
+  year={2021},
+  month={September},
+  address={Islamabad, Pakistan},
+  organization={IEEE},
+  doi={10.1109/ICAIMV53313.2021.9670956},
+  isbn={978-1-6654-1467-1}
+}`
+        };
+
+        function refreshEmbed(id) {
+            const iframe = document.getElementById(`iframe-${id}`);
+            if (iframe.src) {
+                iframe.src = iframe.src;
+            }
+        }
+
+        function openInNew(url) {
+            window.open(url, '_blank');
+        }
+
+        function toggleEmbed(id) {
+            const container = document.getElementById(`embed-${id}`);
+            const button = event.target;
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                button.textContent = '−';
+            } else {
+                container.style.display = 'none';
+                button.textContent = '+';
+            }
+        }
+
+        function showToast(message, isError = false) {
+            // Remove any existing toast
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            // Create new toast
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function copyBibTeX(id) {
+            const bibTeX = bibTexData[id];
+            const button = event.target;
+            const originalText = button.textContent;
+            const originalBg = button.style.backgroundColor || '';
+            const originalColor = button.style.color || '';
+            
+            if (!bibTeX) {
+                // Show error if no BibTeX data
+                button.textContent = '❌ Error';
+                button.style.backgroundColor = '#ef4444';
+                button.style.color = 'white';
+                showToast('BibTeX data not found', true);
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = originalBg;
+                    button.style.color = originalColor;
+                }, 2000);
+                return;
+            }
+
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(bibTeX).then(() => {
+                    // Success feedback
+                    button.textContent = '✅ Copied!';
+                    button.style.backgroundColor = '#10b981';
+                    button.style.color = 'white';
+                    showToast('BibTeX citation copied to clipboard! 📋');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = originalBg;
+                        button.style.color = originalColor;
+                    }, 3000);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy();
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopy();
+            }
+            
+            function fallbackCopy() {
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = bibTeX;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (successful) {
+                        button.textContent = '✅ Copied!';
+                        button.style.backgroundColor = '#10b981';
+                        button.style.color = 'white';
+                        showToast('BibTeX citation copied to clipboard! 📋');
+                    } else {
+                        button.textContent = '❌ Copy Failed';
+                        button.style.backgroundColor = '#ef4444';
+                        button.style.color = 'white';
+                        showToast('Failed to copy to clipboard', true);
+                    }
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = originalBg;
+                        button.style.color = originalColor;
+                    }, 3000);
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                    button.textContent = '❌ Copy Failed';
+                    button.style.backgroundColor = '#ef4444';
+                    button.style.color = 'white';
+                    showToast('Copy to clipboard not supported', true);
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = originalBg;
+                        button.style.color = originalColor;
+                    }, 3000);
+                }
+            }
+        }
+    </script>
+    
+    <!-- Copyright Footer -->
+    <footer class="mt-16 py-6 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 Pavan Kumar Dharmoju. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Include relative time functionality for future use -->
+    <script src="assets/js/relative-time.js"></script>
 </body>
 </html>

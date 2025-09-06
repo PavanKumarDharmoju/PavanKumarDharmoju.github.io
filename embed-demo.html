@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publication Embed Demo - Pavan Kumar Dharmoju</title>
+    <meta name="description" content="Interactive embedding demo for research publications and external content by Pavan Kumar Dharmoju.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-optical-sizing: auto;
+            letter-spacing: -0.01em;
+        }
+        
+        .embed-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9fafb;
+        }
+        
+        .embed-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .embed-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        .embed-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+            border-radius: 50%;
+            height: 32px;
+            width: 32px;
+            border: 2px solid #f3f4f6;
+            border-top: 2px solid #2563eb;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .embed-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .embed-control-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .embed-control-btn:hover {
+            background: white;
+        }
+        
+        .publication-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .authors {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .venue {
+            color: #4b5563;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+        
+        .abstract {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .embed-error {
+            color: #dc2626;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 py-12">
+        <div class="mb-8">
+            <h1 class="text-3xl font-semibold mb-4">Publication Embedding Demo</h1>
+            <p class="text-gray-600">
+                Interactive demonstration of embedding external research publications and academic content 
+                directly into the website. Multiple embedding strategies with SEO considerations.
+            </p>
+        </div>
+
+        <!-- Strategy Selection -->
+        <div class="bg-gray-50 p-6 rounded-lg mb-8">
+            <h2 class="text-lg font-semibold mb-4">Embedding Strategy</h2>
+            <div class="flex flex-wrap gap-4 mb-4">
+                <label class="flex items-center">
+                    <input type="radio" name="strategy" value="iframe" checked class="mr-2">
+                    <span class="text-sm">Direct iFrame</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="radio" name="strategy" value="proxy" class="mr-2">
+                    <span class="text-sm">Proxy iFrame (CORS bypass)</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="radio" name="strategy" value="custom" class="mr-2">
+                    <span class="text-sm">Custom Embed (Extracted content)</span>
+                </label>
+            </div>
+            <div class="text-sm text-gray-600">
+                <p><strong>Direct iFrame:</strong> Simple but may be blocked by X-Frame-Options</p>
+                <p><strong>Proxy iFrame:</strong> Uses a proxy service to bypass CORS restrictions</p>
+                <p><strong>Custom Embed:</strong> Extracts and formats content for better SEO and control</p>
+            </div>
+        </div>
+
+        <!-- Publication 1: ACL Anthology -->
+        <div class="publication-card">
+            <h2 class="text-xl font-semibold mb-3">Virtual CRISPR: Can LLMs Predict CRISPR Screen Results?</h2>
+            <div class="authors">
+                Steven Song, Abdalla Abdrabou, Asmita Dabholkar, Kastan Day, 
+                <strong>Pavan Dharmoju</strong>, Jason Perera, Volodymyr Kindratenko, Aly A. Khan
+            </div>
+            <div class="venue">
+                Proceedings of the 24th Workshop on Biomedical Language Processing (BioNLP 2025)
+            </div>
+            <div class="abstract">
+                CRISPR-Cas systems enable systematic investigation of gene function, but experimental CRISPR screens are resource-intensive. 
+                Here, we investigate the potential of Large Language Models (LLMs) to predict the outcomes of CRISPR screens in silico, 
+                thereby prioritizing experiments and accelerating biological discovery.
+            </div>
+            
+            <div class="flex gap-3 mb-4">
+                <button onclick="embedPublication('acl', 'https://aclanthology.org/2025.bionlp-1.30/')" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    Embed Publication
+                </button>
+                <a href="https://aclanthology.org/2025.bionlp-1.30.pdf" target="_blank"
+                   class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                    View PDF
+                </a>
+                <a href="https://aclanthology.org/2025.bionlp-1.30/" target="_blank"
+                   class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                    Original Page
+                </a>
+            </div>
+            
+            <div id="embed-acl" class="embed-container hidden">
+                <div class="embed-controls">
+                    <button onclick="refreshEmbed('acl')" class="embed-control-btn">↻ Refresh</button>
+                    <button onclick="openInNew('https://aclanthology.org/2025.bionlp-1.30/')" class="embed-control-btn">↗ Open</button>
+                    <button onclick="closeEmbed('acl')" class="embed-control-btn">✕ Close</button>
+                </div>
+                <div class="embed-overlay" onclick="loadEmbed('acl', 'https://aclanthology.org/2025.bionlp-1.30/')">
+                    <div class="text-center">
+                        <div class="loading-spinner mb-2"></div>
+                        <p class="text-sm text-gray-600">Click to load embedded content</p>
+                    </div>
+                </div>
+                <iframe id="iframe-acl" class="embed-iframe" style="display: none;"></iframe>
+                <div id="error-acl" class="embed-error hidden"></div>
+            </div>
+        </div>
+
+        <!-- Publication 2: IEEE -->
+        <div class="publication-card">
+            <h2 class="text-xl font-semibold mb-3">IEEE Publication Example</h2>
+            <div class="authors">
+                <strong>Pavan Dharmoju</strong> et al.
+            </div>
+            <div class="venue">
+                IEEE Conference Proceedings
+            </div>
+            <div class="abstract">
+                Example IEEE publication for embedding demonstration. This shows how the system handles different publication platforms.
+            </div>
+            
+            <div class="flex gap-3 mb-4">
+                <button onclick="embedPublication('ieee1', 'https://ieeexplore.ieee.org/abstract/document/9984510')" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    Embed Publication
+                </button>
+                <a href="https://ieeexplore.ieee.org/abstract/document/9984510" target="_blank"
+                   class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                    Original Page
+                </a>
+            </div>
+            
+            <div id="embed-ieee1" class="embed-container hidden">
+                <div class="embed-controls">
+                    <button onclick="refreshEmbed('ieee1')" class="embed-control-btn">↻ Refresh</button>
+                    <button onclick="openInNew('https://ieeexplore.ieee.org/abstract/document/9984510')" class="embed-control-btn">↗ Open</button>
+                    <button onclick="closeEmbed('ieee1')" class="embed-control-btn">✕ Close</button>
+                </div>
+                <div class="embed-overlay" onclick="loadEmbed('ieee1', 'https://ieeexplore.ieee.org/abstract/document/9984510')">
+                    <div class="text-center">
+                        <div class="loading-spinner mb-2"></div>
+                        <p class="text-sm text-gray-600">Click to load embedded content</p>
+                    </div>
+                </div>
+                <iframe id="iframe-ieee1" class="embed-iframe" style="display: none;"></iframe>
+                <div id="error-ieee1" class="embed-error hidden"></div>
+            </div>
+        </div>
+
+        <!-- SEO Analysis Section -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h2 class="text-lg font-semibold mb-4 text-blue-900">SEO Strategy Analysis</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded border">
+                    <h3 class="font-semibold text-green-700 mb-2">✅ Custom Embed (Best for SEO)</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Content is indexable by search engines</li>
+                        <li>• Structured data markup possible</li>
+                        <li>• Fast page load times</li>
+                        <li>• Mobile-friendly design</li>
+                        <li>• Full control over presentation</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded border">
+                    <h3 class="font-semibold text-yellow-700 mb-2">⚠️ Proxy iFrame (Moderate SEO)</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Content may not be indexed</li>
+                        <li>• Potential loading delays</li>
+                        <li>• Works around CORS issues</li>
+                        <li>• Preserves original formatting</li>
+                        <li>• Limited mobile optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded border">
+                    <h3 class="font-semibold text-red-700 mb-2">❌ Direct iFrame (Poor SEO)</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Content not indexed by search engines</li>
+                        <li>• Often blocked by X-Frame-Options</li>
+                        <li>• Poor mobile experience</li>
+                        <li>• No structured data benefits</li>
+                        <li>• Dependent on external site</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom URL Tester -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4">Test Custom URL</h2>
+            <div class="flex gap-3 mb-4">
+                <input type="url" 
+                       id="custom-url" 
+                       placeholder="Enter any URL to test embedding..." 
+                       class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                <button onclick="testCustomUrl()" 
+                        class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                    Test Embed
+                </button>
+            </div>
+            
+            <div id="embed-custom" class="embed-container hidden">
+                <div class="embed-controls">
+                    <button onclick="refreshEmbed('custom')" class="embed-control-btn">↻ Refresh</button>
+                    <button onclick="openInNew(document.getElementById('custom-url').value)" class="embed-control-btn">↗ Open</button>
+                    <button onclick="closeEmbed('custom')" class="embed-control-btn">✕ Close</button>
+                </div>
+                <div class="embed-overlay" onclick="loadCustomEmbed()">
+                    <div class="text-center">
+                        <div class="loading-spinner mb-2"></div>
+                        <p class="text-sm text-gray-600">Click to load embedded content</p>
+                    </div>
+                </div>
+                <iframe id="iframe-custom" class="embed-iframe" style="display: none;"></iframe>
+                <div id="error-custom" class="embed-error hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getEmbeddingStrategy() {
+            return document.querySelector('input[name="strategy"]:checked').value;
+        }
+
+        function embedPublication(id, url) {
+            const container = document.getElementById(`embed-${id}`);
+            container.classList.remove('hidden');
+            
+            // Reset state
+            const overlay = container.querySelector('.embed-overlay');
+            const iframe = document.getElementById(`iframe-${id}`);
+            const error = document.getElementById(`error-${id}`);
+            
+            overlay.classList.remove('hidden');
+            iframe.style.display = 'none';
+            error.classList.add('hidden');
+        }
+
+        function loadEmbed(id, url) {
+            const strategy = getEmbeddingStrategy();
+            const overlay = document.querySelector(`#embed-${id} .embed-overlay`);
+            const iframe = document.getElementById(`iframe-${id}`);
+            const error = document.getElementById(`error-${id}`);
+            
+            overlay.querySelector('p').textContent = 'Loading...';
+            
+            setTimeout(() => {
+                try {
+                    let embedUrl = url;
+                    
+                    if (strategy === 'proxy') {
+                        // Use a CORS proxy service
+                        embedUrl = `https://cors-anywhere.herokuapp.com/${url}`;
+                        // Alternative proxy: `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+                    } else if (strategy === 'custom') {
+                        // For custom embed, we would extract content and format it
+                        showCustomEmbed(id, url);
+                        return;
+                    }
+                    
+                    iframe.src = embedUrl;
+                    iframe.style.display = 'block';
+                    overlay.classList.add('hidden');
+                    
+                    // Handle iframe load errors
+                    iframe.onerror = () => {
+                        showError(id, 'Failed to load content. The site may not allow embedding.');
+                    };
+                    
+                    // Check if iframe loaded successfully after a delay
+                    setTimeout(() => {
+                        try {
+                            // This will throw an error if CORS blocks access
+                            iframe.contentDocument;
+                        } catch (e) {
+                            if (iframe.style.display === 'block' && strategy === 'iframe') {
+                                showError(id, 'Content blocked by X-Frame-Options. Try proxy strategy.');
+                            }
+                        }
+                    }, 3000);
+                    
+                } catch (e) {
+                    showError(id, `Error loading content: ${e.message}`);
+                }
+            }, 1000);
+        }
+
+        function showCustomEmbed(id, url) {
+            const iframe = document.getElementById(`iframe-${id}`);
+            const overlay = document.querySelector(`#embed-${id} .embed-overlay`);
+            
+            // Create custom content based on URL
+            let customContent = `
+                <div style="padding: 20px; font-family: system-ui, sans-serif;">
+                    <h2 style="color: #1f2937; margin-bottom: 16px;">Custom Embedded Content</h2>
+                    <p style="color: #6b7280; margin-bottom: 16px;">
+                        This demonstrates how extracted content would appear with full SEO benefits.
+                        In a real implementation, this would show the actual publication content.
+                    </p>
+                    <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <strong>Original URL:</strong> ${url}
+                    </div>
+                    <div style="border-left: 4px solid #3b82f6; padding-left: 16px; color: #374151;">
+                        <p><strong>Abstract:</strong> This would contain the extracted abstract and key information from the publication.</p>
+                        <p><strong>Authors:</strong> Publication authors would be listed here with proper schema markup.</p>
+                        <p><strong>Citation:</strong> Formatted citation information for easy copying.</p>
+                    </div>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <a href="${url}" target="_blank" style="background: #3b82f6; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;">
+                            View Original Publication
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            iframe.srcdoc = customContent;
+            iframe.style.display = 'block';
+            overlay.classList.add('hidden');
+        }
+
+        function showError(id, message) {
+            const overlay = document.querySelector(`#embed-${id} .embed-overlay`);
+            const iframe = document.getElementById(`iframe-${id}`);
+            const error = document.getElementById(`error-${id}`);
+            
+            overlay.classList.add('hidden');
+            iframe.style.display = 'none';
+            error.textContent = message;
+            error.classList.remove('hidden');
+        }
+
+        function refreshEmbed(id) {
+            const iframe = document.getElementById(`iframe-${id}`);
+            if (iframe.src) {
+                iframe.src = iframe.src;
+            }
+        }
+
+        function openInNew(url) {
+            window.open(url, '_blank');
+        }
+
+        function closeEmbed(id) {
+            const container = document.getElementById(`embed-${id}`);
+            const iframe = document.getElementById(`iframe-${id}`);
+            const overlay = container.querySelector('.embed-overlay');
+            const error = document.getElementById(`error-${id}`);
+            
+            container.classList.add('hidden');
+            iframe.src = '';
+            iframe.style.display = 'none';
+            overlay.classList.remove('hidden');
+            error.classList.add('hidden');
+        }
+
+        function testCustomUrl() {
+            const url = document.getElementById('custom-url').value.trim();
+            if (!url) {
+                alert('Please enter a URL to test');
+                return;
+            }
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('Please enter a valid URL starting with http:// or https://');
+                return;
+            }
+            
+            embedPublication('custom', url);
+        }
+
+        function loadCustomEmbed() {
+            const url = document.getElementById('custom-url').value.trim();
+            loadEmbed('custom', url);
+        }
+
+        // Add strategy change handler
+        document.querySelectorAll('input[name="strategy"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                // Close all open embeds when strategy changes
+                ['acl', 'ieee1', 'custom'].forEach(id => {
+                    const container = document.getElementById(`embed-${id}`);
+                    if (!container.classList.contains('hidden')) {
+                        closeEmbed(id);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Copyright Footer -->
+    <footer class="mt-16 py-6 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 Pavan Kumar Dharmoju. All rights reserved.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
