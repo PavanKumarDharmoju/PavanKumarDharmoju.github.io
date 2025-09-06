@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography - Pavan Kumar Dharmoju | Visual Stories Through Code and Light</title>
+    <meta name="description" content="Photography portfolio of Pavan Kumar Dharmoju - capturing moments between building AI systems. Street photography, landscapes, and technical documentation through a developer's lens.">
+    <meta name="keywords" content="Photography Portfolio, Developer Photographer, Street Photography, Chicago Photography, AI Engineer Photography, Technical Photography">
+    <meta name="author" content="Pavan Kumar Dharmoju">
+    <link rel="canonical" href="https://pavankumardharmoju.github.io/photography.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-optical-sizing: auto;
+            letter-spacing: -0.01em;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .photo-item {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover .photo-overlay {
+            transform: translateY(0);
+        }
+
+        .photo-overlay h3 {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .photo-overlay p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.75rem;
+            margin: 0.25rem 0 0;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .load-more-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .load-more-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .load-more-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 2rem auto;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .load-more-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-8">
+        <div class="flex flex-col sm:flex-row gap-8 pt-12">
+            <!-- Sidebar -->
+            <aside class="sm:w-24 shrink-0">
+                <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
+                    <div class="flex items-center sm:block">
+                        <a href="index.html">
+                            <img src="assets/img/pavan2.png" alt="Pavan Kumar Dharmoju" 
+                                 class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
+                        </a>
+                    </div>
+                    <div>
+                        <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base">
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="index.html">About</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="work.html">Work</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
+                            <a class="mr-4 text-gray-800" href="photography.html">Photography</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
+                        </nav>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 min-h-screen">
+                <div class="max-w-2xl">
+                    <div class="space-y-12 my-2">
+                        
+                        <!-- Photography Header -->
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-semibold text-gray-900 mb-3">Visual Commit Log</h1>
+                            <p class="text-gray-600 text-base leading-relaxed">
+                                Capturing moments between building systems. Street scenes, landscapes, and life through the lens of a developer 
+                                who sees the world in frames and functions. Each shot is a commit to seeing beauty in the everyday.
+                            </p>
+                        </div>
+                        
+                        <!-- Photo Commits -->
+                        <div class="space-y-8" id="photoContainer">
+                            
+                            <!-- Street Photography Series - Initially Visible -->
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">f8a3c47</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">2024</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Chicago Streets</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    feat: urban geometry and human stories
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-4">
+                                    Street photography from Chicago's Loop and neighborhoods. Capturing the intersection of architecture and humanity.
+                                    Shot with Canon EOS R6 + 24-70mm f/2.8. The city as a debugging session - finding patterns in chaos.
+                                </p>
+                                
+                                <div class="photo-grid mb-4">
+                                    <!-- Reduced initial photos -->
+                                    <div class="photo-item" onclick="openLightbox('chicago-street-1.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Michigan Avenue Morning</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Michigan Avenue Morning</h3>
+                                            <p>f/2.8 • 1/125s • ISO 400</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="photo-item" onclick="openLightbox('chicago-street-2.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Loop Reflections</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Loop Reflections</h3>
+                                            <p>f/4.0 • 1/60s • ISO 800</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Street Photography</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Canon EOS R6</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">24-70mm f/2.8</span>
+                                </div>
+                            </div>
+
+                            <!-- Nature/Landscape Series - Initially Hidden -->
+                            <div id="natureSection" class="load-more-section border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">2b9e874</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">2024</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Lake Michigan</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    fix: nature as stress testing for the soul
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-4">
+                                    Landscapes and seascapes from weekend escapes. When debugging gets intense, sometimes you need to 
+                                    step outside and remember that not all systems can be controlled - and that's beautiful.
+                                </p>
+                                
+                                <div class="photo-grid mb-4">
+                                    <div class="photo-item" onclick="openLightbox('nature-1.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Golden Hour Data</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Golden Hour Data</h3>
+                                            <p>f/8.0 • 1/30s • ISO 100</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="photo-item" onclick="openLightbox('nature-2.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Recursive Trees</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Recursive Trees</h3>
+                                            <p>f/11 • 1/60s • ISO 200</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Landscape</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Golden Hour</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Long Exposure</span>
+                                </div>
+                            </div>
+
+                            <!-- Additional Street Photos - Initially Hidden -->
+                            <div id="streetSection2" class="load-more-section border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">a1f9b83</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">2024</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Chicago Streets</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    refactor: more street exploration commits
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-4">
+                                    Additional street captures from different neighborhoods. Each frame is a different approach to 
+                                    the same problem - how do you capture a moment that tells a larger story?
+                                </p>
+                                
+                                <div class="photo-grid mb-4">
+                                    <div class="photo-item" onclick="openLightbox('chicago-street-3.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Commuter Patterns</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Commuter Patterns</h3>
+                                            <p>f/5.6 • 1/250s • ISO 200</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="photo-item" onclick="openLightbox('chicago-street-4.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Urban Geometry</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Urban Geometry</h3>
+                                            <p>f/8.0 • 1/60s • ISO 400</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="photo-item" onclick="openLightbox('chicago-street-5.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Rain Reflections</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Rain Reflections</h3>
+                                            <p>f/2.8 • 1/30s • ISO 1600</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Street Photography</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Weather</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Architecture</span>
+                                </div>
+                            </div>
+
+                            <!-- Tech Documentation Photography - Initially Hidden -->
+                            <div id="techSection" class="load-more-section border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">d7c4a91</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">2024</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Workspace</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    docs: behind the scenes of building systems
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-4">
+                                    Technical photography documenting the process. Workspaces, setups, and the aesthetic of development.
+                                    Because even code environments deserve good documentation.
+                                </p>
+                                
+                                <div class="photo-grid mb-4">
+                                    <div class="photo-item" onclick="openLightbox('tech-1.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Late Night Debug</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Late Night Debug Session</h3>
+                                            <p>f/1.8 • 1/15s • ISO 3200</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="photo-item" onclick="openLightbox('tech-2.jpg')">
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-400 text-sm">Data Center Aesthetics</span>
+                                        </div>
+                                        <div class="photo-overlay">
+                                            <h3>Data Center Aesthetics</h3>
+                                            <p>f/2.8 • 1/125s • ISO 1600</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Tech Documentation</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Workspace</span>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Ambient Light</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Load More Button - Now moves to bottom -->
+                        <div id="loadMoreContainer" class="text-center mt-8">
+                            <button id="loadMoreBtn" class="load-more-btn" onclick="loadMorePhotos()">
+                                <span id="loadMoreText">git pull --more-photos</span>
+                                <div id="loadMoreSpinner" class="loading-spinner" style="display: none;"></div>
+                            </button>
+                        </div>
+
+                            <!-- Equipment & Process -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                                <h2 class="text-lg font-semibold text-gray-900 mb-4">📷 Current Stack</h2>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900 mb-2">Camera Body</h3>
+                                        <p class="text-gray-600">Canon EOS R6 Mark II</p>
+                                        <p class="text-gray-500 text-xs">Full-frame mirrorless • 24.2MP</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900 mb-2">Primary Lens</h3>
+                                        <p class="text-gray-600">Canon RF 24-70mm f/2.8L</p>
+                                        <p class="text-gray-500 text-xs">Versatile zoom • Weather sealed</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900 mb-2">Post-Processing</h3>
+                                        <p class="text-gray-600">Adobe Lightroom + VSCO</p>
+                                        <p class="text-gray-500 text-xs">RAW workflow • Film emulation</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900 mb-2">Philosophy</h3>
+                                        <p class="text-gray-600">Minimal editing, maximum story</p>
+                                        <p class="text-gray-500 text-xs">Authentic moments • Technical precision</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+    
+    <!-- Copyright Footer -->
+    <footer class="mt-16 py-6 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 Pavan Kumar Dharmoju. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let currentLoadLevel = 0;
+        const totalLevels = 3;
+        const sectionsToLoad = ['natureSection', 'streetSection2', 'techSection'];
+        const loadMessages = [
+            'git pull --more-photos',
+            'git fetch --additional-series',
+            'git merge --final-commits'
+        ];
+        
+        function openLightbox(imageSrc) {
+            // For now, just show a placeholder since we don't have actual images
+            // In the future, you can replace this with actual image paths
+            document.getElementById('lightbox-img').src = 'assets/img/pavan2.png'; // placeholder
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function loadMorePhotos() {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const loadMoreText = document.getElementById('loadMoreText');
+            const loadMoreSpinner = document.getElementById('loadMoreSpinner');
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            const photoContainer = document.getElementById('photoContainer');
+
+            if (currentLoadLevel >= totalLevels) return;
+
+            // Show loading state
+            loadMoreText.style.display = 'none';
+            loadMoreSpinner.style.display = 'inline-block';
+            loadMoreBtn.disabled = true;
+
+            // Simulate network delay
+            setTimeout(() => {
+                // Show the next section
+                const sectionToShow = document.getElementById(sectionsToLoad[currentLoadLevel]);
+                if (sectionToShow) {
+                    sectionToShow.style.display = 'block';
+                    
+                    // Trigger the fade-in animation
+                    setTimeout(() => {
+                        sectionToShow.style.opacity = '1';
+                        sectionToShow.style.transform = 'translateY(0)';
+                    }, 50);
+                }
+
+                currentLoadLevel++;
+
+                // Update button text and state
+                loadMoreSpinner.style.display = 'none';
+                loadMoreText.style.display = 'inline';
+                loadMoreBtn.disabled = false;
+
+                if (currentLoadLevel < totalLevels) {
+                    // Update button text for next load
+                    loadMoreText.textContent = loadMessages[currentLoadLevel];
+                    
+                    // Move the button to the bottom by appending it after the newly shown content
+                    photoContainer.appendChild(loadMoreContainer);
+                } else {
+                    // All content loaded - hide the button
+                    loadMoreContainer.style.display = 'none';
+                }
+
+                // Smooth scroll to the newly loaded content
+                if (sectionToShow) {
+                    setTimeout(() => {
+                        sectionToShow.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest' 
+                        });
+                    }, 300);
+                }
+            }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+        }
+
+        // Close lightbox on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Intersection Observer for performance (optional enhancement)
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '50px'
+            });
+
+            // Observe all photo items
+            document.addEventListener('DOMContentLoaded', () => {
+                const photoItems = document.querySelectorAll('.photo-item');
+                photoItems.forEach(item => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    observer.observe(item);
+                });
+            });
+        }
+    </script>
+
+    <!-- Include relative time functionality for future use -->
+    <script src="assets/js/relative-time.js"></script>
+</body>
+</html>

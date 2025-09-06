@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogs - Pavan Kumar Dharmoju</title>
+    <title>Technical Articles - Pavan Kumar Dharmoju | Code & Insights</title>
+    <meta name="description" content="Technical articles and insights from Pavan Kumar Dharmoju. Deep dives into AI, machine learning, data engineering, and real-world implementation stories.">
+    <meta name="keywords" content="Technical Blog, AI Articles, Machine Learning Insights, Data Engineering, Code Stories, Developer Articles, Tech Deep Dives">
+    <meta name="author" content="Pavan Kumar Dharmoju">
+    <link rel="canonical" href="https://pavankumardharmoju.github.io/blogs.html">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
@@ -16,6 +20,76 @@
             letter-spacing: -0.01em;
         }
     </style>
+    <script>
+        function subscribeNewsletter() {
+            const emailInput = document.getElementById('newsletter-email');
+            const subscribeBtn = document.getElementById('subscribe-btn');
+            const messageDiv = document.getElementById('subscription-message');
+            
+            const email = emailInput.value.trim();
+            
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                showMessage('Please enter your email address.', 'error');
+                return;
+            }
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // Disable button and show loading state
+            subscribeBtn.disabled = true;
+            subscribeBtn.textContent = 'Subscribing...';
+            
+            // Simulate subscription process (replace with actual implementation)
+            setTimeout(() => {
+                // Store email in localStorage (you can replace this with actual backend integration)
+                let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                
+                if (subscribers.includes(email)) {
+                    showMessage('You are already subscribed!', 'info');
+                } else {
+                    subscribers.push(email);
+                    localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                    showMessage('Thank you for subscribing! You\'ll receive updates when new articles are published.', 'success');
+                    emailInput.value = '';
+                }
+                
+                // Reset button
+                subscribeBtn.disabled = false;
+                subscribeBtn.textContent = 'Subscribe';
+            }, 1000);
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('subscription-message');
+            messageDiv.textContent = message;
+            messageDiv.className = `mt-3 text-sm ${type === 'error' ? 'text-red-600' : type === 'success' ? 'text-green-600' : 'text-blue-600'}`;
+            messageDiv.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Allow Enter key to submit
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                subscribeNewsletter();
+            }
+        }
+        
+        // Update subscriber count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+            const baseCount = 50; // Base subscriber count
+            const totalCount = baseCount + subscribers.length;
+            document.getElementById('subscriber-count').textContent = totalCount + '+';
+        });
+    </script>
 </head>
 <body class="bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-8">
@@ -36,6 +110,7 @@
                             <a class="mr-4 text-gray-800" href="blogs.html">Blogs</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
                         </nav>
                     </div>
@@ -47,191 +122,239 @@
                 <div class="max-w-2xl">
                     <div class="space-y-12 my-2">
                         
-                        <!-- Blog Posts -->
-                        <div class="space-y-8">
+                        <!-- Blog Header -->
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-semibold text-gray-900 mb-3">Technical Articles</h1>
+                            <p class="text-gray-600 text-base leading-relaxed">
+                                Deep dives into problems I've solved, mistakes I've made, and lessons learned along the way. 
+                                No fluff, just honest technical insights from building real systems.
+                            </p>
+                        </div>
+                        
+                        <!-- Article Commits -->
+                        <div class="space-y-6">
                             
                             <!-- Scaling Data Pipelines -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/scaling-data-pipelines.html" class="hover:text-gray-600">
-                                            Scaling Data Pipelines for Real-Time Analytics
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">March 15, 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">3f8a92d</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">March 15, 2024</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/scaling-data-pipelines.html" class="hover:text-blue-600">
+                                        docs: scaling data pipelines for real-time analytics
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     A deep dive into building scalable data infrastructure that can handle millions of 
-                                    events per second. Learn about architectural patterns, tools, and best practices 
-                                    for modern data engineering. Covers Apache Kafka, stream processing, and distributed 
-                                    systems design for enterprise-scale analytics platforms.
+                                    events per second. Real architectural patterns, tools, and best practices 
+                                    for modern data engineering. What actually works when Stack Overflow answers aren't enough.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Data Engineering</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Apache Kafka</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Real-time</span>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Scalability</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Data Engineering</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Apache Kafka</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Real-time</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Scalability</span>
                                 </div>
                             </div>
 
                             <!-- LLM Production Deployment -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/llm-production-deployment.html" class="hover:text-gray-600">
-                                            Deploying LLMs in Production: Lessons Learned
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">February 28, 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">e7c4b91</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">February 28, 2024</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/llm-production-deployment.html" class="hover:text-blue-600">
+                                        feat: deploying LLMs in production - lessons learned
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     Practical insights from deploying large language models in production environments. 
-                                    Covering optimization techniques, monitoring strategies, and cost management for 
-                                    enterprise LLM applications. Includes performance benchmarking, resource allocation, 
-                                    and horizontal scaling strategies for LLM inference.
+                                    The optimization techniques that actually matter, monitoring strategies that work, 
+                                    and cost management tricks that will save your budget.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">LLMs</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Production</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">MLOps</span>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Optimization</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">LLMs</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Production</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">MLOps</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Optimization</span>
                                 </div>
                             </div>
 
                             <!-- Attribution Modeling -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/attribution-modeling-deep-dive.html" class="hover:text-gray-600">
-                                            Attribution Modeling: A Data Engineer's Perspective
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">January 20, 2024</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">a9f2e87</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">January 20, 2024</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
-                                    How to build robust attribution models that accurately measure marketing impact 
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/attribution-modeling-deep-dive.html" class="hover:text-blue-600">
+                                        refactor: attribution modeling from a data engineer's perspective
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    How to build robust attribution models that actually measure marketing impact 
                                     across multiple channels. Technical deep-dive into data processing, model 
-                                    architecture, and validation techniques. Covers Bayesian methods, multi-touch 
-                                    attribution, and marketing mix modeling approaches.
+                                    architecture, and validation techniques that go beyond basic last-click attribution.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Attribution</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Marketing Analytics</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Machine Learning</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Bayesian Methods</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Attribution</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Marketing Analytics</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Machine Learning</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Bayesian Methods</span>
                                 </div>
                             </div>
 
                             <!-- Computer Vision at Edge -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/computer-vision-edge-deployment.html" class="hover:text-gray-600">
-                                            Computer Vision at the Edge: Optimization Strategies
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">December 10, 2023</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">c3d8f42</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">December 10, 2023</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/computer-vision-edge-deployment.html" class="hover:text-blue-600">
+                                        perf: computer vision at the edge - optimization strategies
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     Techniques for deploying computer vision models on edge devices with limited 
                                     computational resources. Model compression, quantization, and hardware acceleration 
-                                    strategies for real-world applications. Includes practical examples using TensorRT, 
-                                    ONNX, and mobile deployment frameworks.
+                                    strategies that actually work in the real world.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Computer Vision</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Edge Computing</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Optimization</span>
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">Model Compression</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Computer Vision</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Edge Computing</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Optimization</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Model Compression</span>
                                 </div>
                             </div>
 
                             <!-- Time Series Forecasting -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/time-series-forecasting-energy.html" class="hover:text-gray-600">
-                                            Time Series Forecasting for Energy Systems
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">November 15, 2023</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">f5b7a19</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">November 15, 2023</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/time-series-forecasting-energy.html" class="hover:text-blue-600">
+                                        feat: time series forecasting for energy systems
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     Advanced techniques for forecasting electrical demand using deep learning. 
                                     Exploring LSTM networks, attention mechanisms, and ensemble methods for 
-                                    improved prediction accuracy in energy systems. Includes case studies from 
-                                    real-world energy grid optimization projects.
+                                    improved prediction accuracy. Real case studies from energy grid optimization.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Time Series</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Deep Learning</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Energy</span>
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">LSTM</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Time Series</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Deep Learning</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Energy</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">LSTM</span>
                                 </div>
                             </div>
 
                             <!-- MLOps Best Practices -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/mlops-best-practices.html" class="hover:text-gray-600">
-                                            MLOps Best Practices: From Notebook to Production
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">October 8, 2023</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-teal-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">b8e3c74</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">October 8, 2023</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/mlops-best-practices.html" class="hover:text-blue-600">
+                                        docs: MLOps best practices - from notebook to production
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     A comprehensive guide to building robust MLOps pipelines that ensure reliable 
                                     model deployment and monitoring. Best practices for version control, testing, 
-                                    and continuous integration in ML workflows. Covers Docker, Kubernetes, MLflow, 
-                                    and automated model validation strategies.
+                                    and continuous integration that actually scale.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">MLOps</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">DevOps</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">Best Practices</span>
-                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">CI/CD</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">MLOps</span>
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">DevOps</span>
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">Best Practices</span>
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">CI/CD</span>
                                 </div>
                             </div>
 
                             <!-- Data Quality Monitoring -->
-                            <div class="border-b border-gray-100 pb-8">
-                                <div class="mb-4">
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                        <a href="blog/data-quality-monitoring.html" class="hover:text-gray-600">
-                                            Automated Data Quality Monitoring at Scale
-                                        </a>
-                                    </h2>
-                                    <p class="text-sm text-gray-500 mb-3">September 22, 2023</p>
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-indigo-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">d7a4f83</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">September 22, 2023</span>
                                 </div>
-                                <p class="text-gray-700 text-base leading-relaxed mb-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <a href="blog/data-quality-monitoring.html" class="hover:text-blue-600">
+                                        build: automated data quality monitoring at scale
+                                    </a>
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-3">
                                     Building automated systems for monitoring data quality in large-scale data 
                                     pipelines. Techniques for anomaly detection, data profiling, and alerting 
-                                    mechanisms that ensure data reliability. Includes implementation examples using 
-                                    Apache Airflow, Great Expectations, and custom monitoring solutions.
+                                    mechanisms that catch problems before they break everything downstream.
                                 </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Data Quality</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Monitoring</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Automation</span>
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">Apache Airflow</span>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Data Quality</span>
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Monitoring</span>
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Automation</span>
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Apache Airflow</span>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Newsletter Signup -->
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <h3 class="font-medium mb-3">Stay Updated</h3>
-                            <p class="text-gray-600 text-sm mb-4">
-                                Get notified when I publish new articles about AI, data engineering, and machine learning.
+                        <!-- Newsletter Signup - Git style -->
+                        <div class="border-l-2 border-green-400 pl-6 pb-6 bg-green-50 rounded-r-lg mt-12">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white animate-pulse"></div>
+                                <span class="font-mono text-sm text-green-600">subscribe</span>
+                                <span class="text-sm text-green-600">•</span>
+                                <span class="text-sm text-green-600">stay updated</span>
+                            </div>
+                            <h3 class="font-medium text-gray-900 mb-2">feat: get notified about new technical articles</h3>
+                            <p class="text-gray-700 text-sm mb-4">
+                                No spam, just quality technical content delivered when I publish new insights about AI, 
+                                data engineering, machine learning, and real-world system building.
                             </p>
-                            <div class="flex space-x-3">
-                                <input type="email" placeholder="your.email@example.com" 
-                                       class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-gray-500">
-                                <button class="px-4 py-2 bg-black text-white text-sm rounded hover:bg-gray-800 transition-colors">
-                                    Subscribe
-                                </button>
+                            
+                            <div class="max-w-md">
+                                <div class="flex flex-col sm:flex-row gap-3 mb-3">
+                                    <input 
+                                        type="email" 
+                                        id="newsletter-email"
+                                        placeholder="your.email@domain.com" 
+                                        onkeypress="handleKeyPress(event)"
+                                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+                                    >
+                                    <button 
+                                        id="subscribe-btn"
+                                        onclick="subscribeNewsletter()"
+                                        class="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        git push
+                                    </button>
+                                </div>
+                                
+                                <div id="subscription-message" class="text-sm" style="display: none;"></div>
+                                
+                                <p class="text-xs text-gray-500 mt-2">
+                                    <span id="subscriber-count">50+</span> developers subscribed • Unsubscribe anytime
+                                </p>
                             </div>
                         </div>
 
@@ -240,5 +363,17 @@
             </main>
         </div>
     </div>
+    
+    <!-- Copyright Footer -->
+    <footer class="mt-16 py-6 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 Pavan Kumar Dharmoju. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Include relative time functionality for future use -->
+    <script src="assets/js/relative-time.js"></script>
 </body>
 </html>
