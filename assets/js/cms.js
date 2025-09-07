@@ -11,6 +11,45 @@ class CMSManager {
         this.setupWorkTab();
         this.loadExistingWorkEntries();
         this.updatePreview();
+        this.checkServerStatus();
+    }
+
+    async checkServerStatus() {
+        try {
+            const response = await fetch('/save-file', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: 'test', content: 'test' })
+            });
+            
+            // If we get here, server is running
+            this.showServerStatus(true);
+        } catch (error) {
+            // Server not running
+            this.showServerStatus(false);
+        }
+    }
+
+    showServerStatus(isRunning) {
+        const statusDiv = document.createElement('div');
+        statusDiv.id = 'server-status';
+        statusDiv.className = `fixed top-4 left-4 px-3 py-1 rounded-full text-xs font-medium z-50 ${
+            isRunning 
+                ? 'bg-green-100 text-green-800 border border-green-300' 
+                : 'bg-red-100 text-red-800 border border-red-300'
+        }`;
+        statusDiv.innerHTML = `
+            <span class="inline-block w-2 h-2 rounded-full mr-2 ${
+                isRunning ? 'bg-green-500' : 'bg-red-500'
+            }"></span>
+            ${isRunning ? 'Server Running' : 'Server Offline'}
+        `;
+        
+        // Remove existing status if any
+        const existing = document.getElementById('server-status');
+        if (existing) existing.remove();
+        
+        document.body.appendChild(statusDiv);
     }
 
     setupTabSwitching() {
@@ -511,13 +550,30 @@ class CMSManager {
         const completeHTML = this.generateCompleteWorkHTML(title, description, entriesHTML);
         
         try {
-            // Try to save file directly to current directory
-            await this.saveFileToCurrentDirectory('work.html', completeHTML);
-            this.showNotification('work.html updated successfully! Ready for git commit.', 'success');
+            // Always try server-side save first
+            const response = await fetch('/save-file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: 'work.html',
+                    content: completeHTML
+                })
+            });
+            
+            if (response.ok) {
+                this.showNotification('✅ work.html saved to project directory!', 'success');
+                return true;
+            } else {
+                throw new Error('Server save failed');
+            }
         } catch (error) {
-            // Fallback to browser download
+            // Fallback: download and show manual instructions
+            this.showNotification('Server not available, downloading file...', 'info');
             this.downloadFile('work.html', completeHTML);
-            this.showNotification('HTML exported to downloads (could not save to project directory)', 'info');
+            this.showManualMoveInstructions();
+            return false;
         }
     }
 
@@ -685,16 +741,31 @@ class CMSManager {
         };
         
         const jsonContent = JSON.stringify(data, null, 2);
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
         const filename = `cms-backup-${timestamp}.json`;
         
         try {
-            await this.saveFileToCurrentDirectory(filename, jsonContent);
-            this.showNotification('Data backed up to project directory!', 'success');
+            // Try server-side save first
+            const response = await fetch('/save-file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: filename,
+                    content: jsonContent
+                })
+            });
+            
+            if (response.ok) {
+                this.showNotification(`✅ Backup saved as ${filename}`, 'success');
+            } else {
+                throw new Error('Server save failed');
+            }
         } catch (error) {
             // Fallback to browser download
             this.downloadFile(filename, jsonContent);
-            this.showNotification('Data backed up to downloads folder', 'info');
+            this.showNotification('Backup downloaded to Downloads folder', 'info');
         }
     }
 
@@ -743,12 +814,17 @@ class CMSManager {
         try {
             // First export the HTML
             this.showNotification('Exporting HTML...', 'info');
-            await this.exportHTML();
+            const exportSuccess = await this.exportHTML();
             
-            // Then attempt to run git commit
+            if (!exportSuccess) {
+                // Show manual workflow if export failed
+                this.showManualWorkflowInstructions();
+                return;
+            }
+            
+            // Then attempt to run git commit via server
             this.showNotification('Running git commit...', 'info');
             
-            // Try to call the git script via server
             try {
                 const response = await fetch('/git-commit', {
                     method: 'POST',
@@ -762,39 +838,100 @@ class CMSManager {
                 
                 if (response.ok) {
                     const result = await response.json();
-                    this.showNotification('✅ Changes committed and pushed!', 'success');
+                    this.showNotification('🎉 Changes committed and pushed successfully!', 'success');
+                    
+                    // Show success details
+                    this.showSuccessMessage('Your changes are live! The work.html file has been updated and pushed to GitHub.');
                 } else {
                     throw new Error('Git commit via server failed');
                 }
             } catch (serverError) {
-                // Fallback instruction
-                this.showNotification('HTML exported! Run: python git_commit.py', 'info');
-                
-                // Show detailed instructions
-                const instruction = document.createElement('div');
-                instruction.className = 'fixed top-20 right-4 bg-white border border-gray-300 rounded-lg shadow-lg p-4 max-w-sm z-50';
-                instruction.innerHTML = `
-                    <h4 class="font-medium mb-2">Complete the workflow:</h4>
-                    <ol class="text-sm space-y-1">
-                        <li>1. ✅ HTML exported to work.html</li>
-                        <li>2. Run: <code class="bg-gray-100 px-1 rounded">python git_commit.py</code></li>
-                        <li>3. Your changes will be committed and pushed</li>
-                    </ol>
-                    <button onclick="this.parentElement.remove()" class="mt-2 text-xs text-gray-500 hover:text-gray-700">Close</button>
-                `;
-                document.body.appendChild(instruction);
-                
-                // Auto-remove after 10 seconds
-                setTimeout(() => {
-                    if (instruction.parentNode) {
-                        instruction.parentNode.removeChild(instruction);
-                    }
-                }, 10000);
+                // Show manual git instructions
+                this.showNotification('File saved! Run git commands manually.', 'info');
+                this.showManualGitInstructions();
             }
             
         } catch (error) {
             this.showNotification('Error in auto-commit workflow: ' + error.message, 'error');
         }
+    }
+
+    showManualMoveInstructions() {
+        const instruction = document.createElement('div');
+        instruction.className = 'fixed top-20 right-4 bg-yellow-50 border border-yellow-300 rounded-lg shadow-lg p-4 max-w-md z-50';
+        instruction.innerHTML = `
+            <h4 class="font-medium text-yellow-900 mb-2">📁 Manual File Move Required</h4>
+            <div class="text-sm text-yellow-800 space-y-2">
+                <p>The work.html file was downloaded to your Downloads folder.</p>
+                <p><strong>Next steps:</strong></p>
+                <ol class="list-decimal list-inside space-y-1">
+                    <li>Move the downloaded work.html to this project folder</li>
+                    <li>Run: <code class="bg-yellow-100 px-1 rounded">python3 git_commit.py</code></li>
+                </ol>
+                <p class="text-xs mt-2">Or start the server with: <code class="bg-yellow-100 px-1 rounded">python3 cms_server.py</code></p>
+            </div>
+            <button onclick="this.parentElement.remove()" class="mt-2 text-xs text-yellow-600 hover:text-yellow-800">Close</button>
+        `;
+        document.body.appendChild(instruction);
+        
+        setTimeout(() => {
+            if (instruction.parentNode) {
+                instruction.parentNode.removeChild(instruction);
+            }
+        }, 15000);
+    }
+
+    showManualWorkflowInstructions() {
+        const instruction = document.createElement('div');
+        instruction.className = 'fixed top-20 right-4 bg-blue-50 border border-blue-300 rounded-lg shadow-lg p-4 max-w-md z-50';
+        instruction.innerHTML = `
+            <h4 class="font-medium text-blue-900 mb-2">📋 Manual Workflow</h4>
+            <div class="text-sm text-blue-800 space-y-2">
+                <p>Server not available. Complete manually:</p>
+                <ol class="list-decimal list-inside space-y-1">
+                    <li>✅ File downloaded to Downloads</li>
+                    <li>Move work.html to project folder</li>
+                    <li>Run: <code class="bg-blue-100 px-1 rounded">python3 git_commit.py</code></li>
+                </ol>
+            </div>
+            <button onclick="this.parentElement.remove()" class="mt-2 text-xs text-blue-600 hover:text-blue-800">Close</button>
+        `;
+        document.body.appendChild(instruction);
+    }
+
+    showManualGitInstructions() {
+        const instruction = document.createElement('div');
+        instruction.className = 'fixed top-20 right-4 bg-green-50 border border-green-300 rounded-lg shadow-lg p-4 max-w-md z-50';
+        instruction.innerHTML = `
+            <h4 class="font-medium text-green-900 mb-2">✅ File Saved! Complete with Git</h4>
+            <div class="text-sm text-green-800 space-y-2">
+                <p>work.html updated in project directory.</p>
+                <p><strong>Complete the deployment:</strong></p>
+                <div class="bg-green-100 rounded p-2 font-mono text-xs">
+                    python3 git_commit.py
+                </div>
+                <p class="text-xs">This will commit and push your changes.</p>
+            </div>
+            <button onclick="this.parentElement.remove()" class="mt-2 text-xs text-green-600 hover:text-green-800">Close</button>
+        `;
+        document.body.appendChild(instruction);
+    }
+
+    showSuccessMessage(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-20 right-4 bg-green-50 border border-green-300 rounded-lg shadow-lg p-4 max-w-md z-50';
+        notification.innerHTML = `
+            <h4 class="font-medium text-green-900 mb-2">🎉 Success!</h4>
+            <p class="text-sm text-green-800">${message}</p>
+            <button onclick="this.parentElement.remove()" class="mt-2 text-xs text-green-600 hover:text-green-800">Close</button>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 8000);
     }
 
     importData(file) {
