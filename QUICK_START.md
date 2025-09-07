@@ -1,59 +1,44 @@
 # 🚀 Quick Start Guide - CMS
 
-## Option 1: Server Mode (Recommended)
+## ✅ Recommended Workflow (Server Mode)
 
 ```bash
 # 1. Start the CMS server
-python cms_server.py
+python3 cms_server.py
 
-# 2. Open your browser to http://localhost:8000
-# 3. Use the CMS interface
-# 4. Click "Export + Auto Commit & Push" when done
+# 2. Open your browser to http://localhost:8000/cms.html
+# 3. Load existing entries from work.html
+# 4. Add/edit your entries
+# 5. Click "🚀 Export + Auto Commit & Push"
+# 6. Done! Files are automatically saved and pushed to GitHub
 ```
 
-## Option 2: Manual Mode
+## 📱 Fallback Workflow (No Server)
 
 ```bash
 # 1. Open cms.html directly in browser
 open cms.html
 
-# 2. Use the CMS interface
-# 3. Click "Export HTML Only"
-# 4. Run git commit manually:
-python git_commit.py
+# 2. Use the CMS interface (entries download to Downloads folder)
+# 3. Move downloaded work.html to project directory
+# 4. Run git commit:
+python3 git_commit.py
 ```
 
-## 🎯 Quick Workflow
+## 🎯 Key Features
 
-1. **Load Data**: Click "Load Existing Entries" to import from work.html
-2. **Add Entry**: Fill form and click "Add Entry"
-3. **Preview**: Check the live preview on the right
-4. **Export**: Use "Export + Auto Commit & Push" for one-click deployment
+- **🟢 Server Status Indicator**: Shows if server is running
+- **📁 Direct File Saving**: Files save to project directory when server running
+- **🚀 One-Click Deploy**: Export + commit + push in one action
+- **� Smart Fallback**: Clear instructions when server unavailable
+- **💾 Auto Backup**: JSON backups save to project directory
 
-## 📁 Files Created
+## 🔧 What's Fixed
 
-- `cms.html` - Main CMS interface
-- `assets/js/cms.js` - CMS functionality
-- `cms_server.py` - Development server
-- `git_commit.py` - Git automation
-- `cms_generator.py` - HTML generator
+✅ **No more manual file moving** when using server mode
+✅ **Clear visual feedback** with server status indicator  
+✅ **Smart fallback** with manual instructions when needed
+✅ **One-click deployment** that actually works
+✅ **Better error handling** and user guidance
 
-## 🎨 Features Built
-
-✅ **Load all existing entries** from work.html with real parsing
-✅ **Scroll container** for entries (max height with scrolling)
-✅ **Direct file saving** to current directory (when using server)
-✅ **Auto git commit & push** workflow
-✅ **Complete HTML generation** with proper structure
-✅ **Tag management** with color coding
-✅ **Form validation** and error handling
-✅ **Live preview** of changes
-
-## 🔄 Next Steps
-
-After testing the Work tab, we can build:
-- Projects tab
-- Publications tab  
-- Photography tab
-
-Each with similar functionality but tailored to their content types.
+The CMS now prioritizes server-side operations and provides clear guidance for manual workflows when needed!
