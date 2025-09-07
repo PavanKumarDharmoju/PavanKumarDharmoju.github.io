@@ -167,8 +167,18 @@ class ProjectsCMSManager {
         const container = document.getElementById('projects-entries-list');
         if (!container) return;
 
-        container.innerHTML = this.projectsEntries.map((entry, index) => 
-            `<div class="entry-item border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+        // Clear existing content
+        container.innerHTML = '';
+
+        // Add scroll container
+        const scrollContainer = document.createElement('div');
+        scrollContainer.className = 'max-h-96 overflow-y-auto space-y-2';
+        scrollContainer.id = 'projects-entries-scroll-container';
+
+        this.projectsEntries.forEach((entry, index) => {
+            const entryElement = document.createElement('div');
+            entryElement.className = 'entry-item border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow';
+            entryElement.innerHTML = `
                 <div class="flex justify-between items-start mb-3">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
@@ -195,8 +205,19 @@ class ProjectsCMSManager {
                         </button>
                     </div>
                 </div>
-            </div>`
-        ).join('');
+            `;
+            scrollContainer.appendChild(entryElement);
+        });
+
+        // Add empty state if no entries
+        if (this.projectsEntries.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'text-center py-8 text-gray-500';
+            emptyState.innerHTML = '<p>No projects yet. Add your first project above!</p>';
+            scrollContainer.appendChild(emptyState);
+        }
+
+        container.appendChild(scrollContainer);
     }
 
     editProjectsEntry(index) {
