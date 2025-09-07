@@ -9,6 +9,8 @@ class CMSManager {
     init() {
         this.setupTabSwitching();
         this.setupWorkTab();
+        this.setupEntryTypeTracking();
+        this.setCurrentDate(); // Auto-set today's date
         this.loadExistingWorkEntries();
         this.updatePreview();
         this.checkServerStatus();
@@ -111,6 +113,11 @@ class CMSManager {
             this.clearWorkForm();
         });
 
+        // Today button
+        document.getElementById('today-btn').addEventListener('click', () => {
+            this.setCurrentDate();
+        });
+
         // Load entries
         document.getElementById('load-entries-btn').addEventListener('click', () => {
             this.loadExistingWorkEntries();
@@ -142,6 +149,8 @@ class CMSManager {
             if (!document.getElementById('commit-hash').value) {
                 this.generateCommitHash();
             }
+            // Smart entry type suggestion
+            this.suggestEntryType();
         });
 
         // Update preview on changes
@@ -242,7 +251,57 @@ class CMSManager {
         document.getElementById('status-color').value = 'green';
         document.getElementById('entry-type').value = 'feat';
         
-        // Set current date
+        // Reset entry type tracking
+        document.getElementById('entry-type').dataset.userChanged = 'false';
+        
+        // Set current date in the format used in work.html
+        const now = new Date();
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const formattedDate = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+        document.getElementById('commit-date').value = formattedDate;
+    }
+
+    // Auto-set date when page loads
+    suggestEntryType() {
+        const title = document.getElementById('entry-title').value.toLowerCase();
+        const entryTypeSelect = document.getElementById('entry-type');
+        
+        // Don't auto-change if user has already selected something other than default
+        if (entryTypeSelect.value !== 'feat' && entryTypeSelect.dataset.userChanged === 'true') {
+            return;
+        }
+        
+        // Keywords that suggest specific entry types
+        const typeKeywords = {
+            'experiment': ['experiment', 'trying', 'learning', 'testing', 'vs', 'comparison', 'explore'],
+            'build': ['tracker', 'scraper', 'pipeline', 'infrastructure', 'deployment', 'ci/cd', 'docker'],
+            'wip': ['wip', 'progress', 'working on', 'building', 'developing', 'started'],
+            'fix': ['fix', 'bug', 'error', 'failed', 'broken', 'debug', 'issue'],
+            'refactor': ['refactor', 'improve', 'optimize', 'cleanup', 'rewrite', 'production'],
+            'docs': ['docs', 'documentation', 'paper', 'publication', 'published', 'guide', 'readme']
+        };
+        
+        // Check for keywords in title
+        for (const [type, keywords] of Object.entries(typeKeywords)) {
+            if (keywords.some(keyword => title.includes(keyword))) {
+                entryTypeSelect.value = type;
+                return;
+            }
+        }
+        
+        // Default to feat if no specific keywords found
+        entryTypeSelect.value = 'feat';
+    }
+
+    // Track when user manually changes entry type
+    setupEntryTypeTracking() {
+        const entryTypeSelect = document.getElementById('entry-type');
+        entryTypeSelect.addEventListener('change', () => {
+            entryTypeSelect.dataset.userChanged = 'true';
+        });
+    }
+
+    setCurrentDate() {
         const now = new Date();
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const formattedDate = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
