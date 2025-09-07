@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Management System - Pavan Kumar Dharmoju</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-optical-sizing: auto;
+            letter-spacing: -0.01em;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .sortable-item {
+            cursor: move;
+        }
+        
+        .sortable-item:hover {
+            background-color: #f8fafc;
+        }
+        
+        .sortable-ghost {
+            opacity: 0.5;
+        }
+        
+        .form-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tag-input {
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin: 0.25rem;
+            display: inline-block;
+            font-size: 0.75rem;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            color: #ef4444;
+            margin-left: 0.5rem;
+        }
+        
+        .preview-panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <h1 class="text-2xl font-semibold text-gray-900">Content Management System</h1>
+                    <div class="flex gap-4">
+                        <button id="saveAllBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            Save All Changes
+                        </button>
+                        <button id="previewBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
+                            Preview Site
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Tabs -->
+            <div class="mb-8">
+                <nav class="flex space-x-8 border-b border-gray-200">
+                    <button class="tab-btn py-2 px-1 border-b-2 border-blue-500 text-blue-600 font-medium" data-tab="work">
+                        Work / Build Log
+                    </button>
+                    <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="projects">
+                        Projects
+                    </button>
+                    <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="publications">
+                        Publications
+                    </button>
+                    <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="photography">
+                        Photography
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Work Tab Content -->
+            <div id="work-tab" class="tab-content active">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Panel - Content Management -->
+                    <div class="space-y-6">
+                        <!-- Page Header Settings -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Page Header</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Page Title</label>
+                                    <input type="text" id="work-title" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           value="Build Log" placeholder="Page title">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea id="work-description" rows="3" class="w-full p-2 border border-gray-300 rounded-md" 
+                                              placeholder="Page description">My day job is confidential (marketing attribution stuff), so here's what I'm actually excited to share—the random projects I build because they seem fun, experiments that went nowhere, and side quests that turned into something cool.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add New Entry -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Entry</h3>
+                            <form id="work-entry-form" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Commit Hash</label>
+                                        <input type="text" id="commit-hash" class="w-full p-2 border border-gray-300 rounded-md" 
+                                               placeholder="a7b91c4" maxlength="7">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                        <input type="text" id="commit-date" class="w-full p-2 border border-gray-300 rounded-md" 
+                                               placeholder="Sep 3, 2025">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Status Color</label>
+                                        <select id="status-color" class="w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="green">Green (Completed)</option>
+                                            <option value="blue">Blue (In Progress)</option>
+                                            <option value="yellow">Yellow (Experimental)</option>
+                                            <option value="red">Red (Failed/Blocked)</option>
+                                            <option value="purple">Purple (Academic)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Entry Type</label>
+                                        <select id="entry-type" class="w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="feat">feat: (New Feature)</option>
+                                            <option value="build">build: (Build/Infrastructure)</option>
+                                            <option value="fix">fix: (Bug Fix)</option>
+                                            <option value="docs">docs: (Documentation)</option>
+                                            <option value="refactor">refactor: (Code Refactor)</option>
+                                            <option value="experiment">experiment: (Experiment)</option>
+                                            <option value="wip">wip: (Work in Progress)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                                    <input type="text" id="entry-title" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="auto-commit message generator using OpenAI API">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea id="entry-description" rows="4" class="w-full p-2 border border-gray-300 rounded-md" 
+                                              placeholder="Describe what you built, what you learned, or what went wrong..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                                    <div class="flex flex-wrap gap-2 mb-2" id="current-tags"></div>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="tag-input" class="flex-1 p-2 border border-gray-300 rounded-md" 
+                                               placeholder="Add a tag (e.g., Python, Machine Learning)">
+                                        <button type="button" id="add-tag-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Add Tag
+                                        </button>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs text-gray-500">Suggested tags:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">Python</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">JavaScript</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">Machine Learning</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">Web Scraping</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">CLI Tool</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">React</button>
+                                            <button type="button" class="suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">API</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-4">
+                                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                                        Add Entry
+                                    </button>
+                                    <button type="button" id="clear-form-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                                        Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Existing Entries Management -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Manage Entries</h3>
+                            <div class="space-y-2" id="entries-list">
+                                <!-- Entries will be loaded here -->
+                            </div>
+                            <button id="load-entries-btn" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                                Load Existing Entries
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Preview -->
+                    <div class="space-y-6">
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Live Preview</h3>
+                            <div class="preview-panel" id="work-preview">
+                                <!-- Preview will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Git Workflow</h3>
+                            <div class="space-y-3">
+                                <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
+                                    <h4 class="font-medium text-blue-900 mb-2">Quick Start:</h4>
+                                    <ol class="text-sm text-blue-800 space-y-1">
+                                        <li>1. Load existing entries from work.html</li>
+                                        <li>2. Add/edit your entries</li>
+                                        <li>3. Export HTML (saves to current directory)</li>
+                                        <li>4. Run: <code class="bg-blue-100 px-1 rounded">python git_commit.py</code></li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-2">
+                                    <button id="auto-commit-btn" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
+                                        Export + Auto Commit & Push
+                                    </button>
+                                    <button id="export-only-btn" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
+                                        Export HTML Only
+                                    </button>
+                                </div>
+                                
+                                <div class="text-xs text-gray-600">
+                                    <p><strong>Server Mode:</strong> Run <code>python cms_server.py</code> for direct file saving</p>
+                                    <p><strong>Manual Mode:</strong> Files saved to downloads, move manually</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Backup & Import</h3>
+                            <div class="space-y-2">
+                                <button id="backup-data-btn" class="w-full py-2 px-4 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
+                                    Backup Data (JSON)
+                                </button>
+                                <input type="file" id="import-data-input" accept=".json" class="hidden">
+                                <button id="import-data-btn" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                                    Import Data (JSON)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other tabs will be added here -->
+            <div id="projects-tab" class="tab-content">
+                <div class="text-center py-12">
+                    <h3 class="text-lg font-medium text-gray-900">Projects Tab</h3>
+                    <p class="text-gray-600 mt-2">Coming soon...</p>
+                </div>
+            </div>
+
+            <div id="publications-tab" class="tab-content">
+                <div class="text-center py-12">
+                    <h3 class="text-lg font-medium text-gray-900">Publications Tab</h3>
+                    <p class="text-gray-600 mt-2">Coming soon...</p>
+                </div>
+            </div>
+
+            <div id="photography-tab" class="tab-content">
+                <div class="text-center py-12">
+                    <h3 class="text-lg font-medium text-gray-900">Photography Tab</h3>
+                    <p class="text-gray-600 mt-2">Coming soon...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/cms.js"></script>
+</body>
+</html>
