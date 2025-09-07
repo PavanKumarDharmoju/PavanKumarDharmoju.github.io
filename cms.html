@@ -293,11 +293,179 @@
                 </div>
             </div>
 
-            <!-- Other tabs will be added here -->
+            <!-- Projects Tab Content -->
             <div id="projects-tab" class="tab-content">
-                <div class="text-center py-12">
-                    <h3 class="text-lg font-medium text-gray-900">Projects Tab</h3>
-                    <p class="text-gray-600 mt-2">Coming soon...</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Panel - Content Management -->
+                    <div class="space-y-6">
+                        <!-- Page Header Settings -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Page Header</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Page Title</label>
+                                    <input type="text" id="projects-title" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           value="Project Build Log" placeholder="Page title">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea id="projects-description" rows="3" class="w-full p-2 border border-gray-300 rounded-md" 
+                                              placeholder="Page description">Systems I've architected, bugs I've hunted down, and experiments that taught me something new. Each commit represents real problems solved with real code that runs in production.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add New Project -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Project</h3>
+                            <form id="projects-entry-form" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Commit Hash</label>
+                                        <input type="text" id="projects-commit-hash" class="w-full p-2 border border-gray-300 rounded-md" 
+                                               placeholder="a8f5c92" maxlength="7">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                        <input type="date" id="projects-date" class="w-full p-2 border border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Status Color</label>
+                                        <select id="projects-status-color" class="w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="blue">Blue (AI/ML Projects)</option>
+                                            <option value="green">Green (Infrastructure/Systems)</option>
+                                            <option value="purple">Purple (Research/Academic)</option>
+                                            <option value="red">Red (Computer Vision/Medical)</option>
+                                            <option value="orange">Orange (Testing/Evaluation)</option>
+                                            <option value="indigo">Indigo (Analytics/Business)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
+                                        <select id="projects-entry-type" class="w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="feat">feat: (New Feature/System)</option>
+                                            <option value="build">build: (Infrastructure/Pipeline)</option>
+                                            <option value="refactor">refactor: (System Optimization)</option>
+                                            <option value="test">test: (Testing/Evaluation)</option>
+                                            <option value="analytics">analytics: (Data Analysis)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Organization/Client</label>
+                                    <input type="text" id="projects-organization" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="Kellogg x Overtone">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Title</label>
+                                    <input type="text" id="projects-title-input" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="publisher-brand content alignment at scale">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea id="projects-description-input" rows="4" class="w-full p-2 border border-gray-300 rounded-md" 
+                                              placeholder="Detailed technical description of the project, impact metrics, and real-world results..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tech Stack Tags</label>
+                                    <div class="flex flex-wrap gap-2 mb-2" id="projects-current-tags"></div>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="projects-tag-input" class="flex-1 p-2 border border-gray-300 rounded-md" 
+                                               placeholder="Add a tech tag (e.g., BERT, PyTorch, AWS)">
+                                        <button type="button" id="projects-add-tag-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Add Tag
+                                        </button>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs text-gray-500">Suggested professional tags:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">BERT</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">PyTorch</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">TensorFlow</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">AWS</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">Docker</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">MLflow</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">Apache Spark</button>
+                                            <button type="button" class="projects-suggested-tag px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300">FAISS</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-4">
+                                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                                        Add Project
+                                    </button>
+                                    <button type="button" id="projects-clear-form-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                                        Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Existing Projects Management -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Manage Projects</h3>
+                            <div class="space-y-2" id="projects-entries-list">
+                                <!-- Projects will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Preview -->
+                    <div class="space-y-6">
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Live Preview</h3>
+                            <div class="preview-panel" id="projects-preview">
+                                <!-- Preview will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Git Workflow</h3>
+                            <div class="space-y-3">
+                                <div class="bg-green-50 border border-green-200 rounded-md p-3">
+                                    <h4 class="font-medium text-green-900 mb-2">✅ Recommended Workflow:</h4>
+                                    <ol class="text-sm text-green-800 space-y-1">
+                                        <li>1. Start server: <code class="bg-green-100 px-1 rounded">python3 cms_server.py</code></li>
+                                        <li>2. Projects auto-load → Edit → Export + Auto Commit</li>
+                                        <li>3. Files save directly to project, auto-git push</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
+                                    <h4 class="font-medium text-blue-900 mb-2">📱 Server Status:</h4>
+                                    <p id="projects-server-status" class="text-sm text-blue-800">Checking...</p>
+                                </div>
+                                
+                                <div class="bg-orange-50 border border-orange-200 rounded-md p-3">
+                                    <h4 class="font-medium text-orange-900 mb-2">⚠️ Manual Mode:</h4>
+                                    <p class="text-sm text-orange-800">Without server: File downloads to your Downloads folder. Move to project directory manually.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Export Options</h3>
+                            <div class="space-y-2">
+                                <button id="projects-auto-commit-btn" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium">
+                                    🚀 Export + Auto Commit & Push
+                                </button>
+                                <button id="projects-export-only-btn" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
+                                    📁 Export HTML Only
+                                </button>
+                                <button id="projects-backup-data-btn" class="w-full py-2 px-4 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
+                                    Backup Projects Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -318,5 +486,6 @@
     </div>
 
     <script src="assets/js/cms.js"></script>
+    <script src="assets/js/cms-projects.js"></script>
 </body>
 </html>
