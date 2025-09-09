@@ -44,20 +44,21 @@
             <aside class="sm:w-24 shrink-0">
                 <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
-                        <a href="index.html">
-                            <img src="assets/img/pavan.jpg" alt="Pavan Kumar Dharmoju" 
-                                 class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
+                        <a href="index.html" aria-label="Go to homepage">
+                            <img src="assets/img/pavan.jpg" alt="Portrait photo of Pavan Kumar Dharmoju" 
+                                 class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300"
+                                 loading="eager">
                         </a>
                     </div>
                     <div>
-                        <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base">
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="index.html">About</a>
-                            <a class="mr-4 text-gray-800" href="work.html">Work</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
+                        <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base" role="navigation" aria-label="Main navigation">
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="index.html">About</a>
+                            <a class="mr-4 text-gray-900 font-medium" href="work.html" aria-current="page">Work</a>
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="blogs.html">Blogs</a>
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="projects.html">Projects</a>
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="publications.html">Publications</a>
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="photography.html">Photography</a>
+                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="contact.html">Contact</a>
                         </nav>
                     </div>
                 </div>
@@ -80,57 +81,6 @@
                         <!-- Commit-style Entries -->
                         <div class="space-y-6">
                             
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">630ab58</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">Sep 9, 2025</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">feat: Day 2 — Safe factorial (TDD), 'touch' discovery, exceptions in pytest</h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Day 2: Learning some new cool commands
-
-I didn’t realize you can directly use `touch` to create a file instead of `vi <file>` and doing `:wq` every time — should have known that!
-
-Work done:
-- Wrote a safe factorial function using TDD
-- Added tests in pytest
-- Practiced raising/catching exceptions and asserting them in tests
-
-Outcome: green tests, faster CLI workflow with `touch`, and better comfort with pytest exception handling.
-Commit: <fill with today's hash> | Status: Green (Completed) | Today: Yes
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Pytest</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">LeetCode</span>
-                                </div>
-                            </div>
-            
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">88a989e</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">Sep 8, 2025</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">experiment: Day 1 of ai-learning-journey, Environment setup, a lot of CLI</h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Creating the environment through Command line
-
-It's been so long since I used only command line for things like git (I mainly use GitHub Desktop) that I forgot most of the commands. Today's challenge achieved the following:
-
-1) Create files and use git through the command line  
-2) Start with the basics of pytest (need to get stronger in pytests)  
-3) Start this journey of learning to hone my skills
-
-Outcome: repo initialized, environment ready, and my first green test with pytest.
-
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Pytest</span>
-                                </div>
-                            </div>
-            
                             <div class="border-l-2 border-gray-200 pl-6 pb-6">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
