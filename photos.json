@@ -24,6 +24,38 @@
   },
   "albums": [
     {
+      "commitHash": "5qbnmxk",
+      "date": "Oct 12, 2025",
+      "location": "Chicago Loop",
+      "statusColor": "orange",
+      "entryType": "feat",
+      "title": "Churro the Labradoodle",
+      "description": "Met Churro, the labradoodle, in my apartment and was inspired by his energy. With Sharanya's help, I got him to pose, resulting in some amazing shots.",
+      "tags": [
+        "Dog\n            ",
+        "Street Photography\n            ",
+        "Bean\n            "
+      ],
+      "photos": [
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczNtm97BPv4XJMVVOBvmWEHyv4zSWatZ1LT45bS9V4xSbvTs-z9_VZgJ5K4a7cysG7bp09CxVuv6qaeQeqr0B5WLN27GRdfyzXueF09VUaHDmRku6RsFieU_1ItUnPazXnmhHV2rD2sp9Lp96Sa5wxumQw=w1120-h1992-s-no-gm?authuser=0",
+          "title": "Churro@Bean",
+          "settings": "ƒ/3.5 • 1/500 • 51 mm • ISO160"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMrPhSZh3gr9CVfpFExhoj-qXED6XJw-E2zY_Y4TmXDyVlFWKg6C_T-aE1zPimXwXA32GvIzkeYmRuqpEVItqjJNVJIg-II2Ny1mAW6JAmSOSZ0r711CHm4pw-9pVDQGo4dWNbZqZ3CLOIMBLHGS11oPA=w1120-h1992-s-no-gm?authuser=0",
+          "title": "Churro@Bean",
+          "settings": "ƒ/3.5 • 1/500 • 51 mm • ISO160"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMrBQ8lvcCGAorFxAM778zNYTQgPzPg0o1pP66Bo1xIFDC0Ky9uJou30jSTDcMookMUsc1gqfrwM8DrkSBq9EIDGAxTdqOhhQBxOOHh-zEzZLMBL0gqH_Ow1UGkwV8UqJ2fiPt4mHBvH44CBFnWWCOvow=w1120-h1992-s-no-gm?authuser=0",
+          "title": "Churro@Stetson and Lake",
+          "settings": "ƒ/18 • 1/250 • 200 mm • ISO5000"
+        }
+      ],
+      "id": "1765629108986"
+    },
+    {
       "id": "chicago-streets-2024",
       "commitHash": "f8a3c47",
       "date": "Dec 2024",
