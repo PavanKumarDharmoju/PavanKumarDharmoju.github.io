@@ -245,21 +245,31 @@ class PhotographyCMS {
     }
     
     addOrUpdateAlbum() {
+        console.log('PhotographyCMS: Adding/updating album...');
         const formData = this.getFormData();
-        if (!formData) return;
+        if (!formData) {
+            console.log('PhotographyCMS: Form data validation failed');
+            return;
+        }
+        
+        console.log('PhotographyCMS: Form data valid:', formData);
         
         if (this.currentEditingId) {
             // Update existing
             const index = this.albums.findIndex(a => a.id === this.currentEditingId);
             if (index !== -1) {
                 this.albums[index] = { ...formData, id: this.currentEditingId };
+                console.log('PhotographyCMS: Updated existing album at index', index);
             }
             this.currentEditingId = null;
         } else {
             // Add new
             formData.id = this.generateId();
             this.albums.unshift(formData); // Add to beginning
+            console.log('PhotographyCMS: Added new album with ID:', formData.id);
         }
+        
+        console.log('PhotographyCMS: Total albums now:', this.albums.length);
         
         this.clearForm();
         this.updateEntriesList();
@@ -278,6 +288,10 @@ class PhotographyCMS {
         const title = document.getElementById('photography-album-title').value.trim();
         const description = document.getElementById('photography-description-text').value.trim();
         
+        console.log('PhotographyCMS: Getting form data...');
+        console.log('PhotographyCMS: Title:', title);
+        console.log('PhotographyCMS: Description:', description);
+        
         if (!commitHash || !date || !title || !description) {
             this.showMessage('Please fill in all required fields', 'error');
             return null;
@@ -287,17 +301,33 @@ class PhotographyCMS {
         const tags = Array.from(document.querySelectorAll('#photography-tags-list .tag'))
             .map(el => el.textContent.trim().replace('×', ''));
         
+        console.log('PhotographyCMS: Tags:', tags);
+        
         // Get photos
-        const photos = Array.from(document.querySelectorAll('#photography-photos-container .photo-entry'))
-            .map(entry => ({
-                url: entry.querySelector('.photo-url').value.trim(),
-                title: entry.querySelector('.photo-title').value.trim(),
-                settings: entry.querySelector('.photo-settings').value.trim()
-            }))
-            .filter(photo => photo.url && photo.title);
+        const photoEntries = document.querySelectorAll('#photography-photos-container .photo-entry');
+        console.log('PhotographyCMS: Found', photoEntries.length, 'photo entries');
+        
+        const photos = Array.from(photoEntries)
+            .map((entry, index) => {
+                const url = entry.querySelector('.photo-url').value.trim();
+                const title = entry.querySelector('.photo-title').value.trim();
+                const settings = entry.querySelector('.photo-settings').value.trim();
+                
+                console.log(`PhotographyCMS: Photo ${index + 1}:`, { url, title, settings });
+                
+                return { url, title, settings };
+            })
+            .filter(photo => {
+                const hasUrl = photo.url.length > 0;
+                const hasTitle = photo.title.length > 0;
+                console.log('PhotographyCMS: Photo validation:', { hasUrl, hasTitle, photo });
+                return hasUrl && hasTitle;
+            });
+        
+        console.log('PhotographyCMS: Valid photos:', photos.length, photos);
         
         if (photos.length === 0) {
-            this.showMessage('Please add at least one photo', 'error');
+            this.showMessage('Please add at least one photo with URL and title', 'error');
             return null;
         }
         
