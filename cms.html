@@ -100,6 +100,9 @@
                     <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="projects">
                         Projects
                     </button>
+                    <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="blogs">
+                        Blogs
+                    </button>
                     <button class="tab-btn py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="publications">
                         Publications
                     </button>
@@ -469,6 +472,193 @@
                 </div>
             </div>
 
+            <!-- Blogs Tab Content -->
+            <div id="blogs-tab" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Panel - Blog Editor -->
+                    <div class="space-y-6">
+                        <!-- Blog Metadata -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Blog Post Details</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                                    <input type="text" id="blog-title" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="MLOps Best Practices: From Notebook to Production">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL Slug *</label>
+                                    <input type="text" id="blog-slug" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="mlops-best-practices">
+                                    <p class="text-xs text-gray-500 mt-1">Will create: blog/{slug}.html</p>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                                    <textarea id="blog-description" rows="3" class="w-full p-2 border border-gray-300 rounded-md" 
+                                              placeholder="A comprehensive guide to building robust MLOps pipelines..."></textarea>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                        <input type="date" id="blog-date" class="w-full p-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Reading Time</label>
+                                        <input type="text" id="blog-reading-time" class="w-full p-2 border border-gray-300 rounded-md" 
+                                               placeholder="10 min read">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                                    <div class="flex flex-wrap gap-2 mb-2" id="blog-tags-list"></div>
+                                    <input type="text" id="blog-tags-input" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="MLOps, DevOps, Machine Learning">
+                                    <p class="text-xs text-gray-500 mt-1">Press Enter to add tags</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Markdown Editor -->
+                        <div class="form-section">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-medium text-gray-900">Content Editor</h3>
+                                <div class="flex gap-2">
+                                    <button type="button" id="blog-preview-btn" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">
+                                        Preview
+                                    </button>
+                                    <button type="button" id="blog-markdown-btn" class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Markdown Toolbar -->
+                            <div class="border border-gray-300 rounded-t-md p-2 bg-gray-50 flex gap-1 text-sm">
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="bold">
+                                    <strong>B</strong>
+                                </button>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="italic">
+                                    <em>I</em>
+                                </button>
+                                <span class="border-r border-gray-300 mx-1"></span>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="heading">
+                                    H1
+                                </button>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="code">
+                                    Code
+                                </button>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="link">
+                                    Link
+                                </button>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="list">
+                                    List
+                                </button>
+                                <span class="border-r border-gray-300 mx-1"></span>
+                                <button type="button" class="markdown-tool px-2 py-1 hover:bg-gray-200 rounded" data-action="image">
+                                    Image
+                                </button>
+                            </div>
+                            
+                            <textarea id="blog-content" class="w-full border border-gray-300 border-t-0 rounded-b-md p-4 font-mono text-sm resize-none" 
+                                      rows="20" placeholder="Start writing your blog post in Markdown...
+
+# Introduction
+
+Your content here...
+
+## Code Examples
+
+```python
+def hello_world():
+    print('Hello, world!')
+```
+
+## Links and Images
+
+[Link text](https://example.com)
+![Alt text](image-url.jpg)
+"></textarea>
+                            
+                            <div id="blog-preview-content" class="hidden border border-gray-300 rounded-md p-4 bg-white prose prose-sm max-w-none"></div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="form-section">
+                            <div class="flex gap-4">
+                                <button type="button" id="blog-save-btn" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                                    Save as Draft
+                                </button>
+                                <button type="button" id="blog-publish-btn" class="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
+                                    Publish Post
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                                <button type="button" id="blog-export-html-btn" class="py-2 px-4 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                                    Export HTML
+                                </button>
+                                <button type="button" id="blog-clear-btn" class="py-2 px-4 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
+                                    Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Blog Management -->
+                    <div class="space-y-6">
+                        <!-- Existing Posts -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Existing Posts</h3>
+                            <div class="max-h-96 overflow-y-auto space-y-2" id="blog-posts-list">
+                                <!-- Existing blog posts will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Live Preview -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">HTML Preview</h3>
+                            <div id="blog-html-preview" class="bg-white border rounded p-4 text-sm max-h-64 overflow-y-auto">
+                                <!-- HTML preview will be shown here -->
+                            </div>
+                        </div>
+
+                        <!-- Server Status -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Blog Workflow</h3>
+                            <div class="space-y-3">
+                                <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
+                                    <h4 class="font-medium text-blue-900 mb-2">📝 Writing Process:</h4>
+                                    <ol class="text-sm text-blue-800 space-y-1">
+                                        <li>1. Fill in blog details and tags</li>
+                                        <li>2. Write content in Markdown editor</li>
+                                        <li>3. Use Preview to check formatting</li>
+                                        <li>4. Publish to generate HTML file</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="bg-green-50 border border-green-200 rounded-md p-3">
+                                    <h4 class="font-medium text-green-900 mb-2">📱 Server Status:</h4>
+                                    <p id="blog-server-status" class="text-sm text-green-800">Checking...</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-2">
+                                    <button id="blog-auto-commit-btn" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium">
+                                        🚀 Publish + Auto Commit
+                                    </button>
+                                    <button id="blog-backup-btn" class="w-full py-2 px-4 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
+                                        📦 Backup Blog Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="publications-tab" class="tab-content">
                 <div class="text-center py-12">
                     <h3 class="text-lg font-medium text-gray-900">Publications Tab</h3>
@@ -656,5 +846,6 @@
     <script src="assets/js/cms.js"></script>
     <script src="assets/js/cms-projects.js"></script>
     <script src="assets/js/cms-photography.js"></script>
+    <script src="assets/js/cms-blogs.js"></script>
 </body>
 </html>
