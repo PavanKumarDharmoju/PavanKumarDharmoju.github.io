@@ -1,0 +1,81 @@
+{
+  "profile": {
+    "name": "Pavan Kumar Dharmoju",
+    "title": "Building AI that works",
+    "bio": "I build AI systems that work in the real world. Currently at Marketing Attribution LLC, part of a 6-person team developing optimization software that turns complex marketing data into actionable insights for brands.",
+    "image": "assets/img/pavan.jpg",
+    "location": "Chicago, IL"
+  },
+  "contact": {
+    "email": "dharmojupavankumar@gmail.com",
+    "linkedin": "https://linkedin.com/in/pavankumardharmoju",
+    "github": "https://github.com/PavanKumarDharmoju",
+    "instagram": "pixelsbypavan",
+    "youtube": "pavankumardharmoju",
+    "scholar": "your-scholar-id"
+  },
+  "work": [
+    {
+      "company": "Marketing Attribution LLC",
+      "role": "AI/ML Engineer",
+      "period": "2024 - Present",
+      "description": "Part of a 6-person team developing optimization software that turns complex marketing data into actionable insights for brands.",
+      "url": "https://www.marketingattribution.com/"
+    },
+    {
+      "company": "Chan Zuckerberg Biohub",
+      "role": "ML Research Assistant",
+      "period": "2024",
+      "description": "Built RAG systems for biomedical research, processing 6M+ papers.",
+      "url": "https://www.czbiohub.org/"
+    },
+    {
+      "company": "Northwestern University - Feinberg School of Medicine",
+      "role": "Research Assistant",
+      "period": "2023 - 2024",
+      "description": "Teaching computers to detect eye diseases with 95% accuracy.",
+      "url": "https://www.feinberg.northwestern.edu/"
+    },
+    {
+      "company": "Deloitte",
+      "role": "Business Technology Analyst",
+      "period": "2020 - 2022",
+      "description": "Automating enterprise workflows and building data pipelines.",
+      "url": "https://www2.deloitte.com/us/en.html"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Northwestern University",
+      "degree": "MS in Artificial Intelligence",
+      "year": "December 2024"
+    }
+  ],
+  "skills": [
+    "Python",
+    "TensorFlow",
+    "PyTorch",
+    "AWS",
+    "SQL",
+    "Machine Learning",
+    "Computer Vision",
+    "NLP",
+    "RAG Systems",
+    "MLOps"
+  ],
+  "pages": [
+    "index.html",
+    "work.html",
+    "projects.html",
+    "blogs.html",
+    "publications.html",
+    "photography.html",
+    "contact.html"
+  ],
+  "siteMetadata": {
+    "title": "Pavan Kumar Dharmoju",
+    "description": "AI Engineer building systems that work in the real world",
+    "url": "https://pavankumardharmoju.github.io",
+    "author": "Pavan Kumar Dharmoju"
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "settings": {
+    "photosPerPage": 6,
+    "albumsPerPage": 2,
+    "enableLazyLoading": true
+  },
+  "equipment": {
+    "camera": {
+      "name": "Sony A7 III",
+      "details": "Full-frame mirrorless • 24.2MP"
+    },
+    "lens": {
+      "name": "Tamron 28-200mm f/2.8",
+      "details": "Versatile zoom • Weather sealed"
+    },
+    "postProcessing": {
+      "name": "Adobe Lightroom + VSCO",
+      "details": "RAW workflow • Film emulation"
+    },
+    "philosophy": {
+      "name": "Life around the lens",
+      "details": "Authentic moments • Technical precision"
+    }
+  },
+  "albums": [
+    {
+      "id": "chicago-streets-2024",
+      "commitHash": "f8a3c47",
+      "date": "Dec 2024",
+      "location": "Chicago Streets",
+      "statusColor": "orange",
+      "entryType": "feat",
+      "title": "urban geometry",
+      "description": "Street photography from Chicago's Loop and neighborhoods. Capturing the intersection of architecture and humanity. The city as a debugging session - finding patterns in chaos.",
+      "tags": [
+        "Street Photography",
+        "Sony A7 III",
+        "28-200mm"
+      ],
+      "photos": [
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMj0VqNftM4Z9gTBxyjoq5LCKFoQh-nqUo6kgAt3t2pw_m7sMFel9sxnXtxLJw73ImQlNiydv8oq-cY-sFIgXSMgyMxmu_ldth5rHF2B9D48jd4-2rLsoCruJlvQI2IV-QGLF4Y4MSstagPKQ_rFZYqew=w3004-h1992-s-no-gm?authuser=0",
+          "title": "The Wrigley Building",
+          "settings": "f/2.8 • 1/125s • ISO 400"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMIUJzAFebsffmaT1CyzsjB8xHTTyfayaIj5dSoco1vDbv0HTQZ3dljHhu30Oq8lMjt6zgXEGjKdHDumRnOmasAkp5ulfLmqi2vTqeUTNM7zlyoIigs3n_mt5_CVwsfGkfEKvhu8K5Hc_gxAdm1luiUkA=w3004-h1992-s-no-gm?authuser=0",
+          "title": "Michigan Avenue Morning",
+          "settings": "f/5.6 • 1/60s • ISO 200"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczM0d0kAMi2ugvwzjb4L3ZVuEugQJQAqI5ckuwfYlAFUtI1xDZlyCTCIdsPyy0OydzxFBeqC14SocLxNGcUE0o1AEU54MlB_hQ2feZXr3_j-nhtvzOBnu70NcdTi3iS5h9NxF1oEBIda23VzkKcvnZGdkg=w3004-h1992-s-no-gm?authuser=0",
+          "title": "Chicago River Reflections",
+          "settings": "f/4.0 • 1/60s • ISO 800"
+        }
+      ]
+    },
+    {
+      "commitHash": "2b9e874",
+      "date": "Nov 2024",
+      "location": "Lake Michigan",
+      "statusColor": "green",
+      "entryType": "fix",
+      "title": "nature as stress testing for the soul",
+      "description": "Landscapes and seascapes from weekend escapes. When debugging gets intense, sometimes you need to step outside and remember that not all systems can be controlled - and that's beautiful.",
+      "tags": [
+        "Landscape\n            ",
+        "Golden Hour\n            ",
+        "Long Exposure\n            "
+      ],
+      "photos": [
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMdYf0U-hsM_F4N9OB9Dhb7L_2i-hxgGowDdQmCjuhT7GUpky3xd82pIBHJF-GdsQyfuBP6eESUob3w-VuGYV59R5u_v1GyYstaN8hwBvxYp-ymaMLo-7bBe5JrJJoFQxsVxbB7VA1uNR0skxO83Q1eTA=w3456-h1944-s-no-gm?authuser=0",
+          "title": "Golden Hour Data",
+          "settings": "f/8.0 • 1/30s • ISO 100"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczN5JvQBRv2caTOOgKVM7KO1E7s6GsbuG0WdjKZ6oSnz2SNiLGdroXjT5Gv48EPC35MF4cWZWPErcEXKDIaE7Z2iiCIA2y1J9IlJT9hyR3wCeEQMz1ccE7tCwi4pqdkjmdx00s1PjwiHgPbOjaoOT_DkFQ=w3456-h1944-s-no-gm?authuser=0",
+          "title": "Recursive Trees",
+          "settings": "f/11 • 1/60s • ISO 200"
+        }
+      ],
+      "id": "lake-michigan-2024"
+    },
+    {
+      "id": "chicago-streets-2-2024",
+      "commitHash": "a1f9b83",
+      "date": "Oct 2024",
+      "location": "Chicago Neighborhoods",
+      "statusColor": "orange",
+      "entryType": "refactor",
+      "title": "more street exploration commits",
+      "description": "Additional street captures from different neighborhoods. Each frame is a different approach to the same problem - how do you capture a moment that tells a larger story?",
+      "tags": [
+        "Street Photography",
+        "Weather",
+        "Architecture"
+      ],
+      "photos": [
+        {
+          "url": "",
+          "title": "Commuter Patterns",
+          "settings": "f/5.6 • 1/250s • ISO 200"
+        },
+        {
+          "url": "",
+          "title": "Urban Geometry",
+          "settings": "f/8.0 • 1/60s • ISO 400"
+        },
+        {
+          "url": "",
+          "title": "Rain Reflections",
+          "settings": "f/2.8 • 1/30s • ISO 1600"
+        }
+      ]
+    },
+    {
+      "id": "tech-workspace-2024",
+      "commitHash": "d7c4a91",
+      "date": "Sep 2024",
+      "location": "Workspace",
+      "statusColor": "blue",
+      "entryType": "docs",
+      "title": "behind the scenes of building systems",
+      "description": "Technical photography documenting the process. Workspaces, setups, and the aesthetic of development. Because even code environments deserve good documentation.",
+      "tags": [
+        "Tech Documentation",
+        "Workspace",
+        "Ambient Light"
+      ],
+      "photos": [
+        {
+          "url": "",
+          "title": "Late Night Debug Session",
+          "settings": "f/1.8 • 1/15s • ISO 3200"
+        },
+        {
+          "url": "",
+          "title": "Data Center Aesthetics",
+          "settings": "f/2.8 • 1/125s • ISO 1600"
+        }
+      ]
+    }
+  ]
+}

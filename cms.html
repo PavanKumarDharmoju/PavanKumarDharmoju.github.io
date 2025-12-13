@@ -504,25 +504,29 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Commit Hash</label>
-                                        <input type="text" id="photo-commit-hash" class="w-full p-2 border border-gray-300 rounded-md" 
+                                        <input type="text" id="photography-commit-hash" class="w-full p-2 border border-gray-300 rounded-md" 
                                                placeholder="f8a3c47" maxlength="7">
+                                        <button type="button" id="photography-generate-hash" class="mt-1 text-xs text-blue-600 hover:text-blue-800">Generate Random</button>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
-                                        <input type="text" id="photo-year" class="w-full p-2 border border-gray-300 rounded-md" 
-                                               placeholder="2024">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                        <div class="flex gap-1">
+                                            <input type="text" id="photography-commit-date" class="flex-1 p-2 border border-gray-300 rounded-md" 
+                                                   placeholder="Dec 2024">
+                                            <button type="button" id="photography-today-btn" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-xs">Today</button>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                                        <input type="text" id="photo-location" class="w-full p-2 border border-gray-300 rounded-md" 
+                                        <input type="text" id="photography-location" class="w-full p-2 border border-gray-300 rounded-md" 
                                                placeholder="Chicago Streets">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Status Color</label>
-                                        <select id="photo-status-color" class="w-full p-2 border border-gray-300 rounded-md">
+                                        <select id="photography-status-color" class="w-full p-2 border border-gray-300 rounded-md">
                                             <option value="orange">Orange (Street Photography)</option>
                                             <option value="green">Green (Nature/Landscape)</option>
                                             <option value="blue">Blue (Tech/Documentary)</option>
@@ -532,55 +536,48 @@
                                     </div>
                                 </div>
                                 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Series Title</label>
-                                    <input type="text" id="photo-series-title" class="w-full p-2 border border-gray-300 rounded-md" 
-                                           placeholder="feat: urban geometry and human stories">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Entry Type</label>
+                                        <select id="photography-entry-type" class="w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="feat">feat (New series)</option>
+                                            <option value="docs">docs (Documentation)</option>
+                                            <option value="fix">fix (Corrections)</option>
+                                            <option value="refactor">refactor (Reorganized)</option>
+                                            <option value="experiment">experiment (Testing)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Album Title</label>
+                                        <input type="text" id="photography-album-title" class="w-full p-2 border border-gray-300 rounded-md" 
+                                               placeholder="urban geometry and human stories">
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Series Description</label>
-                                    <textarea id="photo-series-description" rows="3" class="w-full p-2 border border-gray-300 rounded-md" 
+                                    <textarea id="photography-description-text" rows="3" class="w-full p-2 border border-gray-300 rounded-md" 
                                               placeholder="Describe the photo series, location, camera equipment used..."></textarea>
                                 </div>
 
-                                <!-- Photo Items Section -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Photo Items</label>
-                                    <div id="photo-items-container" class="space-y-3">
-                                        <!-- Photo items will be added here -->
-                                    </div>
-                                    <button type="button" id="add-photo-item-btn" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm">
-                                        + Add Photo
-                                    </button>
-                                </div>
-                                
+                                <!-- Tags Section -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
-                                    <div class="flex flex-wrap gap-2 mb-2" id="photo-current-tags"></div>
-                                    <div class="flex gap-2">
-                                        <input type="text" id="photo-tag-input" class="flex-1 p-2 border border-gray-300 rounded-md" 
-                                               placeholder="Add a tag (e.g., Street Photography, Canon EOS R6)">
-                                        <button type="button" id="add-photo-tag-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-1">💡 Common tags: Street Photography, Landscape, Portrait, Canon EOS R6, 24-70mm f/2.8, Golden Hour</p>
+                                    <div class="flex flex-wrap gap-2 mb-2" id="photography-tags-list"></div>
+                                    <input type="text" id="photography-tags-input" class="w-full p-2 border border-gray-300 rounded-md" 
+                                           placeholder="Add a tag (e.g., Street Photography, Sony A7 III)">
+                                    <p class="text-xs text-gray-500 mt-1">💡 Common tags: Street Photography, Landscape, Portrait, Sony A7 III, 24-70mm f/2.8, Golden Hour</p>
                                 </div>
 
-                                <!-- Visibility Settings -->
+                                <!-- Photos Section -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
-                                    <div class="flex items-center gap-4">
-                                        <label class="flex items-center">
-                                            <input type="radio" name="photo-visibility" value="visible" checked class="mr-2">
-                                            <span class="text-sm">Initially Visible</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="radio" name="photo-visibility" value="load-more" class="mr-2">
-                                            <span class="text-sm">Load More Section</span>
-                                        </label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Photos</label>
+                                    <div id="photography-photos-container" class="space-y-3">
+                                        <!-- Photo items will be added here -->
                                     </div>
+                                    <button type="button" id="photography-add-photo-btn" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm">
+                                        + Add Photo
+                                    </button>
                                 </div>
                                 
                                 <div class="flex gap-4">
