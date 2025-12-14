@@ -1,7 +1,7 @@
 {
   "settings": {
     "photosPerPage": 6,
-    "albumsPerPage": 2,
+    "albumsPerPage": 10,
     "enableLazyLoading": true
   },
   "equipment": {

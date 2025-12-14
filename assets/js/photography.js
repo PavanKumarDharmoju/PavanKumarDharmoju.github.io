@@ -14,7 +14,7 @@ class PhotoGallery {
         this.settings = {};
         this.equipment = {};
         this.currentPage = 0;
-        this.albumsPerPage = 2;
+        this.albumsPerPage = 10;
         this.isLoading = false;
         
         this.statusColors = {
@@ -71,7 +71,7 @@ class PhotoGallery {
         this.albums = data.albums || [];
         this.settings = data.settings || {};
         this.equipment = data.equipment || {};
-        this.albumsPerPage = this.settings.albumsPerPage || 2;
+        this.albumsPerPage = this.settings.albumsPerPage || 10;
     }
     
     getImageUrl(photo) {
