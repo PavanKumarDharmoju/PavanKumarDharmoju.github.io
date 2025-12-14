@@ -120,36 +120,36 @@
       "id": "lake-michigan-2024"
     },
     {
-      "id": "chicago-streets-2-2024",
       "commitHash": "a1f9b83",
       "date": "Oct 2024",
       "location": "Chicago Neighborhoods",
       "statusColor": "orange",
       "entryType": "refactor",
       "title": "more street exploration commits",
-      "description": "Additional street captures from different neighborhoods. Each frame is a different approach to the same problem - how do you capture a moment that tells a larger story?",
+      "description": "Additional street captures from different neighborhoods. Each frame is a different approach to the same problem, how do you capture a moment that tells a larger story, this commit focuses purely on vehicles",
       "tags": [
-        "Street Photography",
-        "Weather",
-        "Architecture"
+        "Street Photography\n            ",
+        "Weather\n            ",
+        "Architecture\n            "
       ],
       "photos": [
         {
-          "url": "",
-          "title": "Commuter Patterns",
-          "settings": "f/5.6 • 1/250s • ISO 200"
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczPTdgQ2RoB6tyLvOko1H0eLJE1YyUUdxtikEKbw1XVLVGlbT8LVhKxfLBNV8CmYoAMEzJyk5cS9hf18jEo6dUyQH-WnduuFc0T2oxFKcx7HXNZrBL_xSP9Ecpy8Fo10Wt2Ta8C9j7V5WjUVv0V3RozRag=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Bikes Ahead",
+          "settings": "f/2.8 • 1/1000s • ISO 200"
         },
         {
-          "url": "",
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMf2_EH7BLxxMmqmCwu2YpzWRaHOkbBjF_RoGACE_HXMzzWy-df-ijmoXBzwHnb9Wbnyw3lEC9nqkK9X-YcQXTERaNW9Yo-IZ485l-UCjIE8ALLIQJbrqFNqcDQjJ4zuuL_UUSIYdsUIVHpMTfKHaAsFQ=w2736-h1814-s-no-gm?authuser=0",
           "title": "Urban Geometry",
-          "settings": "f/8.0 • 1/60s • ISO 400"
+          "settings": "f/2.8 • 1/1000s • ISO 200"
         },
         {
-          "url": "",
-          "title": "Rain Reflections",
-          "settings": "f/2.8 • 1/30s • ISO 1600"
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczNKUbE9FFOUHy_H3w6Hrl8gzWYGViGrf9g6jrXmA-NDpFWApiYTY-mb3Q2WSn_xoz0578SRABYuAK7Gkx7RwgI3XPWWKKsTaUSb-CTeAkXNAoyoGWg06Q4Akx9Ov_RIxewYW2WkOlb2KCiv0AyKJCdAZg=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Bikes Belong",
+          "settings": "f/2.8 • 1/1000s • ISO 200"
         }
-      ]
+      ],
+      "id": "chicago-streets-2-2024"
     },
     {
       "id": "tech-workspace-2024",
