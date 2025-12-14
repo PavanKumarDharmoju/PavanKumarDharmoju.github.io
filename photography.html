@@ -38,37 +38,46 @@
 
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
         }
 
         @media (max-width: 640px) {
             .photo-grid {
                 grid-template-columns: 1fr;
-                gap: 0.75rem;
+                gap: 1rem;
             }
         }
 
         @media (min-width: 641px) and (max-width: 1024px) {
             .photo-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
             }
         }
 
         @media (min-width: 1025px) {
             .photo-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
             }
         }
 
         .photo-item {
-            aspect-ratio: 4/3;
+            min-height: 300px;
             overflow: hidden;
-            border-radius: 8px;
+            border-radius: 12px;
             position: relative;
             background: #f3f4f6;
             border: 1px solid #e5e7eb;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .photo-item:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
         }
 
         .photo-item img {
@@ -87,8 +96,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 1.5rem;
             transform: translateY(100%);
             transition: transform 0.3s ease;
         }
@@ -99,18 +108,20 @@
 
         .photo-overlay h3 {
             color: white;
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
             margin: 0;
+            line-height: 1.4;
         }
 
         .photo-overlay p {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.75rem;
-            margin: 0.25rem 0 0;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.875rem;
+            margin: 0.5rem 0 0;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
         }
 
-        /* Lightbox */
+        /* Enhanced Image Viewer */
         .lightbox {
             display: none;
             position: fixed;
@@ -119,29 +130,101 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
             z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            padding: 1rem;
         }
 
         .lightbox.active {
+            display: block;
+        }
+
+        .image-viewer-container {
             display: flex;
+            height: 100%;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .image-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
         .lightbox img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            border-radius: 4px;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-info-panel {
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .image-meta {
+            flex: 1;
+        }
+
+        .image-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 1rem 0;
+            line-height: 1.4;
+        }
+
+        .image-details {
+            space-y: 0.75rem;
+        }
+
+        .detail-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+        }
+
+        .detail-value {
+            font-size: 0.875rem;
+            color: #374151;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .image-counter {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-align: center;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
         }
 
         .lightbox-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 1rem;
+            right: 1rem;
             color: white;
-            font-size: 2rem;
+            font-size: 1.5rem;
             cursor: pointer;
             background: rgba(255,255,255,0.1);
             width: 44px;
@@ -150,11 +233,85 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            z-index: 10;
+            border: none;
         }
 
         .lightbox-close:hover {
             background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: translateY(-50%);
+        }
+
+        .nav-prev {
+            left: 1rem;
+        }
+
+        .nav-next {
+            left: calc(100% - 6rem);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .image-viewer-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .image-display {
+                flex: 1;
+                min-height: 60vh;
+            }
+            
+            .image-info-panel {
+                width: 100%;
+                max-height: 40vh;
+                overflow-y: auto;
+            }
+            
+            .nav-arrow {
+                bottom: 50%;
+                top: auto;
+                transform: translateY(50%);
+            }
+            
+            .nav-arrow:hover {
+                transform: translateY(50%) scale(1.1);
+            }
+            
+            .nav-next {
+                left: auto;
+                right: 1rem;
+            }
         }
 
         /* Album animations */
@@ -326,10 +483,61 @@
         </div>
     </div>
     
-    <!-- Lightbox -->
+    <!-- Enhanced Image Viewer -->
     <div id="lightbox" class="lightbox">
-        <span class="lightbox-close" aria-label="Close lightbox">&times;</span>
-        <img id="lightbox-img" src="" alt="Enlarged photo view">
+        <div class="image-viewer-container">
+            <!-- Close Button -->
+            <span class="lightbox-close" aria-label="Close image viewer">&times;</span>
+            
+            <!-- Navigation Arrows -->
+            <button class="nav-arrow nav-prev" aria-label="Previous image">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <button class="nav-arrow nav-next" aria-label="Next image">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+            
+            <!-- Image Display Area -->
+            <div class="image-display">
+                <img id="lightbox-img" src="" alt="Photo view" loading="eager">
+            </div>
+            
+            <!-- Image Info Panel -->
+            <div class="image-info-panel">
+                <div class="image-info-content">
+                    <div class="image-meta">
+                        <h3 id="image-title" class="image-title">Photo Title</h3>
+                        <div class="image-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Settings:</span>
+                                <span id="image-settings" class="detail-value">f/2.8 • 1/100s • ISO 200 • 28mm</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Album:</span>
+                                <span id="image-album" class="detail-value">Album Name</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Location:</span>
+                                <span id="image-location" class="detail-value">Location Name</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Date:</span>
+                                <span id="image-date" class="detail-value">Date</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Counter -->
+                    <div class="image-counter">
+                        <span id="current-image">1</span> / <span id="total-images">1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Copyright Footer -->
