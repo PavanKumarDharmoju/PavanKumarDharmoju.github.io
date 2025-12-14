@@ -152,31 +152,36 @@
       "id": "chicago-streets-2-2024"
     },
     {
-      "id": "tech-workspace-2024",
       "commitHash": "d7c4a91",
       "date": "Sep 2024",
-      "location": "Workspace",
+      "location": "Chicago Downtown",
       "statusColor": "blue",
       "entryType": "docs",
-      "title": "behind the scenes of building systems",
-      "description": "Technical photography documenting the process. Workspaces, setups, and the aesthetic of development. Because even code environments deserve good documentation.",
+      "title": "Beauty of Crowds",
+      "description": "Crowds are misunderstood; people perceive inherent chaos, but they actually possess a remarkable order. A large number of people, spanning different ages and emotions, still follow a laminar flow, moving without obstruction.",
       "tags": [
-        "Tech Documentation",
-        "Workspace",
-        "Ambient Light"
+        "Tech Documentation\n            ",
+        "Workspace\n            ",
+        "Ambient Light\n            "
       ],
       "photos": [
         {
-          "url": "",
-          "title": "Late Night Debug Session",
-          "settings": "f/1.8 • 1/15s • ISO 3200"
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczOF1R-Y3zIxFs_V_ArC89LGMrZNQ6ozad1Dp2QioIuuKZ2Cz7G_ZPc2carZfohxHBWiwluMLsg1b0QKEz_lF8EHJzmHdXDgeWfgVQCSV3yXoBygQ_2nOkih_kzIzCXbuDxS-xpLjUYBWUJiilrU0Etuow=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Magnificent Mile",
+          "settings": "f/2.8 • 1/1000s • ISO 200"
         },
         {
-          "url": "",
-          "title": "Data Center Aesthetics",
-          "settings": "f/2.8 • 1/125s • ISO 1600"
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczPq0_Gk_4tFiFKvcLrNDr0WAFaJy2wczgLqsPyBuPE96JUIUb0aDGlPaPqDJZmyevNuBSIh_I00X2kqDboZvu_I0yJ8N834DJdiFqs4LiDvBVM-p_8D4dnRfCGn7KMTGMx8Frs7iG42UtGmKy8Le9QuCA=w2736-h1814-s-no-gm?authuser=0",
+          "title": "The L Underground",
+          "settings": "f/2.8 • 1/1000s • ISO 200"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczOsADqYXbaU1sMVpr5N9zVE0CiAcNQlbRqj4J99ALNDVH-ZvAFCQja-Dxd1IQJBStORFVVqr7npHJFqkHIce-s7ActN4J7zqnJlgigQmgfFpgWLyUE7dugXJchuc7u__wCR_xuv8mf66Y2SM7yuSJ7Wtw=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Manchester United Match",
+          "settings": "f/2.8 • 1/1000s • ISO 200"
         }
-      ]
+      ],
+      "id": "tech-workspace-2024"
     }
   ]
 }
