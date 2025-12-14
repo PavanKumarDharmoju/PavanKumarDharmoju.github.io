@@ -1,0 +1,137 @@
+# Robots.txt - Blocking AI crawlers and data scrapers
+# Personal portfolio of Pavan Kumar Dharmoju
+# Last updated: December 14, 2025
+
+# Block all AI training and scraping bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Anthropic
+Disallow: /
+
+User-agent: Bard
+Disallow: /
+
+User-agent: Gemini
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /
+
+User-agent: python-requests
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: img2dataset
+Disallow: /
+
+User-agent: ImagifyBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: VelenPublicWebCrawler
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FriendlyCrawler
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: AWS-*
+Disallow: /
+
+# Block content scraping and training data collection
+User-agent: *
+Disallow: /photos.json
+Disallow: /blog/
+Disallow: /*.json$
+Disallow: /assets/js/
+Disallow: /cms.html
+Disallow: /work-admin.html
+
+# Allow legitimate search engines for public pages
+User-agent: Googlebot
+Allow: /index.html
+Allow: /work.html
+Allow: /projects.html
+Allow: /publications.html
+Allow: /photography.html
+Allow: /contact.html
+Disallow: /
+
+User-agent: Bingbot
+Allow: /index.html
+Allow: /work.html
+Allow: /projects.html
+Allow: /publications.html
+Allow: /photography.html
+Allow: /contact.html
+Disallow: /
+
+User-agent: DuckDuckBot
+Allow: /index.html
+Allow: /work.html
+Allow: /projects.html
+Allow: /publications.html
+Allow: /photography.html
+Allow: /contact.html
+Disallow: /
+
+# Sitemap for legitimate indexing
+Sitemap: https://pavankumardharmoju.github.io/sitemap.xml
+
+# Crawl delay for all bots
+Crawl-delay: 10
