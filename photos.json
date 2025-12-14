@@ -24,6 +24,38 @@
   },
   "albums": [
     {
+      "commitHash": "uef1gi6",
+      "date": "Dec 14, 2025",
+      "location": "Wrigley Field, Chicago",
+      "statusColor": "orange",
+      "entryType": "feat",
+      "title": "Go Cubs",
+      "description": "First baseball game! Dansby Swanson hit a three-run homer, tying his season high with four RBIs, as the Chicago Cubs defeated the Oakland Athletics 9-2. Shot it all with my 28mm. Rathan got the hang of it in like 5 minutes. Baseball is way easier than cricket, for sure.",
+      "tags": [
+        "Sports\n            ",
+        "Sunset\n            ",
+        "Film\n            "
+      ],
+      "photos": [
+        {
+          "url": "https://photos.fife.usercontent.google.com/pw/AP1GczNH02vNLH3_DlK6E2EqxbfsNAsZGE9IY5Ttp_oGeJHUhdXM4bUCPjRZlQ=w1320-h1992-s-no-gm?authuser=0",
+          "title": "Entry Gate",
+          "settings": "f/2.8 • 1/100s • ISO 200 • 28mm"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMloWEV5I92jNXkoQSA9vIfGHF7HxTF2j1eQVpiNRIdNC8WOXs7ZnWyD3-9jgYVDl_QkKvshjULOug5sahhWp4IFhAqCfMFqGvEYB8G29WoZMJD3xQUA4AOlBUnfu-yhBeuXPNBhitSBiE_QL-MnlJEDQ=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Cubs Score",
+          "settings": "f/2.8 • 1/100s • ISO 200 • 28mm"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczO3IM1aQYhhfAjby69bitxQhDgfPii82DBiSFc-bbcsuSHoeJ0HL1cZHPKMbxKuYTR22cBoE_d-XyWvoSOIHXhhz2NX3MZb3n3ovXzncE-Sbl7pVz3nUQE_g0q3FdSjLvR94wYuHcVZECBlWZOt4JdrLA=w2736-h1814-s-no-gm?authuser=0",
+          "title": "Cubs Fielding",
+          "settings": "f/2.8 • 1/100s • ISO 200 • 28mm"
+        }
+      ],
+      "id": "1765735655813"
+    },
+    {
       "commitHash": "5qbnmxk",
       "date": "Oct 12, 2025",
       "location": "Chicago Loop",
