@@ -1,0 +1,117 @@
+# .htaccess - Server-level AI bot blocking and content protection
+# Personal portfolio of Pavan Kumar Dharmoju
+
+# Block AI training and scraping bots by User-Agent
+<RequireAll>
+    Require all granted
+    
+    # Block OpenAI and ChatGPT bots
+    Require not env bad_bot
+    SetEnvIfNoCase User-Agent "GPTBot" bad_bot
+    SetEnvIfNoCase User-Agent "ChatGPT-User" bad_bot
+    SetEnvIfNoCase User-Agent "OpenAI" bad_bot
+    SetEnvIfNoCase User-Agent "OAI-SearchBot" bad_bot
+    
+    # Block Anthropic/Claude bots  
+    SetEnvIfNoCase User-Agent "Claude" bad_bot
+    SetEnvIfNoCase User-Agent "anthropic" bad_bot
+    SetEnvIfNoCase User-Agent "ClaudeBot" bad_bot
+    
+    # Block Google Extended AI training
+    SetEnvIfNoCase User-Agent "Google-Extended" bad_bot
+    SetEnvIfNoCase User-Agent "Bard" bad_bot
+    SetEnvIfNoCase User-Agent "Gemini" bad_bot
+    
+    # Block Meta/Facebook AI bots
+    SetEnvIfNoCase User-Agent "Meta-ExternalAgent" bad_bot
+    SetEnvIfNoCase User-Agent "Meta-ExternalFetcher" bad_bot
+    SetEnvIfNoCase User-Agent "FacebookBot" bad_bot
+    
+    # Block other AI training bots
+    SetEnvIfNoCase User-Agent "CCBot" bad_bot
+    SetEnvIfNoCase User-Agent "Diffbot" bad_bot
+    SetEnvIfNoCase User-Agent "PerplexityBot" bad_bot
+    SetEnvIfNoCase User-Agent "YouBot" bad_bot
+    SetEnvIfNoCase User-Agent "Bytespider" bad_bot
+    SetEnvIfNoCase User-Agent "Applebot-Extended" bad_bot
+    
+    # Block scraping tools
+    SetEnvIfNoCase User-Agent "Scrapy" bad_bot
+    SetEnvIfNoCase User-Agent "python-requests" bad_bot
+    SetEnvIfNoCase User-Agent "img2dataset" bad_bot
+    SetEnvIfNoCase User-Agent "ImagifyBot" bad_bot
+    SetEnvIfNoCase User-Agent "DataForSeoBot" bad_bot
+    SetEnvIfNoCase User-Agent "VelenPublicWebCrawler" bad_bot
+    SetEnvIfNoCase User-Agent "Omgilibot" bad_bot
+    SetEnvIfNoCase User-Agent "FriendlyCrawler" bad_bot
+    SetEnvIfNoCase User-Agent "Timpibot" bad_bot
+</RequireAll>
+
+# Custom error page for blocked bots
+ErrorDocument 403 "Access denied: AI training and automated scraping prohibited"
+
+# Protect sensitive files from direct access
+<Files "photos.json">
+    Require all denied
+    ErrorDocument 403 "Content protected from automated access"
+</Files>
+
+<Files "*.json">
+    Require all denied
+    ErrorDocument 403 "Data files protected from automated access"
+</Files>
+
+<Files "cms.html">
+    Require all denied
+    ErrorDocument 403 "Admin interface protected"
+</Files>
+
+<Files "work-admin.html">
+    Require all denied  
+    ErrorDocument 403 "Admin interface protected"
+</Files>
+
+# Protect JavaScript files containing data
+<FilesMatch "\.(js)$">
+    <RequireAll>
+        Require all granted
+        Require not env bad_bot
+    </RequireAll>
+</FilesMatch>
+
+# Add security headers
+<IfModule mod_headers.c>
+    # Prevent content sniffing
+    Header always set X-Content-Type-Options nosniff
+    
+    # Prevent clickjacking
+    Header always set X-Frame-Options DENY
+    
+    # Add AI blocking headers
+    Header always set X-Robots-Tag "noai, noimageai"
+    Header always set X-AI-Training "disallow"
+    
+    # Copyright notice in headers
+    Header always set X-Copyright "© 2025 Pavan Kumar Dharmoju - All rights reserved"
+    Header always set X-License "Content protected - No AI training permitted"
+</IfModule>
+
+# Rate limiting for remaining traffic
+<IfModule mod_evasive24.c>
+    DOSHashTableSize    3000
+    DOSPageCount        10
+    DOSSiteCount        100  
+    DOSPageInterval     2
+    DOSSiteInterval     2
+    DOSBlockingPeriod   3600
+</IfModule>
+
+# MIME type security
+<IfModule mod_mime.c>
+    AddType application/json .json
+    AddType text/plain .txt
+</IfModule>
+
+# Disable server signature
+ServerTokens Prod
+ServerSignature Off
