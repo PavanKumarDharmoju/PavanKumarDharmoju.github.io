@@ -148,7 +148,7 @@ class PhotoGallery {
                 </p>
                 
                 <div class="photo-grid mb-4">
-                    ${album.photos.map(photo => this.renderPhoto(photo)).join('')}
+                    ${album.photos.map((photo, photoIndex) => this.renderPhoto(photo, album, photoIndex)).join('')}
                 </div>
                 
                 <div class="flex flex-wrap gap-2">
@@ -163,17 +163,18 @@ class PhotoGallery {
         container.insertAdjacentHTML('beforeend', albumHtml);
     }
     
-    renderPhoto(photo) {
+    renderPhoto(photo, album, photoIndex) {
         const imageUrl = this.getImageUrl(photo);
         const highResUrl = this.getHighResUrl(photo);
         const hasImage = imageUrl !== null;
         
         // Escape quotes in title for onclick handler
         const escapedTitle = (photo.title || '').replace(/'/g, "\\'");
+        const albumId = album.commitHash || album.title;
         
         if (hasImage) {
             return `
-                <div class="photo-item" onclick="gallery.openLightbox('${highResUrl}', '${escapedTitle}')">
+                <div class="photo-item" onclick="gallery.openLightbox('${highResUrl}', '${escapedTitle}', '${albumId}', ${photoIndex})">
                     <img 
                         src="${imageUrl}" 
                         alt="${photo.title}"
@@ -347,6 +348,11 @@ class PhotoGallery {
         const lightbox = document.getElementById('lightbox');
         if (!lightbox) return;
         
+        // Initialize image tracking
+        this.currentImageIndex = 0;
+        this.currentAlbumPhotos = [];
+        this.currentAlbumData = null;
+        
         // Close on background click
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
@@ -354,21 +360,151 @@ class PhotoGallery {
             }
         });
         
-        // Close on escape
+        // Navigation arrows
+        const prevBtn = lightbox.querySelector('.nav-prev');
+        const nextBtn = lightbox.querySelector('.nav-next');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.navigateImage(-1));
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.navigateImage(1));
+        }
+        
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.closeLightbox();
+            if (!lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    this.closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.navigateImage(-1);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.navigateImage(1);
+                    break;
+            }
         });
     }
     
-    openLightbox(imageUrl, title) {
+    openLightbox(imageUrl, title, albumId, photoIndex) {
         const lightbox = document.getElementById('lightbox');
         const img = document.getElementById('lightbox-img');
         
-        if (lightbox && img) {
-            img.src = imageUrl;
-            img.alt = title || 'Photo';
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+        if (!lightbox || !img) return;
+        
+        // Find the album and set up navigation data
+        this.currentAlbumData = this.albums.find(album => 
+            album.commitHash === albumId || album.title === albumId
+        );
+        
+        if (!this.currentAlbumData) {
+            console.error('Album not found:', albumId);
+            return;
+        }
+        
+        this.currentAlbumPhotos = this.currentAlbumData.photos || [];
+        this.currentImageIndex = photoIndex || 0;
+        
+        // Load and display the image
+        this.displayCurrentImage();
+        
+        // Show lightbox
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Update navigation buttons
+        this.updateNavigationButtons();
+    }
+    
+    displayCurrentImage() {
+        const img = document.getElementById('lightbox-img');
+        const currentPhoto = this.currentAlbumPhotos[this.currentImageIndex];
+        
+        if (!img || !currentPhoto) return;
+        
+        // Set image
+        const highResUrl = this.getHighResUrl(currentPhoto);
+        img.src = highResUrl;
+        img.alt = currentPhoto.title || 'Photo';
+        
+        // Update info panel
+        this.updateInfoPanel(currentPhoto);
+        
+        // Update counter
+        this.updateImageCounter();
+    }
+    
+    updateInfoPanel(photo) {
+        // Update title
+        const titleEl = document.getElementById('image-title');
+        if (titleEl) {
+            titleEl.textContent = photo.title || 'Untitled';
+        }
+        
+        // Update settings
+        const settingsEl = document.getElementById('image-settings');
+        if (settingsEl) {
+            settingsEl.textContent = photo.settings || 'Settings not available';
+        }
+        
+        // Update album info
+        const albumEl = document.getElementById('image-album');
+        if (albumEl && this.currentAlbumData) {
+            albumEl.textContent = this.currentAlbumData.title || 'Unknown Album';
+        }
+        
+        // Update location
+        const locationEl = document.getElementById('image-location');
+        if (locationEl && this.currentAlbumData) {
+            locationEl.textContent = this.currentAlbumData.location || 'Unknown Location';
+        }
+        
+        // Update date
+        const dateEl = document.getElementById('image-date');
+        if (dateEl && this.currentAlbumData) {
+            dateEl.textContent = this.currentAlbumData.date || 'Unknown Date';
+        }
+    }
+    
+    updateImageCounter() {
+        const currentEl = document.getElementById('current-image');
+        const totalEl = document.getElementById('total-images');
+        
+        if (currentEl) {
+            currentEl.textContent = this.currentImageIndex + 1;
+        }
+        
+        if (totalEl) {
+            totalEl.textContent = this.currentAlbumPhotos.length;
+        }
+    }
+    
+    updateNavigationButtons() {
+        const prevBtn = document.querySelector('.nav-prev');
+        const nextBtn = document.querySelector('.nav-next');
+        
+        if (prevBtn) {
+            prevBtn.disabled = this.currentImageIndex <= 0;
+        }
+        
+        if (nextBtn) {
+            nextBtn.disabled = this.currentImageIndex >= this.currentAlbumPhotos.length - 1;
+        }
+    }
+    
+    navigateImage(direction) {
+        const newIndex = this.currentImageIndex + direction;
+        
+        if (newIndex >= 0 && newIndex < this.currentAlbumPhotos.length) {
+            this.currentImageIndex = newIndex;
+            this.displayCurrentImage();
+            this.updateNavigationButtons();
         }
     }
     
@@ -377,6 +513,11 @@ class PhotoGallery {
         if (lightbox) {
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
+            
+            // Reset navigation data
+            this.currentImageIndex = 0;
+            this.currentAlbumPhotos = [];
+            this.currentAlbumData = null;
         }
     }
     
