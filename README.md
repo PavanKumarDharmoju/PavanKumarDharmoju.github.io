@@ -136,7 +136,16 @@ The `CNAME` file configures the custom domain. Update it if using a different do
 
 ## 📄 License
 
-© 2025 Pavan Kumar Dharmoju. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+**What this means:**
+- ✅ You can use the code for learning and personal projects
+- ✅ You can modify and distribute the code
+- ✅ You can use it for commercial purposes
+- ⚠️ You must include the original copyright notice
+- ⚠️ The software is provided "as is" without warranty
+
+**Note:** While the code is MIT licensed, my personal content (writing, photography, etc.) remains my intellectual property.
 
 ## 📬 Contact
 
