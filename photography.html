@@ -38,14 +38,38 @@
 
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            grid-auto-rows: auto;
+        }
+
+        /* Dynamic aspect ratio handling */
+        .photo-grid.masonry {
+            columns: 2;
+            column-gap: 1.5rem;
+            column-fill: balance;
+        }
+
+        .photo-grid.masonry .photo-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            width: 100%;
         }
 
         @media (max-width: 640px) {
             .photo-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+            
+            .photo-grid.masonry {
+                columns: 1;
+                column-gap: 0;
+            }
+            
+            .photo-grid.masonry .photo-item {
+                margin-bottom: 1rem;
             }
         }
 
@@ -54,17 +78,30 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1.25rem;
             }
+            
+            .photo-grid.masonry {
+                columns: 2;
+                column-gap: 1.25rem;
+            }
+            
+            .photo-grid.masonry .photo-item {
+                margin-bottom: 1.25rem;
+            }
         }
 
         @media (min-width: 1025px) {
             .photo-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
                 gap: 1.5rem;
+            }
+            
+            .photo-grid.masonry {
+                columns: 3;
+                column-gap: 1.5rem;
             }
         }
 
         .photo-item {
-            min-height: 300px;
             overflow: hidden;
             border-radius: 12px;
             position: relative;
@@ -74,6 +111,30 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Standard grid layout */
+        .photo-grid:not(.masonry) .photo-item {
+            aspect-ratio: 4/3;
+            min-height: 250px;
+        }
+
+        .photo-grid:not(.masonry) .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Masonry layout - natural aspect ratios */
+        .photo-grid.masonry .photo-item {
+            height: auto;
+        }
+
+        .photo-grid.masonry .photo-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            max-height: 600px;
+        }
+
         .photo-item:hover {
             border-color: #3b82f6;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -81,14 +142,29 @@
         }
 
         .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .photo-item:hover img {
-            transform: scale(1.05);
+            transform: scale(1.02);
+        }
+
+        /* Aspect ratio specific styles */
+        .photo-item.portrait {
+            grid-row: span 2;
+        }
+
+        .photo-item.landscape {
+            grid-column: span 1;
+        }
+
+        .photo-item.panorama {
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }
+
+        .photo-item.square {
+            aspect-ratio: 1/1;
         }
 
         .photo-overlay {
@@ -121,7 +197,7 @@
             font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
         }
 
-        /* Enhanced Image Viewer */
+        /* Modern Photo Viewer */
         .lightbox {
             display: none;
             position: fixed;
@@ -129,188 +205,415 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0, 0, 0, 0.98);
             backdrop-filter: blur(20px);
             z-index: 1000;
-            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .lightbox.active {
-            display: block;
+            display: flex;
+            opacity: 1;
         }
 
-        .image-viewer-container {
+        .photo-viewer {
             display: flex;
+            flex-direction: column;
+            width: 100%;
             height: 100%;
-            gap: 1rem;
             position: relative;
         }
 
-        .image-display {
-            flex: 1;
+        /* Viewer Header */
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            transition: opacity 0.3s ease;
+        }
+
+        .viewer-header.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .viewer-title {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin: 0;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .viewer-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .viewer-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .lightbox img {
+        .viewer-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .viewer-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main Image Container */
+        .image-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: pan-x pan-y pinch-zoom;
+        }
+
+        .image-wrapper {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: grab;
+        }
+
+        .image-wrapper.dragging {
+            cursor: grabbing;
+        }
+
+        .image-wrapper.zoomed {
+            cursor: zoom-out;
+        }
+
+        .lightbox-img {
+            display: block;
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
         }
 
-        .image-info-panel {
-            width: 320px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Aspect ratio specific viewer adjustments */
+        .image-container.portrait .lightbox-img {
+            max-height: 85vh;
+            max-width: calc(85vh * 2/3);
         }
 
-        .image-meta {
-            flex: 1;
+        .image-container.landscape .lightbox-img {
+            max-width: 85vw;
+            max-height: calc(85vw * 2/3);
         }
 
-        .image-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0 0 1rem 0;
-            line-height: 1.4;
+        .image-container.panorama .lightbox-img {
+            max-width: 90vw;
+            max-height: calc(90vw * 1/3);
         }
 
-        .image-details {
-            space-y: 0.75rem;
+        .image-container.square .lightbox-img {
+            max-width: 70vh;
+            max-height: 70vh;
         }
 
-        .detail-item {
-            margin-bottom: 0.75rem;
-        }
-
-        .detail-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #6b7280;
-            display: block;
-            margin-bottom: 0.25rem;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-        }
-
-        .detail-value {
-            font-size: 0.875rem;
-            color: #374151;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .image-counter {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e5e7eb;
-            font-size: 0.875rem;
-            color: #6b7280;
-            text-align: center;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: rgba(255,255,255,0.1);
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            z-index: 10;
-            border: none;
-        }
-
-        .lightbox-close:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
-        }
-
-        .nav-arrow {
+        /* Navigation */
+        .nav-button {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            z-index: 10;
+            transition: all 0.2s ease;
+            z-index: 15;
+            backdrop-filter: blur(10px);
+            opacity: 0.8;
         }
 
-        .nav-arrow:hover {
-            background: rgba(255,255,255,0.2);
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            opacity: 1;
             transform: translateY(-50%) scale(1.1);
         }
 
-        .nav-arrow:disabled {
-            opacity: 0.4;
+        .nav-button:disabled {
+            opacity: 0.3;
             cursor: not-allowed;
             transform: translateY(-50%);
         }
 
         .nav-prev {
-            left: 1rem;
+            left: 2rem;
         }
 
         .nav-next {
-            left: calc(100% - 6rem);
+            right: 2rem;
+        }
+
+        /* Bottom Info Panel */
+        .viewer-footer {
+            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            padding: 2rem;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            transition: opacity 0.3s ease;
+        }
+
+        .viewer-footer.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .image-info {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: end;
+        }
+
+        .image-meta {
+            color: white;
+        }
+
+        .image-meta h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .meta-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .counter-info {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+        }
+
+        .image-counter {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .zoom-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Loading State */
+        .image-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Fullscreen mode */
+        .lightbox.fullscreen {
+            background: black;
+        }
+
+        .lightbox.fullscreen .viewer-header,
+        .lightbox.fullscreen .viewer-footer {
+            display: none;
+        }
+
+        /* Smooth transitions */
+        .lightbox-img {
+            transition: opacity 0.3s ease;
+        }
+
+        .image-wrapper {
+            transform-origin: center;
+        }
+
+        /* Accessibility improvements */
+        .viewer-btn:focus,
+        .nav-button:focus,
+        .zoom-btn:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Performance optimizations */
+        .image-container {
+            will-change: transform;
+        }
+
+        .lightbox {
+            will-change: opacity;
         }
 
         /* Mobile responsive */
         @media (max-width: 768px) {
-            .image-viewer-container {
-                flex-direction: column;
-                gap: 0.5rem;
+            .viewer-header {
+                padding: 0.75rem 1rem;
             }
             
-            .image-display {
-                flex: 1;
-                min-height: 60vh;
+            .viewer-title {
+                font-size: 1rem;
+                max-width: 50%;
             }
             
-            .image-info-panel {
-                width: 100%;
-                max-height: 40vh;
-                overflow-y: auto;
+            .viewer-btn {
+                width: 40px;
+                height: 40px;
             }
             
-            .nav-arrow {
-                bottom: 50%;
-                top: auto;
-                transform: translateY(50%);
+            .nav-button {
+                width: 44px;
+                height: 44px;
             }
             
-            .nav-arrow:hover {
-                transform: translateY(50%) scale(1.1);
+            .nav-prev {
+                left: 1rem;
             }
             
             .nav-next {
-                left: auto;
                 right: 1rem;
+            }
+            
+            .viewer-footer {
+                padding: 1rem;
+            }
+            
+            .image-info {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .counter-info {
+                text-align: left;
+            }
+            
+            .meta-details {
+                font-size: 0.8rem;
+                gap: 0.75rem;
+            }
+            
+            /* Touch-friendly zoom controls */
+            .zoom-controls {
+                gap: 0.5rem;
+            }
+            
+            .zoom-btn {
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+            }
+            
+            /* Better mobile touch targets */
+            .viewer-btn,
+            .nav-button,
+            .zoom-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .viewer-header {
+                padding: 0.5rem;
+            }
+            
+            .viewer-footer {
+                padding: 0.75rem;
+            }
+            
+            .nav-prev, .nav-next {
+                display: none; /* Hide nav buttons on very small screens, rely on swipe */
+            }
+            
+            .image-info h3 {
+                font-size: 1.125rem;
             }
         }
 
@@ -363,6 +666,34 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        /* Layout toggle button */
+        .layout-toggle-btn {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .layout-toggle-btn:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .layout-toggle-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
         }
 
         .loading-spinner {
@@ -439,10 +770,21 @@
                         <!-- Photography Header -->
                         <div class="mb-8">
                             <h1 class="text-2xl font-semibold text-gray-900 mb-3">Visual Commit Log</h1>
-                            <p class="text-gray-600 text-base leading-relaxed">
+                            <p class="text-gray-600 text-base leading-relaxed mb-4">
                                 Capturing moments between building systems. Street scenes, landscapes, and life through the lens of a developer 
                                 who sees the world in frames and functions. Each shot is a commit to seeing beauty in the everyday.
                             </p>
+                            
+                            <!-- Layout Toggle -->
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-600">Layout:</span>
+                                <button id="layoutToggle" class="layout-toggle-btn active" data-layout="masonry" title="Switch between masonry and grid layouts">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M3 4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 12a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zM11 4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V4zM11 12a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+                                    </svg>
+                                    <span id="layoutText">Masonry</span>
+                                </button>
+                            </div>
                         </div>
                         
                         <!-- Photo Albums Container (dynamically populated) -->
@@ -483,60 +825,104 @@
         </div>
     </div>
     
-    <!-- Enhanced Image Viewer -->
+    <!-- Enhanced Photo Viewer -->
     <div id="lightbox" class="lightbox">
-        <div class="image-viewer-container">
-            <!-- Close Button -->
-            <span class="lightbox-close" aria-label="Close image viewer">&times;</span>
-            
-            <!-- Navigation Arrows -->
-            <button class="nav-arrow nav-prev" aria-label="Previous image">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-            </button>
-            <button class="nav-arrow nav-next" aria-label="Next image">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </button>
-            
-            <!-- Image Display Area -->
-            <div class="image-display">
-                <img id="lightbox-img" src="" alt="Photo view" loading="eager">
+        <div class="photo-viewer">
+            <!-- Viewer Header -->
+            <header class="viewer-header">
+                <h2 id="viewer-title" class="viewer-title">Photo Title</h2>
+                <div class="viewer-actions">
+                    <button id="downloadBtn" class="viewer-btn" title="Download image" aria-label="Download image">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        </svg>
+                    </button>
+                    <button id="shareBtn" class="viewer-btn" title="Share image" aria-label="Share image">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                        </svg>
+                    </button>
+                    <button id="fullscreenBtn" class="viewer-btn" title="Toggle fullscreen" aria-label="Toggle fullscreen">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5"/>
+                        </svg>
+                    </button>
+                    <button id="closeBtn" class="viewer-btn" title="Close viewer" aria-label="Close viewer">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Image Container -->
+            <div class="image-container">
+                <div class="image-loading" id="imageLoading">
+                    <div class="spinner"></div>
+                    <span>Loading image...</span>
+                </div>
+                
+                <div class="image-wrapper" id="imageWrapper">
+                    <img id="lightbox-img" class="lightbox-img" src="" alt="Photo view" loading="eager">
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <button id="navPrev" class="nav-button nav-prev" aria-label="Previous image">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button id="navNext" class="nav-button nav-next" aria-label="Next image">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
             </div>
-            
-            <!-- Image Info Panel -->
-            <div class="image-info-panel">
-                <div class="image-info-content">
+
+            <!-- Footer Info Panel -->
+            <footer class="viewer-footer">
+                <div class="image-info">
                     <div class="image-meta">
-                        <h3 id="image-title" class="image-title">Photo Title</h3>
-                        <div class="image-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Settings:</span>
-                                <span id="image-settings" class="detail-value">f/2.8 • 1/100s • ISO 200 • 28mm</span>
+                        <h3 id="image-title">Photo Title</h3>
+                        <div class="meta-details">
+                            <div class="meta-item">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span id="image-settings">f/2.8 • 1/100s • ISO 200 • 28mm</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Album:</span>
-                                <span id="image-album" class="detail-value">Album Name</span>
+                            <div class="meta-item">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span id="image-location">Location</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Location:</span>
-                                <span id="image-location" class="detail-value">Location Name</span>
+                            <div class="meta-item">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span id="image-date">Date</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Date:</span>
-                                <span id="image-date" class="detail-value">Date</span>
+                            <div class="meta-item">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                                </svg>
+                                <span id="image-album">Album</span>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Navigation Counter -->
-                    <div class="image-counter">
-                        <span id="current-image">1</span> / <span id="total-images">1</span>
+                    <div class="counter-info">
+                        <div class="image-counter">
+                            <span id="current-image">1</span> / <span id="total-images">1</span>
+                        </div>
+                        <div class="zoom-controls">
+                            <button id="zoomOut" class="zoom-btn" title="Zoom out" aria-label="Zoom out">−</button>
+                            <button id="zoomReset" class="zoom-btn" title="Reset zoom" aria-label="Reset zoom">⌂</button>
+                            <button id="zoomIn" class="zoom-btn" title="Zoom in" aria-label="Zoom in">+</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </footer>
         </div>
     </div>
     
@@ -549,7 +935,8 @@
         </div>
     </footer>
 
-    <!-- Photography Gallery Script -->
-    <script src="assets/js/photography.js"></script>
+    <!-- Enhanced Photography Gallery Script -->
+    <script src="assets/js/photography-enhanced.js"></script>
+    <script src="assets/js/layout-toggle.js"></script>
 </body>
 </html>
