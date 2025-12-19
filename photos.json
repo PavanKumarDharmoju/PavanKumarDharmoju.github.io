@@ -24,6 +24,47 @@
   },
   "albums": [
     {
+      "commitHash": "d6nov0e",
+      "date": "Dec 18, 2025",
+      "location": "St Augustine",
+      "statusColor": "green",
+      "entryType": "feat",
+      "title": "Alone on Beach",
+      "description": "Went to St. Augustine, here are some pics from the trip. So glad to get out of Chicago weather and into Florida!",
+      "tags": [
+        "Landscape\n            ",
+        "Nature\n            "
+      ],
+      "photos": [
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczP5adHr_fbPwP8uY4BSjtipdqXuH3ov2g-A4vizJKOowWUZiDZRuEFBQlZJBK4XktPFrbGegV1GADcTAyAjCDRU0JiId4nQOii3XSbW9m6_xQaFJu6VBgYIMaFQrm4_8GnKZQ0s-z2gt9Dgj1RS-8Sp-g=w2736-h1540-s-no-gm?authuser=0",
+          "title": "Bird",
+          "settings": "ƒ/5.6 • 1/1000 • 200 mm • ISO250"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczO5Kgh5ffkLOz07XsChM7gyHP_Snxv1HcqLBvEB0iI6y9by6oIJqIsziL3gLL1Za5g0gNIDki4spwfXuEQMbmylk-q9ub_tKH5SSlnhW-k6Qt6kyA-X1gLda5SKo6Ez5-Ikq95vbMdtEWnGinglaG0TUQ=w2736-h1824-s-no-gm?authuser=0",
+          "title": "Birds",
+          "settings": "ƒ/3.5 • 1/50 • 46 mm • ISO160"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczPJc3-Sokwbgs7GrBWbiPtJTm1ykkakLwcW78fjjbD8Amv1nhuXvAIskhnajV21bkujSQJIfZupVLsqUpY2MkVzPraVgpHYyKBD9Ka8nPDBB1kQhg9UnP9oD97NDw4aNJK1uukc8wBeMXjhWu08AxMMlQ=w2736-h1540-s-no-gm?authuser=0",
+          "title": "Me",
+          "settings": "ƒ/5.6 • 1/250 • 200 mm • ISO2500"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczN5uAS77w6QLL0tAUMaC-6MiPfr0wdfEKG0KYIFksV8UNBwaW5q23rjr60sceRE9AGfKce75ui20spw0hQPJ0AQw8ZT_0xVB3qhWp9SL_t7NO0gTTiuR6v2MWrFs3qhNI3H0OMdJ8A51kQmDfdhY5lmmg=w2736-h1540-s-no-gm?authuser=0",
+          "title": "Me looking down",
+          "settings": "ƒ/3.5 • 1/100 • 44 mm • ISO100"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczN-bx62SmIFMWGkI_mjUGXy6F-iW4sRlRX5W50rpcmae8oJaPygTYOQjrhsrKoiHtMbU0QJPplojvnTPJI7mEGZG2ATN0rZyFVpMAGLGkIQCW_eYqufmBx3mVtA4unTDi7qodo787zLsXtTNcjfm_cBGw=w2736-h1540-s-no-gm?authuser=0",
+          "title": "Me looking up",
+          "settings": "ƒ/4 • 1/80 • 58 mm • ISO100"
+        }
+      ],
+      "id": "1766114989590"
+    },
+    {
       "commitHash": "uef1gi6",
       "date": "Sep 14, 2024",
       "location": "Wrigley Field, Chicago",
