@@ -24,6 +24,53 @@
   },
   "albums": [
     {
+      "commitHash": "ejaq4xz",
+      "date": "Dec 28, 2025",
+      "location": "Teton National Park",
+      "statusColor": "green",
+      "entryType": "feat",
+      "title": "Ravens",
+      "description": "Freedom is just another word for the solitude we find in the sky. Grain, grit, and the ghosts we carry.\n\nClicked during my trip to Yellowstone national park. Inspired by the lens of Fukase and his best work, The solitude of ravens.",
+      "tags": [
+        "Nature\n            ",
+        "Ravens\n            ",
+        "National Park\n            "
+      ],
+      "photos": [
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczOa0Ghimt7N3C85NCDPh0FIRXzEK8YaWdvK9Xaf3DxZl0A3zHfiy5c_TQyrI7ZKlhDFdVwcXmUCro4NZTCnY9gOUI9tRqDH_CrmCobhb3dQBq0w7q0iEyS45IA9Uy-yMP2Ipw2SY7VJ9qNLH-BxT6UCSg=w1488-h992-s-no-gm?authuser=0",
+          "title": "Raven flying",
+          "settings": "ƒ/5.6 • 1/500 • 200 mm • ISO250"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczNPPy3NeOVOBHl0yIbhJtQDe-4ZnnFFQz_FH_wmLIwW6PjY0rFqVIGVZvo7F3hpLpZc9acSdWEGDczkCb882e5EaI42wcd-hF0B4fA-Gt1mmSZlVhoegGnDJ82yNlKZxKBuRPbRZCmSRU-91s1PTT1Apw=w1488-h992-s-no-gm?authuser=0",
+          "title": "Raven flying",
+          "settings": "ƒ/5.6 • 1/500 • 200 mm • ISO100"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczP89sXlWLaXGM0KmkQ6uRtv6Ko6wZ_jX3A7FsEJvrK7YJi7P2sG-smQs69kcr_rp4FrYaVpBSEsap22rLWHYyY8boIBa8PHgRx8Q4q_qnOEN7BPF3M-C4D9SGXLLKz9Oez1Fd5T0WyU5qZkJmKhIYP6aA=w1488-h992-s-no-gm?authuser=0",
+          "title": "Raven flying",
+          "settings": "ƒ/5.6 • 1/500 • 200 mm • ISO125"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczPJba7MKL-ZnVVak5wqxN7nt3dUEHZyfVLyG1fXBLAysNU3h9T7ZwETniM0eVpygjoxHY5CUd0UyhHvw0wulr-jYvxLxFHn7rHy6w1kkU4PAqzS9TkHSZWwb8NMt4mo7DehOwa3iBCDbu5WeHO9a8sUfg=w1488-h992-s-no-gm?authuser=0",
+          "title": "Raven Flying",
+          "settings": "ƒ/5.6 • 1/500 • 200 mm • ISO200"
+        },
+        {
+          "url": "https://lh3.googleusercontent.com/pw/AP1GczMGXTPKeuv_Zn6C7H6CS6b9ZMrGSuS4QQuvhsqJfUNo851Cl_DKaWKDGlZAnFzJxBLbS5ikMP1lekviazX3I0mtoBFq1keJQ00hgAVK3YJZ8hEydqcf1AOAWhy-wBYJoAj-qZFk3beQmXb79O36bNi6IA=w1488-h992-s-no-gm?authuser=0",
+          "title": "Raven Flying",
+          "settings": "ƒ/5.6 • 1/500 • 200 mm • ISO125"
+        },
+        {
+          "url": "https://photos.fife.usercontent.google.com/pw/AP1GczOVpD3qAfoomQRIaNckuh8o0GfPflEzRICBc4UHfHWbLfCcranioRxC1Q=w1488-h992-s-no-gm?authuser=0",
+          "title": "Landed Raven",
+          "settings": "ƒ/5.6 • 1/1600 • 200 mm • ISO800"
+        }
+      ],
+      "id": "1766902991983"
+    },
+    {
       "commitHash": "d6nov0e",
       "date": "Dec 18, 2025",
       "location": "St Augustine",
