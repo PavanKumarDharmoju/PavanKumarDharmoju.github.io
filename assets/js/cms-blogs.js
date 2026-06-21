@@ -751,7 +751,7 @@ Effective attribution modeling requires combining statistical techniques with bu
     <meta name="author" content="Pavan Kumar Dharmoju">
     <meta name="article:published_time" content="${blogData.date}">
     <meta name="article:author" content="Pavan Kumar Dharmoju">
-    <link rel="canonical" href="https://pavankumardharmoju.github.io/blog/${blogData.slug}.html">
+    <link rel="canonical" href="https://pavankumardharmoju.github.io/blog/${blogData.slug}">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
@@ -783,20 +783,20 @@ Effective attribution modeling requires combining statistical techniques with bu
             <aside class="sm:w-24 shrink-0">
                 <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
-                        <a href="../index.html">
+                        <a href="/">
                             <img src="../assets/img/pavan.jpg" alt="Pavan Kumar Dharmoju" 
                                  class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
                         </a>
                     </div>
                     <div>
                         <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base">
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../index.html">About</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../work.html">Work</a>
-                            <a class="mr-4 text-gray-800" href="../blogs.html">Blogs</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../projects.html">Projects</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../publications.html">Publications</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../photography.html">Photography</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="../contact.html">Contact</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/">About</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/work">Work</a>
+                            <a class="mr-4 text-gray-800" href="/blogs">Blogs</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/projects">Projects</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/publications">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/photography">Photography</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/contact">Contact</a>
                         </nav>
                     </div>
                 </div>
