@@ -32,76 +32,6 @@
             letter-spacing: -0.01em;
         }
     </style>
-    <script>
-        function subscribeNewsletter() {
-            const emailInput = document.getElementById('newsletter-email');
-            const subscribeBtn = document.getElementById('subscribe-btn');
-            const messageDiv = document.getElementById('subscription-message');
-            
-            const email = emailInput.value.trim();
-            
-            // Basic email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email) {
-                showMessage('Please enter your email address.', 'error');
-                return;
-            }
-            if (!emailRegex.test(email)) {
-                showMessage('Please enter a valid email address.', 'error');
-                return;
-            }
-            
-            // Disable button and show loading state
-            subscribeBtn.disabled = true;
-            subscribeBtn.textContent = 'Subscribing...';
-            
-            // Simulate subscription process (replace with actual implementation)
-            setTimeout(() => {
-                // Store email in localStorage (you can replace this with actual backend integration)
-                let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
-                
-                if (subscribers.includes(email)) {
-                    showMessage('You are already subscribed!', 'info');
-                } else {
-                    subscribers.push(email);
-                    localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
-                    showMessage('Thank you for subscribing! You\'ll receive updates when new articles are published.', 'success');
-                    emailInput.value = '';
-                }
-                
-                // Reset button
-                subscribeBtn.disabled = false;
-                subscribeBtn.textContent = 'Subscribe';
-            }, 1000);
-        }
-        
-        function showMessage(message, type) {
-            const messageDiv = document.getElementById('subscription-message');
-            messageDiv.textContent = message;
-            messageDiv.className = `mt-3 text-sm ${type === 'error' ? 'text-red-600' : type === 'success' ? 'text-green-600' : 'text-blue-600'}`;
-            messageDiv.style.display = 'block';
-            
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Allow Enter key to submit
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                subscribeNewsletter();
-            }
-        }
-        
-        // Update subscriber count on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
-            const baseCount = 50; // Base subscriber count
-            const totalCount = baseCount + subscribers.length;
-            document.getElementById('subscriber-count').textContent = totalCount + '+';
-        });
-    </script>
 </head>
 <body class="bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-8">
@@ -143,192 +73,8 @@
                             </p>
                         </div>
                         
-                        <!-- Article Commits -->
-                        <div class="space-y-6">
-                            
-                            <!-- Scaling Data Pipelines -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">3f8a92d</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">March 15, 2024</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/scaling-data-pipelines" class="hover:text-blue-600">
-                                        docs: scaling data pipelines for real-time analytics
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    A deep dive into building scalable data infrastructure that can handle millions of 
-                                    events per second. Real architectural patterns, tools, and best practices 
-                                    for modern data engineering. What actually works when Stack Overflow answers aren't enough.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Data Engineering</span>
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Apache Kafka</span>
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Real-time</span>
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Scalability</span>
-                                </div>
-                            </div>
-
-                            <!-- LLM Production Deployment -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">e7c4b91</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">February 28, 2024</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/llm-production-deployment" class="hover:text-blue-600">
-                                        feat: deploying LLMs in production - lessons learned
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Practical insights from deploying large language models in production environments. 
-                                    The optimization techniques that actually matter, monitoring strategies that work, 
-                                    and cost management tricks that will save your budget.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">LLMs</span>
-                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Production</span>
-                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">MLOps</span>
-                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Optimization</span>
-                                </div>
-                            </div>
-
-                            <!-- Attribution Modeling -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-purple-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">a9f2e87</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">January 20, 2024</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/attribution-modeling-deep-dive" class="hover:text-blue-600">
-                                        refactor: attribution modeling from a data engineer's perspective
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    How to build robust attribution models that actually measure marketing impact 
-                                    across multiple channels. Technical deep-dive into data processing, model 
-                                    architecture, and validation techniques that go beyond basic last-click attribution.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Attribution</span>
-                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Marketing Analytics</span>
-                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Machine Learning</span>
-                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Bayesian Methods</span>
-                                </div>
-                            </div>
-
-                            <!-- Computer Vision at Edge -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-orange-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">c3d8f42</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">December 10, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/computer-vision-edge-deployment" class="hover:text-blue-600">
-                                        perf: computer vision at the edge - optimization strategies
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Techniques for deploying computer vision models on edge devices with limited 
-                                    computational resources. Model compression, quantization, and hardware acceleration 
-                                    strategies that actually work in the real world.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Computer Vision</span>
-                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Edge Computing</span>
-                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Optimization</span>
-                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Model Compression</span>
-                                </div>
-                            </div>
-
-                            <!-- Time Series Forecasting -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-red-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">f5b7a19</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">November 15, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/time-series-forecasting-energy" class="hover:text-blue-600">
-                                        feat: time series forecasting for energy systems
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Advanced techniques for forecasting electrical demand using deep learning. 
-                                    Exploring LSTM networks, attention mechanisms, and ensemble methods for 
-                                    improved prediction accuracy. Real case studies from energy grid optimization.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Time Series</span>
-                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Deep Learning</span>
-                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Energy</span>
-                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">LSTM</span>
-                                </div>
-                            </div>
-
-                            <!-- MLOps Best Practices -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-teal-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">b8e3c74</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">October 8, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/mlops-best-practices" class="hover:text-blue-600">
-                                        docs: MLOps best practices - from notebook to production
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    A comprehensive guide to building robust MLOps pipelines that ensure reliable 
-                                    model deployment and monitoring. Best practices for version control, testing, 
-                                    and continuous integration that actually scale.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">MLOps</span>
-                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">DevOps</span>
-                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">Best Practices</span>
-                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">CI/CD</span>
-                                </div>
-                            </div>
-
-                            <!-- Data Quality Monitoring -->
-                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-2 h-2 bg-indigo-500 rounded-full -ml-7 border-2 border-white"></div>
-                                    <span class="font-mono text-sm text-gray-500">d7a4f83</span>
-                                    <span class="text-sm text-gray-500">•</span>
-                                    <span class="text-sm text-gray-500">September 22, 2023</span>
-                                </div>
-                                <h3 class="font-medium text-gray-900 mb-2">
-                                    <a href="/blog/data-quality-monitoring" class="hover:text-blue-600">
-                                        build: automated data quality monitoring at scale
-                                    </a>
-                                </h3>
-                                <p class="text-gray-700 text-sm mb-3">
-                                    Building automated systems for monitoring data quality in large-scale data 
-                                    pipelines. Techniques for anomaly detection, data profiling, and alerting 
-                                    mechanisms that catch problems before they break everything downstream.
-                                </p>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Data Quality</span>
-                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Monitoring</span>
-                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Automation</span>
-                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Apache Airflow</span>
-                                </div>
-                            </div>
-
-                        </div>
+                        <!-- Posts (auto-synced from Substack) -->
+                        <div id="substack-posts" class="space-y-6"></div>
 
                         <!-- Newsletter Signup - Git style -->
                         <div class="border-l-2 border-green-400 pl-6 pb-6 bg-green-50 rounded-r-lg mt-12">
@@ -345,28 +91,11 @@
                             </p>
                             
                             <div class="max-w-md">
-                                <div class="flex flex-col sm:flex-row gap-3 mb-3">
-                                    <input 
-                                        type="email" 
-                                        id="newsletter-email"
-                                        placeholder="your.email@domain.com" 
-                                        onkeypress="handleKeyPress(event)"
-                                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
-                                    >
-                                    <button 
-                                        id="subscribe-btn"
-                                        onclick="subscribeNewsletter()"
-                                        class="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        git push
-                                    </button>
-                                </div>
-                                
-                                <div id="subscription-message" class="text-sm" style="display: none;"></div>
-                                
-                                <p class="text-xs text-gray-500 mt-2">
-                                    <span id="subscriber-count">50+</span> developers subscribed • Unsubscribe anytime
-                                </p>
+                                <a href="https://pixelsbypavan.substack.com/subscribe" target="_blank" rel="noopener"
+                                   class="inline-block px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                                    Subscribe on Substack
+                                </a>
+                                <p class="text-xs text-gray-500 mt-2">Free • new posts delivered straight to your inbox</p>
                             </div>
                         </div>
 
@@ -384,5 +113,15 @@
             </p>
         </div>
     </footer>
+    <script src="assets/js/substack-feed.js"></script>
+    <script>
+        SubstackFeed.render({
+            publication: 'pixelsbypavan',   // Pixels by Pavan (single Substack)
+            containerId: 'substack-posts',
+            layout: 'list',
+            category: 'writing',            // everything NOT tagged as a photo post
+            emptyMessage: 'No articles yet.'
+        });
+    </script>
 </body>
 </html>
