@@ -6,9 +6,9 @@ Generates and updates HTML files based on CMS data
 
 import json
 import os
-import re
+import shutil
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 class HTMLGenerator:
     def __init__(self, base_dir: str = "."):
@@ -195,11 +195,12 @@ class HTMLGenerator:
         for entry in entries:
             entries_html += self.generate_work_entry_html(entry)
         
-        return self.templates['work'].format(
-            page_title=title,
-            page_description=description,
-            entries_content=entries_html
-        )
+        # Use replace() rather than str.format(): the template's <style> block
+        # contains literal CSS braces that format() would misparse as fields.
+        return (self.templates['work']
+                .replace('{page_title}', title)
+                .replace('{page_description}', description)
+                .replace('{entries_content}', entries_html))
 
     def update_from_json(self, json_file: str):
         """Update HTML files from JSON data"""
@@ -229,13 +230,12 @@ class HTMLGenerator:
         if not os.path.exists(backup_dir):
             os.makedirs(backup_dir)
         
-        files_to_backup = ['work.html', 'projects.html', 'publications.html', 'photography.html']
-        
+        files_to_backup = ['work.html']  # the only file this generator writes
+
         for file in files_to_backup:
             src = os.path.join(self.base_dir, file)
             if os.path.exists(src):
                 dst = os.path.join(backup_dir, file)
-                import shutil
                 shutil.copy2(src, dst)
                 print(f"📁 Backed up {file} to {backup_dir}")
 
