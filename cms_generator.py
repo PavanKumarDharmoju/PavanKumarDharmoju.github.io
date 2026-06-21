@@ -14,10 +14,7 @@ class HTMLGenerator:
     def __init__(self, base_dir: str = "."):
         self.base_dir = base_dir
         self.templates = {
-            'work': self._load_work_template(),
-            'projects': self._load_projects_template(),
-            'publications': self._load_publications_template(),
-            'photography': self._load_photography_template()
+            'work': self._load_work_template()
         }
     
     def _load_work_template(self) -> str:
@@ -31,7 +28,7 @@ class HTMLGenerator:
     <meta name="description" content="Personal projects and side experiments by Pavan Kumar Dharmoju. Real stories about building tools, learning new tech, and creative coding projects outside of work.">
     <meta name="keywords" content="Side Projects, Personal Projects, Build Diary, Tech Experiments, Creative Coding, Open Source, Learning Journey, Developer Life">
     <meta name="author" content="Pavan Kumar Dharmoju">
-    <link rel="canonical" href="https://pavankumardharmoju.github.io/work.html">
+    <link rel="canonical" href="https://pavankumardharmoju.github.io/work">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
@@ -68,20 +65,20 @@ class HTMLGenerator:
             <aside class="sm:w-24 shrink-0">
                 <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
-                        <a href="index.html">
+                        <a href="/">
                             <img src="assets/img/pavan.jpg" alt="Pavan Kumar Dharmoju" 
                                  class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
                         </a>
                     </div>
                     <div>
                         <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base">
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="index.html">About</a>
-                            <a class="mr-4 text-gray-800" href="work.html">Work</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="projects.html">Projects</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/">About</a>
+                            <a class="mr-4 text-gray-800" href="/work">Work</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/blogs">Blogs</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/projects">Projects</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/publications">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/photography">Photography</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/contact">Contact</a>
                         </nav>
                     </div>
                 </div>
@@ -120,19 +117,6 @@ class HTMLGenerator:
     </footer>
 </body>
 </html>'''
-
-    def _load_projects_template(self) -> str:
-        """Load the projects.html template structure"""
-        # Similar structure to work template but for projects
-        return "<!-- Projects template -->"
-    
-    def _load_publications_template(self) -> str:
-        """Load the publications.html template structure"""
-        return "<!-- Publications template -->"
-    
-    def _load_photography_template(self) -> str:
-        """Load the photography.html template structure"""
-        return "<!-- Photography template -->"
 
     def get_tag_color_class(self, tag: str) -> str:
         """Get the appropriate color class for a tag"""

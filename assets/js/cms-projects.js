@@ -426,13 +426,13 @@ class ProjectsCMSManager {
                     
                     <div class="flex sm:block">
                         <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base">
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="index.html">About</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="work.html">Work</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="blogs.html">Blogs</a>
-                            <a class="mr-4 text-gray-800" href="projects.html">Projects</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="publications.html">Publications</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="photography.html">Photography</a>
-                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="contact.html">Contact</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/">About</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/work">Work</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/blogs">Blogs</a>
+                            <a class="mr-4 text-gray-800" href="/projects">Projects</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/publications">Publications</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/photography">Photography</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/contact">Contact</a>
                         </nav>
                     </div>
                 </div>
