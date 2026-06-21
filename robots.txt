@@ -95,8 +95,6 @@ Disallow: /
 
 # Block content scraping and training data collection
 User-agent: *
-Disallow: /photos.json
-Disallow: /blog/
 Disallow: /*.json$
 Disallow: /assets/js/
 Disallow: /cms.html
