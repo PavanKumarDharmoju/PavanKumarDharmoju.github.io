@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# graphify knowledge-graph output
+graphify-out/
+
+# CMS generator backups (cms_generator.py --backup)
+backup_*/
+
+# Editors / IDEs
+.idea/
+*.swp
+*~
+
+# Logs & env
+*.log
+.env
+.env.local

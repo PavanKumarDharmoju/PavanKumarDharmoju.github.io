@@ -49,9 +49,7 @@ python cms_server.py
 ├── cms.html                # Content Management Interface
 ├── cms_server.py           # CMS backend server
 ├── cms_generator.py        # HTML generation from JSON
-├── generate.py             # Website generator script
 ├── git_commit.py           # Auto-commit utility
-├── website-config.json     # Site configuration
 │
 └── CNAME                   # Custom domain configuration
 ```
@@ -95,11 +93,11 @@ See [CMS Documentation](README_CMS.md) for detailed usage.
 ### Using the Generator Script
 
 ```bash
-# Generate HTML from configuration
-python generate.py
+# Regenerate work.html from exported CMS JSON data
+python cms_generator.py data.json
 
-# Generate with custom config
-python generate.py --config custom-config.json
+# Create a backup before updating
+python cms_generator.py data.json --backup
 ```
 
 ### File Descriptions
@@ -108,7 +106,6 @@ python generate.py --config custom-config.json
 |------|---------|
 | `cms_server.py` | HTTP server with file saving and git operations |
 | `cms_generator.py` | Generates HTML from JSON data |
-| `generate.py` | Updates HTML files from website-config.json |
 | `git_commit.py` | Automates git commits with AI-generated messages |
 
 ## 🚀 Deployment
