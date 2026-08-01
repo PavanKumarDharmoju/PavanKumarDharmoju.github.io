@@ -28,7 +28,7 @@ class HTMLGenerator:
     <meta name="description" content="Personal projects and side experiments by Pavan Kumar Dharmoju. Real stories about building tools, learning new tech, and creative coding projects outside of work.">
     <meta name="keywords" content="Side Projects, Personal Projects, Build Diary, Tech Experiments, Creative Coding, Open Source, Learning Journey, Developer Life">
     <meta name="author" content="Pavan Kumar Dharmoju">
-    <link rel="canonical" href="https://pavankumardharmoju.github.io/work">
+    <link rel="canonical" href="https://pixelsbypavan.com/work">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
