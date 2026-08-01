@@ -1,6 +1,6 @@
 # Robots.txt - Blocking AI crawlers and data scrapers
 # Personal portfolio of Pavan Kumar Dharmoju
-# Last updated: December 14, 2025
+# Last updated: August 1, 2026
 
 # Block all AI training and scraping bots
 User-agent: GPTBot
@@ -93,43 +93,14 @@ Disallow: /
 User-agent: AWS-*
 Disallow: /
 
-# Block content scraping and training data collection
+# All other crawlers (including search engines): allow the site,
+# but keep private/admin pages and raw data out of the index
 User-agent: *
 Disallow: /*.json$
 Disallow: /assets/js/
 Disallow: /cms.html
 Disallow: /work-admin.html
-
-# Allow legitimate search engines for public pages
-User-agent: Googlebot
-Allow: /index.html
-Allow: /work.html
-Allow: /projects.html
-Allow: /publications.html
-Allow: /photography.html
-Allow: /contact.html
-Disallow: /
-
-User-agent: Bingbot
-Allow: /index.html
-Allow: /work.html
-Allow: /projects.html
-Allow: /publications.html
-Allow: /photography.html
-Allow: /contact.html
-Disallow: /
-
-User-agent: DuckDuckBot
-Allow: /index.html
-Allow: /work.html
-Allow: /projects.html
-Allow: /publications.html
-Allow: /photography.html
-Allow: /contact.html
-Disallow: /
+Disallow: /embed-demo.html
 
 # Sitemap for legitimate indexing
-Sitemap: https://pavankumardharmoju.github.io/sitemap.xml
-
-# Crawl delay for all bots
-Crawl-delay: 10
+Sitemap: https://pixelsbypavan.com/sitemap.xml
