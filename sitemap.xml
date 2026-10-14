@@ -37,6 +37,18 @@
         <priority>0.6</priority>
     </url>
     <url>
+        <loc>https://pixelsbypavan.com/tools/</loc>
+        <lastmod>2026-10-14</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://pixelsbypavan.com/tools/bansuri/</loc>
+        <lastmod>2026-10-14</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://pixelsbypavan.com/contact</loc>
         <lastmod>2026-08-01</lastmod>
         <changefreq>monthly</changefreq>
