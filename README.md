@@ -54,6 +54,7 @@ python cms_server.py
 ├── cms_server.py           # CMS backend server
 ├── cms_generator.py        # HTML generation from JSON
 ├── git_commit.py           # Auto-commit utility
+├── scripts/generate_logo.py # Regenerates favicon.svg/.ico, apple-touch-icon.png, assets/img/logo/
 │
 └── CNAME                   # Custom domain configuration
 ```
