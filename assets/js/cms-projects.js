@@ -432,6 +432,7 @@ class ProjectsCMSManager {
                             <a class="mr-4 text-gray-800" href="/projects">Projects</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="/publications">Publications</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="/photography">Photography</a>
+                            <a class="mr-4 text-gray-400 hover:text-gray-900" href="/tools/">Tools</a>
                             <a class="mr-4 text-gray-400 hover:text-gray-900" href="/contact">Contact</a>
                         </nav>
                     </div>
