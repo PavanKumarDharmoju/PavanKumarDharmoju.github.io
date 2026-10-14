@@ -34,6 +34,10 @@ python cms_server.py
 ├── contact.html            # Contact information
 ├── 404.html                # Custom 404 page
 │
+├── tools/                  # Browser tools (served at /tools/)
+│   ├── index.html          # Tools listing
+│   └── bansuri/            # Bansuri Companion (index.html, bansuri.css, bansuri.js)
+│
 ├── blog/                   # Blog post HTML files
 │   ├── mlops-best-practices.html
 │   ├── llm-production-deployment.html
