@@ -38,7 +38,7 @@ const DEFAULT_VOICE={sa:138.59,fine:0,cal:false};
 const newId=()=>'f'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
 const demoFlute=()=>({id:newId(),name:'G bass',key:'G',len:63,sa:392,est:392,fine:0,cal:false,demo:true});
 const savedS=store.get('settings',{});
-const S=Object.assign({cur:null,welcomed:false,inton:'et',vol:55,gap:1.4,strict:0,gate:-58,autoMute:false,stand:false,chime:true,click:true,bpm:54,alank:0,egRange:'all'},savedS);
+const S=Object.assign({cur:null,welcomed:false,inton:'et',vol:55,gap:1.4,strict:0,gate:-58,autoMute:false,stand:false,chime:true,click:true,bpm:54,alank:0,alLoop:true,egRange:'all'},savedS);
 if(!Array.isArray(S.inst)){
   /* migrate the earlier two-flute layout (E/F/Voice) */
   S.inst=[];
@@ -1081,7 +1081,7 @@ const AL=[
   {name:'Low Octave Lock',sub:'Sa down to Low Pa and back',aroh:[['sa','lni','ldha','lpa','ldha','lni','sa']],avroh:[]}
 ];
 const alSeq=a=>[...AL[a].aroh.flat(),...AL[a].avroh.flat()];
-const F={running:false,idx:-1,count:0,next:0,beatStart:0,frames:[],res:[],timer:0};
+const F={running:false,idx:-1,count:0,rest:0,round:1,best:0,next:0,beatStart:0,frames:[],res:[],timer:0};
 function blockBody(b){
   if(b.id==='b1') return `<div class="kv"><span class="muted">Tone purity right now</span><b class="mono" id="rzPurN">—</b></div><div class="meter pur" id="rzPurM"><i id="rzPur"></i></div>
   <div class="kv"><span class="muted">Longest clear tone today</span><b class="mono" id="rzLongest">—</b></div>
@@ -1090,7 +1090,7 @@ function blockBody(b){
   <div class="muted" style="margin-top:.7rem;font-size:.9rem">Personal bests (held in tune and clear)</div><div class="bests" id="rzBests"></div>
   <div class="row" style="margin-top:.9rem"><button class="btn" data-mic></button><button class="btn primary" data-goto="drop">Open the Gravity Drop</button></div>`;
   if(b.id==='b3') return `<div class="al-tabs" id="alTabs">${AL.map((a,i)=>`<button data-al="${i}" aria-pressed="false">${a.name}</button>`).join('')}</div><div id="alView"></div>
-  <div class="al-ctl"><button class="btn primary" id="alGo"></button><label class="field" for="alBpm"><span>Tempo <b class="mono" id="alBpmV"></b></span><input type="range" id="alBpm" min="40" max="120" step="2"></label><label class="check"><input type="checkbox" id="alClick"> Click</label><span class="muted" id="alStatus" style="font-size:.9rem"></span></div>
+  <div class="al-ctl"><button class="btn primary" id="alGo"></button><label class="field" for="alBpm"><span>Tempo <b class="mono" id="alBpmV"></b></span><input type="range" id="alBpm" min="40" max="120" step="2"></label><label class="check"><input type="checkbox" id="alClick"> Click</label><label class="check"><input type="checkbox" id="alLoop"> Loop</label><span class="muted" id="alStatus" style="font-size:.9rem"></span></div>
   <div class="diag-res" id="alScore" hidden></div>`;
   return `<div class="row"><button class="btn primary" id="rzDrone" aria-pressed="false"></button></div>
   <div style="margin-top:1rem"><b>Ear training</b> <span class="muted">· score <span class="mono" id="egScore">0 / 0</span></span></div>
@@ -1105,7 +1105,7 @@ function buildBlocks(){
       <div class="row"><button class="btn primary" data-blk-go="${b.id}"></button><button class="btn" data-blk-reset="${b.id}" aria-label="Reset timer">${'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>'}</button><button class="btn" data-blk-skip="${b.id}" aria-label="Skip to next block"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l10 7-10 7z"/><path d="M19 5v14"/></svg></button></div>
       <label class="check"><input type="checkbox" data-blk-done="${b.id}" id="done-${b.id}"> Done today</label></div>
     <div class="blk-main"><h3>${b.title}</h3><p>${b.sub}</p>${blockBody(b)}</div></article>`).join('');
-  $('#alBpm').value=S.bpm;$('#alClick').checked=S.click;$('#egRange').value=S.egRange;
+  $('#alBpm').value=S.bpm;$('#alClick').checked=S.click;$('#alLoop').checked=S.alLoop;$('#egRange').value=S.egRange;
   renderBlocks();renderBests();renderAlankar();syncDrone();syncMic();
 }
 function renderBlocks(){
@@ -1139,29 +1139,41 @@ function renderAlankar(){
 }
 function fStart(){
   if(F.running) return fStop(true);
-  audio();F.running=true;F.idx=-1;F.count=4;F.res=[];F.frames=[];F.next=performance.now()+150;$('#alScore').hidden=true;
+  audio();F.running=true;F.idx=-1;F.count=4;F.rest=0;F.round=1;F.best=0;F.res=[];F.frames=[];F.next=performance.now()+150;$('#alScore').hidden=true;
   $$('#alView .al-n').forEach(e=>e.className='al-n');
   F.timer=setInterval(fTick,10);renderAlankar();wakeSync();
 }
 function fStop(manual){
   clearInterval(F.timer);F.running=false;coach.override=null;$$('#alView .al-n.cur').forEach(e=>e.classList.remove('cur'));
   renderAlankar();wakeSync();
-  if(!manual&&coach.on&&F.res.length){
-    const c=F.res.filter(r=>r==='clean').length,a=F.res.filter(r=>r==='airy').length,m=F.res.length-c-a,el=$('#alScore');
-    el.hidden=false;el.innerHTML=`<h4>${c} of ${F.res.length} notes clean</h4><p class="muted">${a} airy · ${m} missed or off pitch. Missed notes are underlined; try them slower.</p>`;
-  }
+  if(!manual) alScore(false);
+}
+/* Score for the pass just finished. In loop mode each round is scored as it ends, with the best round so far. */
+function alScore(looping){
+  if(!coach.on||!F.res.length) return;
+  const c=F.res.filter(r=>r==='clean').length,a=F.res.filter(r=>r==='airy').length,m=F.res.length-c-a,el=$('#alScore');
+  F.best=Math.max(F.best,c);
+  el.hidden=false;el.innerHTML=`<h4>${looping?`Round ${F.round}: `:''}${c} of ${F.res.length} notes clean</h4><p class="muted">${a} airy · ${m} missed or off pitch.${looping&&F.round>1?` Best round so far: ${F.best} of ${F.res.length}.`:''} Missed notes are underlined; try them slower.</p>`;
 }
 function fTick(){
   const now=performance.now();if(now<F.next) return;
   const beat=60000/S.bpm,seq=alSeq(S.alank);F.next+=beat;
   if(F.count>0){click(F.count===4);$('#alStatus').textContent=`Count-in… ${F.count}`;F.count--;return;}
+  if(F.rest>0){click(true);F.rest--;$('#alStatus').textContent=`Breathe… round ${F.round} next`;return;}
   if(F.idx>=0) gradeNote(F.idx,F.beatStart,now,seq);
   F.idx++;F.beatStart=now;
-  if(F.idx>=seq.length){fStop(false);return;}
+  if(F.idx>=seq.length){
+    if(!S.alLoop){fStop(false);return;}
+    /* loop: score this round, take one beat to breathe, then start again from the first note */
+    alScore(true);F.round++;F.idx=-1;F.res=[];F.rest=1;coach.override=null;
+    $$('#alView .al-n.cur').forEach(e=>e.classList.remove('cur'));
+    F.next-=beat;return;
+  }
+  if(F.idx===0) $$('#alView .al-n').forEach(e=>e.className='al-n');
   click(false);coach.override=NOTE[seq[F.idx]];
   $$('#alView .al-n.cur').forEach(e=>e.classList.remove('cur'));
   const cur=$(`#alView .al-n[data-i="${F.idx}"]`);if(cur) cur.classList.add('cur');
-  $('#alStatus').textContent=`${F.idx+1} / ${seq.length} · ${NOTE[seq[F.idx]].name}`;
+  $('#alStatus').textContent=`${S.alLoop?`Round ${F.round} · `:''}${F.idx+1} / ${seq.length} · ${NOTE[seq[F.idx]].name}`;
 }
 function gradeNote(i,t0,t1,seq){
   const el=$(`#alView .al-n[data-i="${i}"]`);if(!coach.on){return;}
@@ -1478,6 +1490,7 @@ document.addEventListener('change',e=>{
     case 'clickOn':case 'alClick':S.click=t.checked;saveS();syncSettings();return;
     case 'standOn':S.stand=t.checked;saveS();syncSettings();return;
     case 'egRange':S.egRange=t.value;saveS();return;
+    case 'alLoop':S.alLoop=t.checked;saveS();return;
     case 'addLen':renderAddForm();return;
     case 'saPick':setSaTo(440*Math.pow(2,(+t.value-69)/12),'','picked');return;
     case 'instSel':if(t.value==='__manage'){t.value=S.cur;openSheet('inst');}else setInstrument(t.value);return;
