@@ -57,6 +57,8 @@ python cms_server.py
 ├── cms_generator.py        # HTML generation from JSON
 ├── git_commit.py           # Auto-commit utility
 ├── scripts/generate_logo.py # Regenerates favicon.svg/.ico, apple-touch-icon.png, assets/img/logo/
+├── scripts/build-css.sh    # Rebuilds assets/css/site.css (compiled Tailwind) after class changes
+├── scripts/sync_substack.py # Writes Substack posts into blogs.html / photography.html (runs daily via GitHub Actions)
 │
 └── CNAME                   # Custom domain configuration
 ```

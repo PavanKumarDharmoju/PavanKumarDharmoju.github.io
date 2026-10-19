@@ -792,7 +792,11 @@
                         </div>
                         
                         <!-- Photos (auto-synced from Substack) -->
-                        <div id="substack-photos"></div>
+                        <div id="substack-photos">
+                            <!-- substack:start -->
+                            <p class="text-gray-500 text-sm">No photo posts yet. <a class="text-blue-600 hover:underline" href="https://pixelsbypavan.substack.com" target="_blank" rel="noopener">Visit on Substack →</a></p>
+                            <!-- substack:end -->
+                        </div>
 
                     </div>
                 </div>
@@ -809,15 +813,5 @@
         </div>
     </footer>
 
-        <script src="assets/js/substack-feed.js"></script>
-    <script>
-        SubstackFeed.render({
-            publication: 'pixelsbypavan',   // Pixels by Pavan (photography)
-            containerId: 'substack-photos',
-            layout: 'gallery',
-            category: 'photo',              // only posts whose title starts with 📷 or [photo]
-            emptyMessage: 'No photo posts yet.'
-        });
-    </script>
 </body>
 </html>

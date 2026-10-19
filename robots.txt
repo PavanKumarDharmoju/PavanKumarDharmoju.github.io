@@ -97,7 +97,6 @@ Disallow: /
 # but keep raw data out of the index
 User-agent: *
 Disallow: /*.json$
-Disallow: /assets/js/
 Disallow: /embed-demo.html
 
 # Sitemap for legitimate indexing

@@ -91,7 +91,27 @@
                         </div>
                         
                         <!-- Posts (auto-synced from Substack) -->
-                        <div id="substack-posts" class="space-y-6"></div>
+                        <div id="substack-posts">
+                            <!-- substack:start -->
+                            <div class="space-y-6">
+                                <a href="https://pixelsbypavan.substack.com/p/the-only-clawdbot-setup-youll-actually" target="_blank" rel="noopener" class="block border-l-2 border-gray-200 hover:border-blue-400 pl-6 pb-6 transition-colors group">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                        <span class="text-sm text-gray-500">January 31, 2026</span>
+                                        <span class="text-sm text-gray-400">•</span>
+                                        <span class="text-sm text-gray-400">Substack</span>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <img src="https://substackcdn.com/image/fetch/$s_!hGIS!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7898cf45-c375-473b-91ce-a0920fef0a6e_1536x1024.png" alt="" loading="lazy" class="w-28 h-20 object-cover rounded-md flex-shrink-0 hidden sm:block">
+                                        <div>
+                                            <h2 class="font-medium text-gray-900 mb-1 group-hover:text-blue-600">The Only Clawdbot Setup You’ll Actually Use (Mac + WhatsApp + Obsidian + Todoist)</h2>
+                                            <p class="text-gray-600 text-sm leading-relaxed">Learn how to turn OpenClaw into a reliable daily assistant that captures memory, manages tasks, and stays always-on all from your Mac.</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- substack:end -->
+                        </div>
 
                         <!-- Newsletter Signup - Git style -->
                         <div class="border-l-2 border-green-400 pl-6 pb-6 bg-green-50 rounded-r-lg mt-12">
@@ -130,15 +150,5 @@
             </p>
         </div>
     </footer>
-    <script src="assets/js/substack-feed.js"></script>
-    <script>
-        SubstackFeed.render({
-            publication: 'pixelsbypavan',   // Pixels by Pavan (single Substack)
-            containerId: 'substack-posts',
-            layout: 'list',
-            category: 'writing',            // everything NOT tagged as a photo post
-            emptyMessage: 'No articles yet.'
-        });
-    </script>
 </body>
 </html>

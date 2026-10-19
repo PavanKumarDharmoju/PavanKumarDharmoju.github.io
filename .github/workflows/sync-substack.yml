@@ -1,0 +1,47 @@
+# Daily: copy new Substack posts into blogs.html / photography.html (scripts/sync_substack.py)
+# and commit them, so the posts are in the page HTML for visitors and Google.
+name: Sync Substack posts
+
+on:
+  schedule:
+    - cron: "17 11 * * *"   # daily, 11:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Render posts into the pages
+        run: python3 scripts/sync_substack.py
+
+      - name: Rebuild CSS for any new classes
+        run: ./scripts/build-css.sh
+
+      - name: Commit and publish if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "No new posts."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Sync Substack posts"
+          git push
+          # pushes made with the workflow token don't always start a Pages build, so ask for one
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages build request failed; it will publish on the next push."
