@@ -343,6 +343,20 @@ body:not(.voice) .voice-only{display:none!important}
 .sheet .field-row>span{color:var(--muted);font-size:.95rem}
 .sheet .field-row input[type=text]{width:12rem;max-width:55%}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 1.2rem);transform:translateX(-50%);z-index:60;background:var(--cream);color:var(--accent-ink);padding:.65rem 1rem;border-radius:12px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:calc(100% - 32px)}
+/* about + FAQ below the app: plain words for first-time visitors and search engines; hidden in music-stand mode */
+.about{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:0 2.5rem}
+.about-inner{max-width:72ch;border-top:1px solid var(--line);padding-top:2rem}
+.about h2{font-size:1.6rem;margin-bottom:.7rem}
+.about h3{font-size:1.2rem;margin:1.6rem 0 .3rem}
+.about p,.about li{color:var(--muted)}
+.about p{margin:.6rem 0}
+.about ul{padding-left:1.2rem;margin:.8rem 0;display:flex;flex-direction:column;gap:.45rem}
+.about b{color:var(--cream);font-weight:600}
+.about a{color:var(--bamboo)}
+.faq details{border-bottom:1px solid var(--line);padding:.75rem 0}
+.faq summary{cursor:pointer;font-weight:600;color:var(--cream)}
+.faq details p{margin:.45rem 0 0}
+.about-alt{margin-top:1.4rem!important}
 footer{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:0 2.5rem;color:var(--muted);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
 footer a{color:var(--bamboo)}
 kbd{font-family:var(--f-mono);font-size:.78rem;padding:.05rem .35rem;border-radius:5px;border:1px solid var(--line-strong);color:var(--cream)}
