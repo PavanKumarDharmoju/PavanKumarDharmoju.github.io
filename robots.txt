@@ -94,12 +94,10 @@ User-agent: AWS-*
 Disallow: /
 
 # All other crawlers (including search engines): allow the site,
-# but keep private/admin pages and raw data out of the index
+# but keep raw data out of the index
 User-agent: *
 Disallow: /*.json$
 Disallow: /assets/js/
-Disallow: /cms.html
-Disallow: /work-admin.html
 Disallow: /embed-demo.html
 
 # Sitemap for legitimate indexing

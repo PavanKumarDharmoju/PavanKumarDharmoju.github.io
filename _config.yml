@@ -1,0 +1,15 @@
+# GitHub Pages (Jekyll) build settings.
+# Files listed here stay in the repo for local use (python3 cms_server.py) but are not published to pixelsbypavan.com.
+exclude:
+  - cms.html
+  - work-admin.html
+  - assets/js/cms.js
+  - assets/js/cms-projects.js
+  - cms_server.py
+  - cms_generator.py
+  - git_commit.py
+  - scripts/
+  - README.md
+  - README_CMS.md
+  - QUICK_START.md
+  - test
