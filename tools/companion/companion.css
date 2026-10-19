@@ -117,6 +117,7 @@ main{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:1.4rem 3re
 /* tab 1 */
 .sa-banner{display:flex;flex-direction:column;gap:.7rem;padding:.95rem 1.1rem;border-radius:12px;border:1px solid var(--accent);background:rgba(235,180,83,.1);margin-bottom:1.2rem;font-size:1.02rem}
 .sa-banner p{max-width:78ch}
+.sa-banner a{color:var(--bamboo)}
 .welcome{border-color:var(--bamboo);background:rgba(214,176,114,.08)}
 .welcome h2{font-size:1.5rem}
 .t1-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem}

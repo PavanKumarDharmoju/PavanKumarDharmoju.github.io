@@ -36,7 +36,9 @@ python cms_server.py
 │
 ├── tools/                  # Browser tools (served at /tools/)
 │   ├── index.html          # Tools listing
-│   └── bansuri/            # Bansuri Companion (index.html, bansuri.css, bansuri.js)
+│   ├── companion/          # Shared engine for both companions (companion.js, companion.css)
+│   ├── bansuri/            # Bansuri Companion page
+│   └── singing/            # Singing Companion page (same engine, <html data-mode="voice">)
 │
 ├── blog/                   # Blog post HTML files
 │   ├── mlops-best-practices.html

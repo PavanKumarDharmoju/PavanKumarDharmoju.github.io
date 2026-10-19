@@ -56,15 +56,23 @@ if(!Array.isArray(S.inst)){
 ['flutes','flute','sa','fine'].forEach(k=>delete S[k]);
 if(!S.voice) S.voice=Object.assign({},DEFAULT_VOICE);
 if(!S.inst.length) S.inst.push(demoFlute());
-if(S.cur!=='V'&&!S.inst.some(x=>x.id===S.cur)) S.cur=S.inst[0].id;
-const isVoice=()=>S.cur==='V';
+if(!S.inst.some(x=>x.id===S.cur)) S.cur=S.inst[0].id;
+/* Each page is one tool: <html data-mode="voice"> is the Singing Companion, anything else the Bansuri Companion.
+   Both share this engine and the same saved settings; the voice keeps its own Sa (S.voice), bests ('V') and riyaz log. */
+const VOICE=document.documentElement.dataset.mode==='voice';
+const isVoice=()=>VOICE;
+const curId=()=>VOICE?'V':S.cur;
+/* each tool shows its welcome once; singers who already chose a Sa have seen enough of it */
+const welcomeKey=VOICE?'welcomedV':'welcomed';
+if(VOICE&&S.voice.cal) S.welcomedV=true;
+function welcomeDone(){S[welcomeKey]=true;saveS();$('#welcome').hidden=true;}
 const dayPfx=()=>isVoice()?'dayV:':'day:';
 const HARM=['Safed 1','Kali 1','Safed 2','Kali 2','Safed 3','Safed 4','Kali 3','Safed 5','Kali 4','Safed 6','Kali 5','Safed 7'];
 const harmName=f=>HARM[((Math.round(69+12*Math.log2(f/440))%12)+12)%12];
 const FL=()=>isVoice()?S.voice:(S.inst.find(x=>x.id===S.cur)||S.inst[0]);
 const saveS=()=>store.set('settings',S);
 const loadBests=id=>store.get('bests:'+id,id==='F'?store.get('bests',{}):{});
-let bests=loadBests(S.cur);
+let bests=loadBests(curId());
 
 /* ================= notes ================= */
 const NOTES=[
@@ -435,7 +443,7 @@ function trackSustain(fr){
   }else if(sus.note&&now-sus.last>250) endSustain();
 }
 function endSustain(){
-  if(sus.note&&sus.dur>1000&&sus.dur>(bests[sus.note]||0)){bests[sus.note]=Math.round(sus.dur);store.set('bests:'+S.cur,bests);renderBests();}
+  if(sus.note&&sus.dur>1000&&sus.dur>(bests[sus.note]||0)){bests[sus.note]=Math.round(sus.dur);store.set('bests:'+curId(),bests);renderBests();}
   sus.note=null;sus.dur=0;
 }
 const susFor=id=>sus.note===id?sus.dur:0;
@@ -573,49 +581,47 @@ function syncMic(){
   renderBlocked();chipUpdate(coach.view);syncHpTip();
 }
 function syncHpTip(){const show=coach.on&&(drone.on||!!ref.id);$('#hpTip').hidden=!show;$('#hpTip2').hidden=!show;}
-const instLabel=()=>isVoice()?'Voice (singing)':FL().name+(FL().len?` · ${FL().len} cm`:'');
+const instLabel=()=>isVoice()?'Voice':FL().name+(FL().len?` · ${FL().len} cm`:'');
 function syncSaLabel(){
   const v=isVoice(),fl=FL(),w=western(saEff()),t=`${w.name}${w.cents?(' '+centsTxt(w.cents)):''}${v?' ('+harmName(saEff())+')':''} · ${saEff().toFixed(2)} Hz`;
   $('#saLabel').textContent=t;
   const how=fl.cal==='picked'?'set by you':fl.cal?'measured':v?'default':fl.len?'estimated from length':'estimated from key';
   $('#setSa').textContent=`${t} · ${how}`;
-  $('#fluteName').textContent=instLabel();$('#setInstName').textContent=instLabel();
+  $('#fluteName').textContent=instLabel();const sn=$('#setInstName');if(sn) sn.textContent=instLabel();
   $('#calBtn').textContent=v?'Find my comfortable Sa':'Find my Sa';
   $('#calResetTxt').textContent=v?'Reset to default':'Reset to estimate';
   $('#calResetRef').textContent=v?'C#3':western(fl.est||392).name;
   buildInstSel();
 }
 function buildInstSel(){
-  const sel=$('#instSel');
-  const h=S.inst.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')+'<option value="V">Voice (singing)</option><option value="__manage">Add or edit instruments…</option>';
+  const sel=$('#instSel');if(!sel) return;
+  const h=S.inst.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')+'<option value="__manage">Add or edit instruments…</option>';
   if(sel.dataset.h!==h){sel.innerHTML=h;sel.dataset.h=h;}
   sel.value=S.cur;
 }
 const nagged=new Set();
 function showCalNag(force){
-  if((!coach.on&&!force)||FL().cal||nagged.has(S.cur)||!$('#saBanner').hidden||$('#calBtn').disabled) return;
-  nagged.add(S.cur);const b=$('#saBanner'),w=western(saEff());
+  if((!coach.on&&!force)||FL().cal||nagged.has(curId())||!$('#saBanner').hidden||$('#calBtn').disabled) return;
+  nagged.add(curId());const b=$('#saBanner'),w=western(saEff());
   if(isVoice()){b.innerHTML=`<p><b>Choose your singing Sa.</b> Right now it's a default (${w.name}, ${harmName(saEff())}). Pick the one closest to your voice, or let me find a comfortable Sa from your range.</p><div class="row"><button class="btn" id="bnLow">Lower voice · Sa C#3 (Kali 1)</button><button class="btn" id="bnHigh">Higher voice · Sa A3 (Safed 6)</button><button class="btn primary" id="bnFind">Find my comfortable Sa</button><button class="btn" id="bnHide">Later</button></div>`;b.hidden=false;return;}
   const fl=FL(),src=fl.len?`its ${fl.len} cm length`:`its key`;
   b.innerHTML=`<p>Your <b>${esc(fl.name)}</b>'s Sa is an estimate from ${src} (${w.name}, ${Math.round(saEff())} Hz). Makers differ, so run <b>Find my Sa</b> once to match every note, the tanpura and the tuner to your flute. It takes about 10 seconds.</p><div class="row"><button class="btn primary" id="bnFind">Find my Sa</button><button class="btn" id="bnHide">Later</button></div>`;
   b.hidden=false;
 }
 function setInstrument(id,quiet){
-  if((id!=='V'&&!S.inst.some(x=>x.id===id))||id===S.cur){buildInstSel();return;}
-  const wasVoice=isVoice();
+  if(VOICE||!S.inst.some(x=>x.id===id)||id===S.cur){buildInstSel();return;}
   endSustain();if(D.started) gdReset();if(F.running) fStop(true);blkPause();
   S.cur=id;saveS();bests=loadBests(id);hideSaBanner();
-  if(wasVoice!==isVoice()) applyInstrument();
-  syncSettings();retune();renderBests();renderInstSheet();showCalNag(isVoice());
-  if(!quiet) toast(isVoice()?`Singing mode. Sa is ${western(saEff()).name} (${harmName(saEff())}).`:`${FL().name} selected. Sa is ${western(saEff()).name} (${saEff().toFixed(2)} Hz).`);
+  syncSettings();retune();renderBests();renderInstSheet();showCalNag();
+  if(!quiet) toast(`${FL().name} selected. Sa is ${western(saEff()).name} (${saEff().toFixed(2)} Hz).`);
 }
 /* ---------- instrument manager ---------- */
 const A={key:null,m:null,nameDirty:false,armed:null};
 function renderInstSheet(){
   const list=$('#instList');if(!list) return;
-  const row=(id,name,sub,isCur,canRemove,editable)=>`<div class="inst ${isCur?'cur':''}"><div style="min-width:0">${editable?`<input type="text" value="${esc(name)}" data-rename="${esc(id)}" maxlength="32" aria-label="Name">`:`<b style="font-family:var(--f-display);font-size:1.1rem">${esc(name)}</b>`}<small>${sub}</small></div><div class="row">${isCur?'<span class="pill">In use</span>':`<button class="btn" data-use="${esc(id)}">Use</button>`}${canRemove?`<button class="btn" data-remove="${esc(id)}">${A.armed===id?'Tap again to remove':'Remove'}</button>`:''}</div></div>`;
+  const row=(id,name,sub,isCur,canRemove)=>`<div class="inst ${isCur?'cur':''}"><div style="min-width:0"><input type="text" value="${esc(name)}" data-rename="${esc(id)}" maxlength="32" aria-label="Name"><small>${sub}</small></div><div class="row">${isCur?'<span class="pill">In use</span>':`<button class="btn" data-use="${esc(id)}">Use</button>`}${canRemove?`<button class="btn" data-remove="${esc(id)}">${A.armed===id?'Tap again to remove':'Remove'}</button>`:''}</div></div>`;
   const subFor=x=>{const w=western(x.sa*Math.pow(2,(x.fine||0)/1200));return `Sa ${w.name} · ${x.sa.toFixed(1)} Hz · ${x.cal==='picked'?'set by you':x.cal?'measured':'estimate'}${x.len?' · '+x.len+' cm':''}`;};
-  list.innerHTML=S.inst.map(x=>row(x.id,x.name,subFor(x),S.cur===x.id,S.inst.length>1,true)).join('')+row('V','Voice (singing)',`Sa ${western(S.voice.sa).name} (${harmName(S.voice.sa)}) · ${S.voice.cal?'chosen':'default'}`,isVoice(),false,false);
+  list.innerHTML=S.inst.map(x=>row(x.id,x.name,subFor(x),S.cur===x.id,S.inst.length>1)).join('');
 }
 function renderAddForm(){
   $('#addKeys').innerHTML=KEYS.map(k=>`<button data-addkey="${k}" aria-pressed="${A.key===k}" title="${k.includes('#')?k+' / '+KEYS[KEYS.indexOf(k)+1]+'b':k}">${k}</button>`).join('')+`<button class="wide" data-addkey="?" aria-pressed="${A.key==='?'}">Not sure</button>`;
@@ -649,7 +655,7 @@ function addFlute(){
   const id=newId();
   S.inst.push({id,name,key:A.key,len:len?Math.round(len*2)/2:null,sa,est:sa,fine:0,cal:false});
   S.inst=S.inst.filter(x=>!(x.demo&&!x.cal));
-  S.welcomed=true;$('#welcome').hidden=true;saveS();
+  welcomeDone();
   A.key=null;A.m=null;A.nameDirty=false;$('#addLen').value='';$('#addName').value='';
   setInstrument(id,true);renderAddForm();renderInstSheet();
   toast(`${name} added. Sa is ${western(saEff()).name} for now.`);
@@ -672,7 +678,7 @@ function exportData(){
   const out=$('#bkOut');
   try{
     const url=URL.createObjectURL(new Blob([json],{type:'application/json'})),a=document.createElement('a');
-    a.href=url;a.download=`bansuri-companion-backup-${keyFor(0)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+    a.href=url;a.download=`${VOICE?'singing':'bansuri'}-companion-backup-${keyFor(0)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
   }catch(e){}
   out.innerHTML='<p class="muted" style="font-size:.85rem">If no file appeared, copy the backup instead and keep it in a note.</p><button class="btn" id="bkCopy">Copy backup text</button>';
   $('#bkCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(json).then(()=>toast('Backup copied.'),()=>toast('Copy was blocked in this view.'));};
@@ -685,7 +691,7 @@ function importData(file){
     if(!storageOK) throw new Error('storage');
     Object.entries(j.data).forEach(([k,v])=>localStorage.setItem('bansuri:'+k,JSON.stringify(v)));
     out.innerHTML='<p><b>Restored.</b> Reloading…</p>';setTimeout(()=>location.reload(),700);
-  }).catch(e=>{out.innerHTML=`<p class="muted">${e&&e.message==='storage'?'This view can\'t save data, so the backup can\'t be restored here.':'That file isn\'t a Bansuri Companion backup.'}</p>`;});
+  }).catch(e=>{out.innerHTML=`<p class="muted">${e&&e.message==='storage'?'This view can\'t save data, so the backup can\'t be restored here.':'That file isn\'t a Bansuri or Singing Companion backup.'}</p>`;});
 }
 function applyInstrument(){
   const v=isVoice();document.body.classList.toggle('voice',v);
@@ -1375,7 +1381,7 @@ function checkMismatch(fr){
   const midi=Math.round(69+12*Math.log2(fr.f/440)),now=fr.t;
   if(mm.midi!==midi){mm.midi=midi;mm.acc=0;mm.fs=[];mm.last=now;}
   mm.acc+=Math.min(100,now-mm.last);mm.last=now;mm.fs.push(fr.f);if(mm.fs.length>150) mm.fs.shift();
-  const key=S.cur+':'+midi;
+  const key=curId()+':'+midi;
   if(mm.acc>2500&&!mm.shown.has(key)&&$('#saBanner').hidden){mm.shown.add(key);showSaBanner(median(mm.fs));}
 }
 function showSaBanner(f){
@@ -1467,8 +1473,8 @@ document.addEventListener('click',e=>{
     case 'bnLow':return setSaTo(138.59,'','picked');
     case 'bnHigh':return setSaTo(220,'','picked');
     case 'calReset':{if(isVoice()){S.voice=Object.assign({},DEFAULT_VOICE);saveS();syncSettings();retune();renderInstSheet();toast('Voice: Sa reset to C#3 (Kali 1).');return;}const p=FL(),f=p.est||(p.len?estFor(p.len):392);Object.assign(p,{sa:f,fine:0,cal:false});saveS();syncSettings();retune();renderInstSheet();toast(`${p.name}: Sa reset to the estimate, ${western(f).name} (${f} Hz).`);return;}
-    case 'wcVoice':S.welcomed=true;saveS();$('#welcome').hidden=true;setInstrument('V');return;
-    case 'wcSkip':S.welcomed=true;saveS();$('#welcome').hidden=true;return;
+    case 'wcFind':welcomeDone();return findSa();
+    case 'wcSkip':welcomeDone();return;
     case 'addGo':return addFlute();
     case 'bkExport':return exportData();
     case 'alGo':return fStart();
@@ -1541,7 +1547,7 @@ coach.subs.add(fr=>{if(fr) drawLadder();});
 $('#droneVol').value=S.vol;
 labelRefs();syncSettings();syncDrone();syncMic();renderWeek();
 if(!storageOK) $('#storeNote').hidden=false;
-if(!S.welcomed) $('#welcome').hidden=false;
+if(!S[welcomeKey]) $('#welcome').hidden=false;
 const hashTab=(location.hash||'').replace('#','');
 setTab(TABS.includes(hashTab)?hashTab:store.get('tab','flute'));
 window.addEventListener('beforeunload',()=>{saveDay();endSustain();});
