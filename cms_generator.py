@@ -33,9 +33,9 @@ class HTMLGenerator:
     <meta name="keywords" content="Side Projects, Personal Projects, Build Diary, Tech Experiments, Creative Coding, Open Source, Learning Journey, Developer Life">
     <meta name="author" content="Pavan Kumar Dharmoju">
     <link rel="canonical" href="https://pixelsbypavan.com/work">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/assets/css/site.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
@@ -70,7 +70,7 @@ class HTMLGenerator:
                 <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
                         <a href="/">
-                            <img src="assets/img/pavan.jpg" alt="Pavan Kumar Dharmoju" 
+                            <img src="/assets/img/pavan-avatar.jpg" width="80" height="80" alt="Pavan Kumar Dharmoju" 
                                  class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
                         </a>
                     </div>

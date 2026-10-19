@@ -401,10 +401,8 @@ class ProjectsCMSManager {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <script src="/assets/js/analytics.js" async></script>
     <title>${title} · pixelsbypavan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/assets/css/site.css">
     <style>
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -423,7 +421,7 @@ class ProjectsCMSManager {
             <aside class="sm:w-24 shrink-0">
                 <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
-                        <img src="assets/img/pavan.jpg" 
+                        <img src="/assets/img/pavan-avatar.jpg" width="80" height="80" 
                              alt="Pavan Kumar Dharmoju" 
                              class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
                     </div>
