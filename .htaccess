@@ -1,37 +1,30 @@
 # .htaccess - Server-level AI bot blocking and content protection
+# Not used by GitHub Pages (which hosts the site); kept in line with robots.txt for other hosts.
 # Personal portfolio of Pavan Kumar Dharmoju
 
 # Block AI training and scraping bots by User-Agent
 <RequireAll>
     Require all granted
     
-    # Block OpenAI and ChatGPT bots
+    # Block AI training bots (AI search bots such as OAI-SearchBot and PerplexityBot are allowed)
     Require not env bad_bot
     SetEnvIfNoCase User-Agent "GPTBot" bad_bot
-    SetEnvIfNoCase User-Agent "ChatGPT-User" bad_bot
-    SetEnvIfNoCase User-Agent "OpenAI" bad_bot
-    SetEnvIfNoCase User-Agent "OAI-SearchBot" bad_bot
     
     # Block Anthropic/Claude bots  
-    SetEnvIfNoCase User-Agent "Claude" bad_bot
-    SetEnvIfNoCase User-Agent "anthropic" bad_bot
     SetEnvIfNoCase User-Agent "ClaudeBot" bad_bot
+    SetEnvIfNoCase User-Agent "anthropic-ai" bad_bot
+    SetEnvIfNoCase User-Agent "Claude-Web" bad_bot
     
     # Block Google Extended AI training
     SetEnvIfNoCase User-Agent "Google-Extended" bad_bot
-    SetEnvIfNoCase User-Agent "Bard" bad_bot
-    SetEnvIfNoCase User-Agent "Gemini" bad_bot
     
     # Block Meta/Facebook AI bots
     SetEnvIfNoCase User-Agent "Meta-ExternalAgent" bad_bot
-    SetEnvIfNoCase User-Agent "Meta-ExternalFetcher" bad_bot
     SetEnvIfNoCase User-Agent "FacebookBot" bad_bot
     
     # Block other AI training bots
     SetEnvIfNoCase User-Agent "CCBot" bad_bot
     SetEnvIfNoCase User-Agent "Diffbot" bad_bot
-    SetEnvIfNoCase User-Agent "PerplexityBot" bad_bot
-    SetEnvIfNoCase User-Agent "YouBot" bad_bot
     SetEnvIfNoCase User-Agent "Bytespider" bad_bot
     SetEnvIfNoCase User-Agent "Applebot-Extended" bad_bot
     
