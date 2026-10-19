@@ -66,6 +66,9 @@ const curId=()=>VOICE?'V':S.cur;
 const welcomeKey=VOICE?'welcomedV':'welcomed';
 if(VOICE&&S.voice.cal) S.welcomedV=true;
 function welcomeDone(){S[welcomeKey]=true;saveS();$('#welcome').hidden=true;}
+/* Named usage events for the site's PostHog analytics (assets/js/analytics.js); a no-op when analytics isn't loaded.
+   Only feature use and scores are sent, never audio or pitch data. */
+function track(event,props){try{if(window.posthog&&window.posthog.capture) window.posthog.capture(event,Object.assign({tool:VOICE?'singing':'bansuri'},props));}catch(e){}}
 const dayPfx=()=>isVoice()?'dayV:':'day:';
 const HARM=['Safed 1','Kali 1','Safed 2','Kali 2','Safed 3','Safed 4','Kali 3','Safed 5','Kali 4','Safed 6','Kali 5','Safed 7'];
 const harmName=f=>HARM[((Math.round(69+12*Math.log2(f/440))%12)+12)%12];
@@ -158,7 +161,7 @@ function droneStop(){
   const g=drone.sess,t=AC.currentTime;g.gain.setValueAtTime(1,t);g.gain.linearRampToValueAtTime(0,t+0.5);
   setTimeout(()=>{try{g.disconnect();}catch(e){}},6500);drone.sess=null;syncDrone();
 }
-const droneToggle=()=>drone.on?droneStop():droneStart();
+const droneToggle=()=>{track('tanpura_toggled',{on:!drone.on});return drone.on?droneStop():droneStart();};
 
 let refWave=null,refWaveV=null,ref={id:null,osc:null,g:null};
 function ensureWaves(){
@@ -297,7 +300,7 @@ async function micStart(){
   coach.src=AC.createMediaStreamSource(coach.stream);
   coach.hp=AC.createBiquadFilter();coach.hp.type='highpass';coach.hp.frequency.value=isVoice()?55:90;
   coach.src.connect(coach.hp);coach.hp.connect(coach.an);
-  coach.on=true;applyRefMute();startLoop();syncMic();setTimeout(showCalNag,400);return true;
+  coach.on=true;applyRefMute();startLoop();syncMic();setTimeout(showCalNag,400);track('mic_started');return true;
 }
 function micStop(){
   if(coach.stream) coach.stream.getTracks().forEach(t=>t.stop());
@@ -308,6 +311,7 @@ function micStop(){
 }
 const micToggle=()=>coach.on?micStop():micStart();
 function micBlocked(name){
+  track('mic_blocked',{reason:name||'unsupported'});
   let framed=true;try{framed=window.self!==window.top;}catch(e){}
   let msg;
   if(name==='NotFoundError'||name==='OverconstrainedError') msg='No microphone was found. Plug one in or check your sound settings, then press Listen again.';
@@ -653,7 +657,7 @@ function addFlute(){
   else{const o=keyOptions(A.key).find(x=>x.m===A.m)||keyOptions(A.key)[0];sa=o.f;}
   const name=uniqueName(($('#addName').value||'').trim()||addDefaultName());
   const id=newId();
-  S.inst.push({id,name,key:A.key,len:len?Math.round(len*2)/2:null,sa,est:sa,fine:0,cal:false});
+  S.inst.push({id,name,key:A.key,len:len?Math.round(len*2)/2:null,sa,est:sa,fine:0,cal:false});track('flute_added',{key:A.key});
   S.inst=S.inst.filter(x=>!(x.demo&&!x.cal));
   welcomeDone();
   A.key=null;A.m=null;A.nameDirty=false;$('#addLen').value='';$('#addName').value='';
@@ -822,7 +826,7 @@ function gdStart(){
   if(D.running) return gdPause();
   if(D.mode==='listen'&&!coach.on){micStart().then(ok=>{if(ok) gdStart();else{D.mode='timed';store.set('gdMode',D.mode);syncGdSettings();toast('Listen mode needs the microphone, so the drill is set to Timed.');}});return;}
   audio();
-  if(!D.started){D.started=true;D.phase=0;D.rep=1;D.prog=0;D.elapsed=0;D.stats=PHASES.map(()=>({held:0,sumC:0,sumP:0,n:0,air:0,oct:0,loud:0}));$('#gdResults').hidden=true;enterPhase();}
+  if(!D.started){track('gravity_drop_started',{mode:D.mode,reps:D.reps});D.started=true;D.phase=0;D.rep=1;D.prog=0;D.elapsed=0;D.stats=PHASES.map(()=>({held:0,sumC:0,sumP:0,n:0,air:0,oct:0,loud:0}));$('#gdResults').hidden=true;enterPhase();}
   else enterPhase();
   D.running=true;D.last=performance.now();D.raf=requestAnimationFrame(gdTick);renderGd();wakeSync();
 }
@@ -864,6 +868,7 @@ function advancePhase(){
 }
 function gdFinish(){
   D.running=false;D.started=false;coach.override=null;$('#gdStatus').hidden=true;chime('end');
+  track('gravity_drop_finished',{mode:D.mode,reps:D.reps,seconds:Math.round(D.elapsed/1000)});
   const r=$('#gdResults'),reps=D.reps;
   const anyData=D.stats.some(s=>s.loud>0);
   let h=`<div class="card-head"><h3 style="font-size:1.3rem">Run complete</h3><span class="muted mono">${reps} rep${reps>1?'s':''} · ${mmss(D.elapsed)}</span></div>`;
@@ -988,7 +993,7 @@ function diagnose(frames,tgt){
   return r(air>0.2?'A':airy>0.25?'D':null,'Mixed result','No single problem stands out. Try a slower, warmer attempt and diagnose again.');
 }
 function showDiag(res,el){
-  el.hidden=false;
+  el.hidden=false;track('note_diagnosed',{symptom:res.sym||'none',result:res.title});
   el.innerHTML=`<h4>${res.title}</h4><p>${res.text}</p>${res.stats?`<div class="diag-stats">${res.stats}</div>`:''}${res.sym?`<div class="row" style="margin-top:.7rem"><button class="btn primary" data-sym-open="${res.sym}">Open checklist ${res.sym}</button></div>`:''}`;
   if(res.sym){symSel=res.sym;renderSym();}
 }
@@ -1060,7 +1065,7 @@ function blkTick(){
   if(keyFor(0)!==dayKey){blkPause();dayKey=keyFor(0);day=loadDay(dayKey);renderBlocks();renderWeek();}
   if(RT.run){
     const id=RT.run;
-    if(blkEl(id)>=blkMs(id)){day.el[id]=blkMs(id);day.done[id]=true;RT.run=null;chime('end');saveDay();wakeSync();renderBlocks();renderWeek();toast(`${BLOCKS.find(b=>b.id===id).title}: done.`);}
+    if(blkEl(id)>=blkMs(id)){track('riyaz_block_completed',{block:BLOCKS.find(b=>b.id===id).title,how:'timer'});day.el[id]=blkMs(id);day.done[id]=true;RT.run=null;chime('end');saveDay();wakeSync();renderBlocks();renderWeek();toast(`${BLOCKS.find(b=>b.id===id).title}: done.`);}
     else if(++RT.n%20===0) saveDay();
   }
   updateClocks();
@@ -1148,17 +1153,19 @@ function fStart(){
   audio();F.running=true;F.idx=-1;F.count=4;F.rest=0;F.round=1;F.best=0;F.res=[];F.frames=[];F.next=performance.now()+150;$('#alScore').hidden=true;
   $$('#alView .al-n').forEach(e=>e.className='al-n');
   F.timer=setInterval(fTick,10);renderAlankar();wakeSync();
+  track('alankar_started',{alankar:AL[S.alank].name,bpm:S.bpm,loop:S.alLoop,graded:coach.on});
 }
 function fStop(manual){
   clearInterval(F.timer);F.running=false;coach.override=null;$$('#alView .al-n.cur').forEach(e=>e.classList.remove('cur'));
   renderAlankar();wakeSync();
+  if(manual) track('alankar_stopped',{alankar:AL[S.alank].name,rounds:F.round});
   if(!manual) alScore(false);
 }
 /* Score for the pass just finished. In loop mode each round is scored as it ends, with the best round so far. */
 function alScore(looping){
   if(!coach.on||!F.res.length) return;
   const c=F.res.filter(r=>r==='clean').length,a=F.res.filter(r=>r==='airy').length,m=F.res.length-c-a,el=$('#alScore');
-  F.best=Math.max(F.best,c);
+  F.best=Math.max(F.best,c);track('alankar_scored',{alankar:AL[S.alank].name,bpm:S.bpm,round:F.round,clean:c,airy:a,missed:m,total:F.res.length});
   el.hidden=false;el.innerHTML=`<h4>${looping?`Round ${F.round}: `:''}${c} of ${F.res.length} notes clean</h4><p class="muted">${a} airy · ${m} missed or off pitch.${looping&&F.round>1?` Best round so far: ${F.best} of ${F.res.length}.`:''} Missed notes are underlined; try them slower.</p>`;
 }
 function fTick(){
@@ -1197,7 +1204,7 @@ const egMasked=()=>performance.now()<(EG.maskUntil||0);
 function egPlay(){const p=egPool();EG.note=p[Math.floor(Math.random()*p.length)];EG.answered=false;egHear();$('#egAgain').disabled=false;$('#egBack').disabled=false;$('#egStatus').textContent=`Which note was that? Tap it, or ${isVoice()?'sing it back':'play it back on your flute'}.`;}
 function egAnswer(id){
   if(!EG.note||EG.answered) return;EG.answered=true;EG.total++;
-  const ok=id===EG.note.id;if(ok) EG.score++;
+  const ok=id===EG.note.id;if(ok) EG.score++;track('ear_test_answered',{correct:ok,note:EG.note.id});
   $('#egStatus').textContent=ok?`Yes! That was ${EG.note.sg} (${EG.note.name}).`:`That was ${EG.note.sg} (${EG.note.name}), not ${NOTE[id].sg}. Press "Hear again" to compare.`;
   $('#egScore').textContent=`${EG.score} / ${EG.total}`;$('#egBack').disabled=true;
 }
@@ -1273,6 +1280,7 @@ async function selfTest(){
   $('#stSum').textContent=pass===NOTES.length?`All ${pass} notes passed. Second number is tone purity (a pure synthetic tone should read near 100).`:`${pass} of ${NOTES.length} passed. If several fail, reload the page and run it again.`;
 }
 function showRecording(an,file){
+  track('recording_analyzed',{seconds:Math.round(an.duration/1000)});
   const tgtId=$('#recTarget').value,tgt=tgtId==='auto'?null:NOTE[tgtId],frames=framesFrom(an,tgt),out=$('#recOut');
   const loud=frames.filter(f=>f.loud),pitched=loud.filter(f=>f.f),L=Math.max(1,loud.length),hop=an.raws.length>1?an.raws[1].t-an.raws[0].t:21;
   const clear=pitched.filter(f=>f.purity>=75).length/L,airy=pitched.filter(f=>f.purity<AIRY_BELOW).length/L,air=loud.filter(f=>f.cls==='air').length/L;
@@ -1297,7 +1305,7 @@ function syncSettings(){
   buildSaPick();syncSaLabel();
 }
 function setSaTo(f,why,how){
-  const p=FL();Object.assign(p,{sa:Math.round(f*100)/100,fine:0,cal:how||true});
+  const p=FL();Object.assign(p,{sa:Math.round(f*100)/100,fine:0,cal:how||true});track('sa_set',{how:how||'measured',note:western(f).name});
   if(!isVoice()){delete p.demo;if(p.key==='?'){const k=western(f).name.replace(/-?\d+$/,'');const kk=KEYS.includes(k)?k:KEYS[((Math.round(midiOf(f))%12)+12)%12];if(p.name==='My flute'||/^My flute \d+$/.test(p.name)) p.name=uniqueName(`${kk} ${regOf(f)}`);p.key=kk;}}
   saveS();syncSettings();retune();hideSaBanner();renderInstSheet();
   toast(`${isVoice()?'Voice':FL().name}: Sa set to ${western(f).name}${isVoice()?' ('+harmName(f)+')':''} (${f.toFixed(2)} Hz)${why?'. '+why:''}. Everything is retuned.`);
@@ -1408,8 +1416,10 @@ function openSheet(name){
 function closeSheet(){if(!openSheetName) return;$('#sheet-'+openSheetName).hidden=true;$('#scrim').hidden=true;openSheetName=null;if(lastFocus&&lastFocus.focus) lastFocus.focus();}
 let activeTab='flute';
 const TABS=['flute','drop','fix','riyaz'];
-function setTab(t){
-  if(!TABS.includes(t)) t='flute';activeTab=t;
+function setTab(t,initial){
+  if(!TABS.includes(t)) t='flute';
+  if(!initial&&t!==activeTab) track('tool_tab_viewed',{tab:t});
+  activeTab=t;
   TABS.forEach(x=>{$('#tab-'+x).hidden=x!==t;$('#tb-'+x).setAttribute('aria-selected',x===t);});
   store.set('tab',t);
   if(t==='flute'){renderT1();t1Live(coach.view);}
@@ -1488,7 +1498,7 @@ document.addEventListener('change',e=>{
   if(d.rename){const x=S.inst.find(i=>i.id===d.rename),n=t.value.trim();if(x&&n){x.name=n===x.name?n:uniqueName(n);saveS();syncSaLabel();}renderInstSheet();return;}
   if(t.name==='addSize'){A.m=+t.value;renderAddForm();return;}
   if(d.step!==undefined){(symChecks[symKey()]||(symChecks[symKey()]=[]))[+d.step]=t.checked;t.closest('.step').classList.toggle('checked',t.checked);return;}
-  if(d.blkDone){day.done[d.blkDone]=t.checked;saveDay();renderBlocks();renderWeek();return;}
+  if(d.blkDone){if(t.checked) track('riyaz_block_completed',{block:BLOCKS.find(b=>b.id===d.blkDone).title,how:'checkbox'});day.done[d.blkDone]=t.checked;saveDay();renderBlocks();renderWeek();return;}
   switch(t.id){
     case 'coachTarget':coach.sel=t.value;return;
     case 'autoMute':S.autoMute=t.checked;saveS();if(AC) applyRefMute();return;
@@ -1549,6 +1559,6 @@ labelRefs();syncSettings();syncDrone();syncMic();renderWeek();
 if(!storageOK) $('#storeNote').hidden=false;
 if(!S[welcomeKey]) $('#welcome').hidden=false;
 const hashTab=(location.hash||'').replace('#','');
-setTab(TABS.includes(hashTab)?hashTab:store.get('tab','flute'));
+setTab(TABS.includes(hashTab)?hashTab:store.get('tab','flute'),true);
 window.addEventListener('beforeunload',()=>{saveDay();endSustain();});
 })();
