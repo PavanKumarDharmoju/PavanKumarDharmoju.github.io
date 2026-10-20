@@ -15,7 +15,7 @@
 (function () {
     'use strict';
 
-    var POSTHOG_KEY = 'phc_REPLACE_WITH_PROJECT_API_KEY';
+    var POSTHOG_KEY = 'phc_rn3Vb78ZF8eGfRBPWyenb3SEFHJyEkBHGgDGmzErhHUj'; // project 674782 (US cloud)
     var POSTHOG_HOST = 'https://us.i.posthog.com';
     var LIVE_HOSTS = ['pixelsbypavan.com', 'www.pixelsbypavan.com'];
 
