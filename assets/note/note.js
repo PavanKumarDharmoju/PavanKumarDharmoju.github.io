@@ -57,10 +57,9 @@
       "saturday. the best day for a long walk"
     ];
     var NO_LINES = ["are you sure?", "really sure?", "think again", "pls", "last chance", "you're breaking my heart", "ok now you're just playing", "the yes button is right there"];
-    var WYD = { label: "\"wyd\" at 11pm", off: true, note: "that's everyone else's idea. not available here" };
 
     var name = C.name;
-    var options = (C.options || []).concat([WYD]);
+    var options = C.options || [];
     var dayNotes = C.dayNotes || DAY_NOTES;
     var today = new Date();
 
@@ -128,7 +127,7 @@
       // 5: the date
       "<h2>yay. ok, pick our first date</h2>" +
       '<div class="pick col opts">' + options.map(function (o, i) {
-        return '<button type="button" data-i="' + i + '"' + (o.off ? ' class="off"' : "") + ' aria-pressed="' + (i === 0) + '"><span>' + esc(o.label) + "</span></button>";
+        return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '"><span>' + esc(o.label) + "</span></button>";
       }).join("") + "</div>" +
       '<div class="note optnote"></div>',
 
@@ -136,7 +135,11 @@
       "<h2>" + (C.dayPrompt || "and which day?") + "</h2>" +
       '<div class="pick days"></div><div class="note daynote"></div>',
 
-      // 7: ticket
+      // 7: the time
+      "<h2>" + (C.timePrompt || "and what time?") + "</h2>" +
+      '<div class="pick times"></div><div class="note timenote"></div>',
+
+      // 8: ticket
       "<h2>it's a date</h2>" +
       '<div class="ticket"><div class="main"><div class="admit">admit one · ' + esc(name) + "</div>" +
         '<div class="what" data-t="what"></div>' +
@@ -161,7 +164,7 @@
     // ---- navigation ----
     var sections = $$(".step"), dots = $$(".dots i"), back = $(".back"), next = $(".next");
     var cur = -1, saidYes = false, picked = null, choice = options[0], seen = {};
-    var ASK = 4, DATE = 5, DAY = 6, LAST = steps.length - 1;
+    var ASK = 4, DATE = 5, DAY = 6, TIME = 7, LAST = steps.length - 1;
 
     function canLeave(i) { return !(i === ASK && !saidYes) && !(i === DAY && !picked); }
     function go(i) {
@@ -179,7 +182,7 @@
       back.classList.toggle("hide", i === 0);
       next.classList.toggle("hide", i === LAST || (i === ASK && !saidYes));
       next.disabled = i === DAY && !picked;
-      next.textContent = i === DAY ? (picked ? "our ticket" : "pick one") : "next";
+      next.textContent = i === DAY && !picked ? "pick one" : i === TIME ? "our ticket" : "next";
       window.scrollTo(0, 0);
       if (!seen[i]) { seen[i] = 1; track("step_viewed", { step: i }); }
     }
@@ -249,11 +252,11 @@
     function pickOption(i) {
       var o = options[i];
       $(".optnote").textContent = o.note;
-      track(o.off ? "tried_wyd" : "picked_date", { date: o.label });
-      if (o.off) return;
+      track("picked_date", { date: o.label });
       choice = o;
       $$(".opts button").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.i === i ? "true" : "false"); });
-      if (picked) renderTicket();
+      renderDays();
+      if (picked) { renderTimes(); renderTicket(); }
     }
     opts.addEventListener("click", function (e) {
       var b = e.target.closest("button");
@@ -261,34 +264,100 @@
     });
     $(".optnote").textContent = options[0].note;
 
+    // ---- availability: only some days, and only evenings on weekdays ----
+    var OPEN_DAYS = C.days || [4, 5, 6, 0]; // 0 = sunday
+    var WEEKDAY_TIMES = [["6:30pm", "straight from work"], ["8:00pm", "dinner hour, the classic"]];
+    var WEEKEND_TIMES = [["11:00am", "slow morning, first coffee"], ["2:00pm", "an afternoon escape"], ["7:30pm", "classic dinner hour"]];
+    function weekend(d) { return d.getDay() === 0 || d.getDay() === 6; }
+    function minutes(str) {
+      var m = /^(\d{1,2}):(\d{2})(am|pm)/.exec(str);
+      return m ? (+m[1] % 12 + (m[3] === "pm" ? 12 : 0)) * 60 + +m[2] : null;
+    }
+    // golden hour on a weekday only works if it starts after work
+    function isOpen(d) {
+      if (OPEN_DAYS.indexOf(d.getDay()) < 0) return false;
+      return !(choice.golden && !weekend(d) && minutes(time(goldenStart(d))) < 17 * 60 + 30);
+    }
+
     // ---- days ----
     var days = $(".days");
-    for (var i = 1; i <= 7; i++) {
-      var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
-      var b = document.createElement("button");
-      b.type = "button";
-      b.textContent = fmt(d, { weekday: "short", month: "short", day: "numeric" });
-      b.dataset.ts = d.getTime();
-      b.setAttribute("aria-pressed", "false");
-      days.appendChild(b);
+    function renderDays() {
+      if (picked && !isOpen(picked)) {
+        picked = null; slotPicked = false;
+        $(".daynote").textContent = "";
+        if (cur === DAY) { next.disabled = true; next.textContent = "pick one"; }
+      }
+      // only open days are shown, up to five of them over the next two weeks
+      days.innerHTML = "";
+      for (var i = 1, shown = 0; i <= 14 && shown < 5; i++) {
+        var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+        if (!isOpen(d)) continue;
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = fmt(d, { weekday: "short", month: "short", day: "numeric" });
+        b.dataset.ts = d.getTime();
+        b.setAttribute("aria-pressed", picked && +picked === d.getTime() ? "true" : "false");
+        days.appendChild(b);
+        shown++;
+      }
     }
     days.addEventListener("click", function (e) {
       var b = e.target.closest("button");
       if (!b) return;
+      var d = new Date(+b.dataset.ts);
       $$(".days button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
       var first = !picked;
-      picked = new Date(+b.dataset.ts);
+      picked = d;
       $(".daynote").textContent = picked.getMonth() === 9 && picked.getDate() === 31 ? "halloween! costumes optional, but encouraged" : dayNotes[picked.getDay()];
+      renderTimes();
       renderTicket();
-      track("picked_night", { night: fmt(picked, { weekday: "long", month: "short", day: "numeric" }), date: choice.label, time: ticketTime(), no_taps: tries, promises_checked: boxes.filter(function (x) { return x.checked; }).length });
+      track("picked_night", summary());
       $(".sent").textContent = "sent! he'll see this in a sec";
       next.disabled = false;
-      next.textContent = "our ticket";
-      if (first) setTimeout(function () { if (cur === DAY) go(LAST); }, 900);
+      next.textContent = "next";
+      if (first) setTimeout(function () { if (cur === DAY) go(TIME); }, 900);
     });
 
-    function ticketTime() {
+    // ---- time: the date's own time if it fits that day, then that day's slots ----
+    var slot = null, slotPicked = false;
+    function suggestedTime() {
       return choice.golden ? time(new Date(goldenStart(picked) - 15 * 6e4)) + " (just before golden hour)" : choice.time;
+    }
+    function renderTimes() {
+      var we = weekend(picked), own = suggestedTime(), m = minutes(own), list = [];
+      if (we || m === null || m >= 18 * 60) list.push({ v: own, n: "my pick for this date" });
+      (we ? WEEKEND_TIMES : WEEKDAY_TIMES).forEach(function (t) { if (t[0] !== choice.time) list.push({ v: t[0], n: t[1] }); });
+      if (we && !choice.golden) list.push({ v: "golden hour, around " + time(goldenStart(picked)), n: "my favorite light, obviously" });
+      if (!slotPicked || !list.some(function (t) { return t.v === slot.v; })) { slot = list[0]; slotPicked = false; }
+      var box = $(".times");
+      box.innerHTML = "";
+      list.forEach(function (t) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = t.v;
+        b.setAttribute("aria-pressed", t.v === slot.v ? "true" : "false");
+        b.timeSlot = t;
+        box.appendChild(b);
+      });
+      $(".timenote").textContent = slot.n;
+    }
+    $(".times").addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      var first = !slotPicked;
+      slot = b.timeSlot;
+      slotPicked = true;
+      $$(".times button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      $(".timenote").textContent = slot.n;
+      renderTicket();
+      track("picked_time", summary());
+      if (first) setTimeout(function () { if (cur === TIME) go(LAST); }, 900);
+    });
+
+    function ticketTime() { return slot ? slot.v : suggestedTime(); }
+    function summary() {
+      return { night: fmt(picked, { weekday: "long", month: "short", day: "numeric" }), date: choice.label, time: ticketTime(),
+        no_taps: tries, promises_checked: boxes.filter(function (x) { return x.checked; }).length };
     }
     function renderTicket() {
       var set = function (k, v) { $('[data-t="' + k + '"]').textContent = v; };
@@ -310,6 +379,8 @@
       if (navigator.clipboard) navigator.clipboard.writeText(msg).then(function () { note.textContent = "copied! paste it in hinge"; }, fallback);
       else fallback();
     });
+
+    renderDays();
 
     // ---- confetti, fired from the yes button ----
     function confetti(from) {

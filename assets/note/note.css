@@ -96,8 +96,6 @@ ul.facts b { font-family: "Caveat", cursive; font-size: 1.25em; color: var(--lil
 .pick.col { flex-direction: column; align-items: flex-start; }
 .pick button { text-align: left; }
 .pick button[aria-pressed="true"] { background: var(--lilac); border-color: var(--lilac-deep); }
-.pick button.off { color: var(--pencil); border-style: dashed; }
-.pick button.off span { text-decoration: line-through; text-decoration-thickness: 2px; }
 .note { min-height: 32px; font-size: 18px; color: var(--pencil); }
 .gap { height: 32px; }
 
@@ -134,7 +132,7 @@ ul.facts b { font-family: "Caveat", cursive; font-size: 1.25em; color: var(--lil
 }
 .nav button {
   font: inherit; font-size: 20px; color: var(--ink); background: var(--paper); cursor: pointer; min-width: 104px;
-  border: 2px solid var(--ink); border-radius: 14px 6px 12px 5px / 6px 12px 5px 14px; padding: 4px 14px;
+  border: 2px solid var(--ink); border-radius: 14px 6px 12px 5px / 6px 12px 5px 14px; padding: 4px 14px; white-space: nowrap;
 }
 .nav .next { background: var(--lilac); }
 .nav button[disabled] { opacity: .45; cursor: default; }
