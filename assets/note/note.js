@@ -40,7 +40,7 @@
     ];
     var FACTS = [
       ["the job", "i build AI for a living. mostly i teach computers to do things, then argue with them when they don't"],
-      ["the camera", "i'm a photographer. i'll wait 20 minutes for the right light, then shoot in 2 seconds. today it shows up at <span data-gh>sunset</span>"],
+      ["the camera", "i'm a photographer. i'll wait 20 minutes for the perfect light, then take the photo in 2 seconds. very patient, very dramatic"],
       ["the bike", "i bike around chicago like i'm in a movie montage. the wind off the lake disagrees"],
       ["the art", "i make art sometimes. \"sometimes\" is doing a lot of work in that sentence"],
       ["the weekends", "climbing gym, mostly falling off walls with great form"],
@@ -157,9 +157,6 @@
 
     function $(sel) { return root.querySelector(sel); }
     function $$(sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); }
-
-    var gh = $("[data-gh]");
-    if (gh) gh.textContent = time(goldenStart(today));
 
     // ---- navigation ----
     var sections = $$(".step"), dots = $$(".dots i"), back = $(".back"), next = $(".next");
