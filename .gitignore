@@ -27,3 +27,6 @@ backup_*/
 *.log
 .env
 .env.local
+
+# Readable note sources and their keys (scripts/seal-note.mjs). Never commit these.
+notes-src/
