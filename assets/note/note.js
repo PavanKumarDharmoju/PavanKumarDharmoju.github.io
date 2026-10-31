@@ -36,7 +36,7 @@
     // ---- things about pavan, shared by every note ----
     var BASICS = [
       ["name", "pavan"], ["age", "27"], ["lives", "chicago"],
-      ["speaks", "telugu, hindi, english"], ["does", "AI by day, photos by golden hour"]
+      ["speaks", "telugu, hindi, english"], ["does", "AI engineer, photographer"]
     ];
     var FACTS = [
       ["the job", "i build AI for a living. mostly i teach computers to do things, then argue with them when they don't"],
@@ -104,8 +104,8 @@
       // 1: me
       "<h2>hi, i'm pavan</h2>" +
       '<div class="polaroid-wrap">' +
-        '<figure class="polaroid"><div class="tape"></div><img src="/assets/img/pavan2.png" alt="pavan in a suit, smiling">' +
-        '<figcaption>my one formal photo.<br>i\'m less serious than this suit</figcaption></figure>' +
+        '<figure class="polaroid"><div class="tape"></div><img src="/assets/img/pavan-river.jpg" alt="pavan smiling on a boat on the chicago river at sunset">' +
+        '<figcaption>golden hour on the chicago river.<br>yes, i dress up for sunsets</figcaption></figure>' +
         '<div class="basics">' + BASICS.map(function (b) { return '<div><span class="k">' + b[0] + "</span> " + b[1] + "</div>"; }).join("") + "</div>" +
       "</div>",
 
