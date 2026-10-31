@@ -1,7 +1,8 @@
 /**
  * Renders a personal note. Each page holds its note encrypted in window.NOTE_SEALED
- * (made by scripts/seal-note.mjs); the AES key is in the link after "#k=", which
- * browsers never send to the server, so the repo only ever holds ciphertext.
+ * (made by scripts/seal-note.mjs); the short code after "#" in the link is hashed into
+ * the AES key. Browsers never send that part to the server, so the repo only ever
+ * holds ciphertext.
  * The note is split into steps with back/next buttons, swipe and arrow keys.
  * Taps are sent to PostHog (assets/js/analytics.js) with note = the note's id.
  */
@@ -19,11 +20,14 @@
       "<p>it only opens from the exact link it was sent with. if you found it some other way, hi, there's nothing to see here</p></section></main>";
   }
 
-  var sealed = window.NOTE_SEALED, m = location.hash.match(/k=([A-Za-z0-9_-]+)/);
+  // a page sealed with "open": true carries its own key, so its plain link works without a code
+  var sealed = window.NOTE_SEALED, m = location.hash.match(/^#([A-Za-z0-9]+)$/);
+  var code = m ? m[1] : sealed && sealed.k;
   if (window.NOTE) render(window.NOTE);
-  else if (!sealed || !m || !window.crypto || !crypto.subtle) locked();
+  else if (!sealed || !code || !window.crypto || !crypto.subtle) locked();
   else {
-    crypto.subtle.importKey("raw", b64(m[1]), "AES-GCM", false, ["decrypt"])
+    crypto.subtle.digest("SHA-256", new TextEncoder().encode(code))
+      .then(function (raw) { return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]); })
       .then(function (key) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(sealed.iv) }, key, b64(sealed.ct)); })
       .then(function (buf) { render(JSON.parse(new TextDecoder().decode(buf))); }, locked);
   }

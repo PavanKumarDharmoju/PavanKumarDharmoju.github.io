@@ -5,9 +5,12 @@
 //
 // The source file (gitignored) looks like notes-src/_template.json:
 //   { "path": "n/<neutral-name>.html", "note": { ...what assets/note/note.js renders... } }
-// The first run adds a random "key" to it; later runs reuse that key, so the link
-// stays the same when you edit the note and seal it again. The key only appears in
-// the link (after "#k="), which browsers never send to the server.
+// The first run adds a random 12-character "key" to it; later runs reuse that key, so
+// the link stays the same when you edit the note and seal it again. The key only
+// appears in the link (after "#"), which browsers never send to the server, and its
+// SHA-256 hash is the AES key.
+// Set "open": true to put the key inside the page, so the plain link (no "#code")
+// opens it. The repo still holds no readable text, but anyone could decode that page.
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
@@ -23,12 +26,14 @@ const data = JSON.parse(readFileSync(src, "utf8"));
 if (!data.path || !data.note) throw new Error(src + " needs \"path\" and \"note\"");
 
 const b64url = (bytes) => Buffer.from(bytes).toString("base64url");
-if (!data.key) {
-  data.key = b64url(crypto.getRandomValues(new Uint8Array(16)));
+const ALPHABET = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no look-alikes (l, 1, o, 0, I, O)
+if (!data.key || !/^[A-Za-z0-9]{12}$/.test(data.key)) {
+  data.key = Array.from(crypto.getRandomValues(new Uint32Array(12)), (n) => ALPHABET[n % ALPHABET.length]).join("");
   writeFileSync(src, JSON.stringify(data, null, 2) + "\n");
 }
 
-const key = await crypto.subtle.importKey("raw", Buffer.from(data.key, "base64url"), "AES-GCM", false, ["encrypt"]);
+const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data.key));
+const key = await crypto.subtle.importKey("raw", digest, "AES-GCM", false, ["encrypt"]);
 const iv = crypto.getRandomValues(new Uint8Array(12));
 const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(JSON.stringify(data.note)));
 
@@ -51,7 +56,7 @@ const page = `<!DOCTYPE html>
 </head>
 <body>
 <div id="note"></div>
-<script>window.NOTE_SEALED = ${JSON.stringify({ iv: b64url(iv), ct: b64url(ct) })};</script>
+<script>window.NOTE_SEALED = ${JSON.stringify({ iv: b64url(iv), ct: b64url(ct), ...(data.open ? { k: data.key } : {}) })};</script>
 <script src="/assets/note/note.js"></script>
 </body>
 </html>
@@ -61,4 +66,4 @@ mkdirSync(dirname(data.path), { recursive: true });
 writeFileSync(data.path, page);
 const urlPath = data.path.replace(/\.html$/, "");
 console.log(`sealed ${src} -> ${data.path}`);
-console.log(`link: https://pixelsbypavan.com/${urlPath}#k=${data.key}`);
+console.log(`link: https://pixelsbypavan.com/${urlPath}` + (data.open ? "" : `#${data.key}`));
