@@ -9,6 +9,7 @@ into the HTML instead, between these markers:
 
 Photo posts are the ones whose title starts with "📷" or "[photo]"; they go
 to Photography with the marker removed. Everything else goes to Blogs.
+Notes that are only photos (no text) also go to Photography, one tile per photo.
 
     python3 scripts/sync_substack.py
 
@@ -16,16 +17,23 @@ Runs daily in .github/workflows/sync-substack.yml. Standard library only.
 """
 import email.utils
 import html
+import json
 import re
 import sys
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PUBLICATION = "https://pixelsbypavan.substack.com"
 FEED = PUBLICATION + "/feed"
 LIMIT = 30
+AUTHOR_ID = 378084778  # the publication author's Substack user id; Notes are per person, not per publication
+NOTES = f"https://substack.com/api/v1/reader/feed/profile/{AUTHOR_ID}?types%5B%5D=note"
+NOTE_PAGES = 10
+PHOTO_LIMIT = 120
 PHOTO_MARKER = re.compile(r"^\s*(?:📷|\[photos?\]|\[photography\])\s*", re.I)
 CONTENT_NS = "{http://purl.org/rss/1.0/modules/content/}encoded"
 BLOCK = re.compile(r"(<!-- substack:start -->)(.*?)(\n[ \t]*<!-- substack:end -->)", re.S)
@@ -49,6 +57,33 @@ def fetch_items():
             "excerpt": text_of(get("description") or content),
         })
     return items
+
+
+def fetch_photo_notes():
+    """Photos from Notes that have images and no text, newest first."""
+    photos, cursor = [], None
+    for _ in range(NOTE_PAGES):
+        url = NOTES + ("&cursor=" + urllib.parse.quote(cursor) if cursor else "")
+        req = urllib.request.Request(url, headers={"User-Agent": "pixelsbypavan-site-sync/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as res:
+            page = json.load(res)
+        for item in page.get("items", []):
+            note = item.get("comment") or {}
+            images = [a for a in note.get("attachments") or [] if a.get("type") == "image" and a.get("imageUrl")]
+            if note.get("user_id") != AUTHOR_ID or (note.get("body") or "").strip() or not images:
+                continue
+            date = datetime.fromisoformat(note["date"].replace("Z", "+00:00"))
+            link = f"https://substack.com/@{note.get('handle') or 'pixelsbypavan'}/note/c-{note['id']}"
+            photos += [{"link": link, "date": date, "url": a["imageUrl"],
+                        "w": a.get("imageWidth") or 4, "h": a.get("imageHeight") or 3} for a in images]
+        cursor = page.get("nextCursor")
+        if not cursor or len(photos) >= PHOTO_LIMIT:
+            break
+    return photos[:PHOTO_LIMIT]
+
+
+def cdn(url, width):
+    return f"https://substackcdn.com/image/fetch/w_{width},c_limit,f_auto,q_auto:good,fl_progressive:steep/{urllib.parse.quote(url, safe='')}"
 
 
 def first_image(markup):
@@ -99,6 +134,14 @@ def gallery_card(p, ind):
 {ind}</a>'''
 
 
+def photo_tile(p, ind):
+    alt = f"Photo by Pavan Kumar Dharmoju, {p['date']:%B %Y}" if p["date"] else "Photo by Pavan Kumar Dharmoju"
+    return f'''
+{ind}<a href="{html.escape(p["link"])}" target="_blank" rel="noopener" class="block mb-3 break-inside-avoid overflow-hidden rounded-md bg-gray-100 group">
+{ind}    <img src="{cdn(p["url"], 800)}" srcset="{cdn(p["url"], 600)} 600w, {cdn(p["url"], 1200)} 1200w" sizes="(min-width: 640px) 220px, 50vw" width="{p["w"]}" height="{p["h"]}" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full h-auto group-hover:opacity-90 transition-opacity">
+{ind}</a>'''
+
+
 def empty(message, ind):
     return (f'\n{ind}<p class="text-gray-500 text-sm">{html.escape(message)} '
             f'<a class="text-blue-600 hover:underline" href="{PUBLICATION}" target="_blank" rel="noopener">Visit on Substack →</a></p>')
@@ -112,6 +155,17 @@ def render(items, layout, message, ind):
         return f'\n{ind}<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{cards}\n{ind}</div>'
     cards = "".join(list_card(p, ind + "    ") for p in items)
     return f'\n{ind}<div class="space-y-6">{cards}\n{ind}</div>'
+
+
+def render_photography(posts, photos, ind):
+    if not posts and not photos:
+        return empty("No photos yet.", ind)
+    body = render(posts, "gallery", "", ind) if posts else ""
+    if photos:
+        tiles = "".join(photo_tile(p, ind + "    ") for p in photos)
+        gap = " mt-8" if posts else ""
+        body += f'\n{ind}<div class="columns-2 sm:columns-3 gap-3{gap}">{tiles}\n{ind}</div>'
+    return body
 
 
 def write(page, body):
@@ -138,7 +192,7 @@ def main():
     photos = [dict(p, title=PHOTO_MARKER.sub("", p["title"]).strip()) for p in items if PHOTO_MARKER.match(p["title"])][:LIMIT]
     writing = [p for p in items if not PHOTO_MARKER.match(p["title"])][:LIMIT]
     write("blogs.html", render(writing, "list", "No articles yet.", indent_of("blogs.html")))
-    write("photography.html", render(photos, "gallery", "No photo posts yet.", indent_of("photography.html")))
+    write("photography.html", render_photography(photos, fetch_photo_notes(), indent_of("photography.html")))
 
 
 if __name__ == "__main__":
