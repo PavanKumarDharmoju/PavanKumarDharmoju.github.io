@@ -7,8 +7,14 @@
  * window.posthog.capture.
  *
  * Setup: paste the Project API key from PostHog (Settings -> Project -> Project
- * API key, it starts with "phc_") into POSTHOG_KEY. EU Cloud projects also need
- * POSTHOG_HOST set to https://eu.i.posthog.com.
+ * API key, it starts with "phc_") into POSTHOG_KEY.
+ *
+ * Events and the PostHog library go through lens.pixelsbypavan.com instead of
+ * *.posthog.com so ad blockers don't drop them. GitHub Pages can't proxy, so the
+ * subdomain is PostHog's managed reverse proxy (PostHog Settings -> Project ->
+ * Managed reverse proxy, plus a CNAME at the DNS provider). The proxy also
+ * serves /static/array.js, which is why the loader fetches the library from
+ * POSTHOG_HOST. UI_HOST keeps toolbar and app links on PostHog's US cloud.
  *
  * Nothing is sent from localhost, file:// previews or any other domain.
  */
@@ -16,7 +22,8 @@
     'use strict';
 
     var POSTHOG_KEY = 'phc_rn3Vb78ZF8eGfRBPWyenb3SEFHJyEkBHGgDGmzErhHUj'; // project 674782 (US cloud)
-    var POSTHOG_HOST = 'https://us.i.posthog.com';
+    var POSTHOG_HOST = 'https://lens.pixelsbypavan.com'; // managed reverse proxy -> us.i.posthog.com
+    var UI_HOST = 'https://us.posthog.com';
     var LIVE_HOSTS = ['pixelsbypavan.com', 'www.pixelsbypavan.com'];
 
     if (POSTHOG_KEY.indexOf('REPLACE') !== -1 || LIVE_HOSTS.indexOf(location.hostname) === -1) return;
@@ -27,6 +34,7 @@
 
     posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
+        ui_host: UI_HOST,
         defaults: '2026-05-30',
         respect_dnt: true
     });
