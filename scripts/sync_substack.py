@@ -9,7 +9,9 @@ into the HTML instead, between these markers:
 
 Photo posts are the ones whose title starts with "📷" or "[photo]"; they go
 to Photography with the marker removed. Everything else goes to Blogs.
-Notes that are only photos (no text) also go to Photography, one tile per photo.
+Notes that are only photos (no text) also go to Photography, grouped into
+sets with a caption and camera details for each photo from
+assets/data/photos.json (keyed by the image's file name on Substack).
 
     python3 scripts/sync_substack.py
 
@@ -34,6 +36,7 @@ AUTHOR_ID = 378084778  # the publication author's Substack user id; Notes are pe
 NOTES = f"https://substack.com/api/v1/reader/feed/profile/{AUTHOR_ID}?types%5B%5D=note"
 NOTE_PAGES = 10
 PHOTO_LIMIT = 120
+PHOTO_DATA = ROOT / "assets" / "data" / "photos.json"
 PHOTO_MARKER = re.compile(r"^\s*(?:📷|\[photos?\]|\[photography\])\s*", re.I)
 CONTENT_NS = "{http://purl.org/rss/1.0/modules/content/}encoded"
 BLOCK = re.compile(r"(<!-- substack:start -->)(.*?)(\n[ \t]*<!-- substack:end -->)", re.S)
@@ -83,7 +86,28 @@ def fetch_photo_notes():
 
 
 def cdn(url, width):
-    return f"https://substackcdn.com/image/fetch/w_{width},c_limit,f_auto,q_auto:good,fl_progressive:steep/{urllib.parse.quote(url, safe='')}"
+    # q_90 rather than q_auto:good, which compresses photos visibly
+    return f"https://substackcdn.com/image/fetch/w_{width},c_limit,f_auto,q_90,fl_progressive:steep/{urllib.parse.quote(url, safe='')}"
+
+
+def describe(photos):
+    """Attach caption, date and camera details from PHOTO_DATA; group into sets, latest set first."""
+    data = json.loads(PHOTO_DATA.read_text(encoding="utf-8")) if PHOTO_DATA.exists() else {}
+    trips, known = data.get("trips", {}), data.get("photos", {})
+    sets = {}
+    for p in photos:
+        info = known.get(p["url"].rsplit("/", 1)[-1], {})
+        taken = datetime.fromisoformat(info["date"]) if info.get("date") else p["date"]  # local time the photo was taken
+        key = info.get("trip") if info.get("trip") in trips else f"{p['date']:%Y-%m}"
+        trip = trips.get(key, {"title": f"{p['date']:%B %Y}", "place": "", "when": ""})
+        settings = [info.get(k) for k in ("focal", "aperture", "shutter")] + ([f"ISO {info['iso']}"] if info.get("iso") else [])
+        sets.setdefault(key, {**trip, "photos": []})["photos"].append(dict(
+            p, taken=taken, caption=info.get("caption", ""),
+            short=" · ".join(x for x in settings[1:] if x),
+            full=" · ".join(x for x in [info.get("camera"), info.get("lens")] + settings if x)))
+    for s in sets.values():
+        s["photos"].sort(key=lambda p: p["taken"].replace(tzinfo=None))
+    return sorted(sets.values(), key=lambda s: s["photos"][0]["taken"].replace(tzinfo=None), reverse=True)  # by when each set starts
 
 
 def first_image(markup):
@@ -134,12 +158,33 @@ def gallery_card(p, ind):
 {ind}</a>'''
 
 
-def photo_tile(p, ind):
-    alt = f"Photo by Pavan Kumar Dharmoju, {p['date']:%B %Y}" if p["date"] else "Photo by Pavan Kumar Dharmoju"
+def photo_figure(p, ind):
+    day = f"{p['taken']:%-d %b %Y}"
+    alt = p["caption"] or f"Photo, {p['taken']:%B %Y}"
+    sub = " · ".join(x for x in [day, p["short"]] if x)
+    caption = f'\n{ind}        <p class="text-sm text-gray-800 leading-snug">{html.escape(p["caption"])}</p>' if p["caption"] else ""
     return f'''
-{ind}<a href="{html.escape(p["link"])}" target="_blank" rel="noopener" class="block mb-3 break-inside-avoid overflow-hidden rounded-md bg-gray-100 group">
-{ind}    <img src="{cdn(p["url"], 800)}" srcset="{cdn(p["url"], 600)} 600w, {cdn(p["url"], 1200)} 1200w" sizes="(min-width: 640px) 220px, 50vw" width="{p["w"]}" height="{p["h"]}" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full h-auto group-hover:opacity-90 transition-opacity">
-{ind}</a>'''
+{ind}<figure>
+{ind}    <a href="{html.escape(p["url"])}" data-photo data-caption="{html.escape(p["caption"])}" data-meta="{html.escape(" · ".join(x for x in [day, p["full"]] if x))}" data-note="{html.escape(p["link"])}" class="block overflow-hidden rounded-md bg-gray-100">
+{ind}        <img src="{cdn(p["url"], 600)}" srcset="{cdn(p["url"], 400)} 400w, {cdn(p["url"], 800)} 800w" sizes="(min-width: 640px) 210px, 45vw" width="600" height="600" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full aspect-square object-cover hover:opacity-90 transition-opacity">
+{ind}    </a>
+{ind}    <figcaption class="mt-2">{caption}
+{ind}        <p class="text-xs text-gray-500 mt-0.5">{html.escape(sub)}</p>
+{ind}    </figcaption>
+{ind}</figure>'''
+
+
+def photo_set(s, ind):
+    n = len(s["photos"])
+    sub = " · ".join(x for x in [s["place"], s["when"], f"{n} photo{'s' if n != 1 else ''}"] if x)
+    figures = "".join(photo_figure(p, ind + "        ") for p in s["photos"])
+    return f'''
+{ind}<section>
+{ind}    <h2 class="text-lg font-medium text-gray-900">{html.escape(s["title"])}</h2>
+{ind}    <p class="text-sm text-gray-500 mb-4">{html.escape(sub)}</p>
+{ind}    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6">{figures}
+{ind}    </div>
+{ind}</section>'''
 
 
 def empty(message, ind):
@@ -162,9 +207,9 @@ def render_photography(posts, photos, ind):
         return empty("No photos yet.", ind)
     body = render(posts, "gallery", "", ind) if posts else ""
     if photos:
-        tiles = "".join(photo_tile(p, ind + "    ") for p in photos)
-        gap = " mt-8" if posts else ""
-        body += f'\n{ind}<div class="columns-2 sm:columns-3 gap-3{gap}">{tiles}\n{ind}</div>'
+        sets = "".join(photo_set(s, ind + "    ") for s in describe(photos))
+        gap = " mt-12" if posts else ""
+        body += f'\n{ind}<div class="space-y-12{gap}">{sets}\n{ind}</div>'
     return body
 
 

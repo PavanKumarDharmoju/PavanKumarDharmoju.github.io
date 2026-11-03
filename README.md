@@ -59,6 +59,7 @@ python cms_server.py
 ├── scripts/generate_logo.py # Regenerates favicon.svg/.ico, apple-touch-icon.png, assets/img/logo/
 ├── scripts/build-css.sh    # Rebuilds assets/css/site.css (compiled Tailwind) after class changes
 ├── scripts/sync_substack.py # Writes Substack posts and photo-only Notes into blogs.html / photography.html (runs daily via GitHub Actions)
+├── assets/data/photos.json  # Captions and camera details for the photo Notes shown on Photography
 │
 └── CNAME                   # Custom domain configuration
 ```
