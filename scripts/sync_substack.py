@@ -11,15 +11,15 @@ Photo posts are the ones whose title starts with "📷" or "[photo]"; they go
 to Photography with the marker removed. Everything else goes to Blogs.
 Photo Notes also go to Photography, in sets of justified rows that keep each
 photo's shape. A photo Note is one with images whose text is empty or written
-like this, one line per image in the order Substack lists them:
+like this, one caption per image in the order Substack lists them:
 
-    📷 Coorg · Karnataka, India
-    Kote Abbi Falls — 31 Oct 2025 · 61mm · f/5 · 1/400s · ISO 100
+    📷 Coorg · Karnataka, India · October 2025
+    The stream below Kote Abbi Falls
+    Kote Abbi Falls
     ...
-    Sony A7 III · Tamron 28–200mm f/2.8–5.6
 
-The first line names the set (and place), each "caption — date · settings"
-line describes one photo, and the last line is the gear.
+The first line names the set, then the place and the month (or a range such
+as "October–November 2025"); Notes with the same set name are shown together.
 
     python3 scripts/sync_substack.py
 
@@ -85,14 +85,14 @@ def fetch_photo_notes():
                 continue
             date = datetime.fromisoformat(note["date"].replace("Z", "+00:00"))
             link = f"https://substack.com/@{note.get('handle') or 'pixelsbypavan'}/note/c-{note['id']}"
-            heading, lines, gear = read_note(body)
+            title, place, when, captions = read_note(body)
+            posted = date.replace(tzinfo=None)
+            start, end = when or (posted, posted)
             for i, a in enumerate(images):
-                caption, taken, settings = lines[i] if i < len(lines) else ("", None, [])
                 photos.append({"link": link, "date": date, "order": (note["id"], i), "url": a["imageUrl"],
                                "w": a.get("imageWidth") or 4, "h": a.get("imageHeight") or 3,
-                               "set": heading, "caption": caption, "taken": taken or date.replace(tzinfo=None),
-                               "short": " · ".join(x for x in settings if not x.endswith("mm")),
-                               "full": " · ".join([gear] + settings if gear else settings)})
+                               "title": title, "place": place, "start": start, "end": end,
+                               "caption": captions[i] if i < len(captions) else ""})
         cursor = page.get("nextCursor")
         if not cursor or len(photos) >= PHOTO_LIMIT:
             break
@@ -100,25 +100,32 @@ def fetch_photo_notes():
 
 
 def read_note(body):
-    """(set title and place, [(caption, date, settings)] per photo, gear) from a photo Note's text."""
+    """(set title, place, (first, last month) or None, captions) from a photo Note's text."""
     lines = [l.strip() for l in body.splitlines() if l.strip()]
     if not lines:
-        return ("", ""), [], ""
-    title, _, place = PHOTO_MARKER.sub("", lines[0]).partition(" · ")
-    photos = []
-    for line in lines[1:]:
-        if " — " not in line:
-            continue
-        caption, _, rest = line.partition(" — ")
-        parts = [x.strip() for x in rest.split(" · ") if x.strip()]
-        try:
-            taken = datetime.strptime(parts[0], "%d %b %Y")
-            parts = parts[1:]
-        except (IndexError, ValueError):
-            taken = None
-        photos.append((caption.strip(), taken, parts))
-    gear = lines[-1] if len(lines) > 1 and " — " not in lines[-1] else ""
-    return (title.strip(), place.strip()), photos, gear
+        return "", "", None, []
+    parts = [x.strip() for x in PHOTO_MARKER.sub("", lines[0]).split(" · ")]
+    when = months(parts[-1]) if len(parts) > 1 else None
+    place = " · ".join(parts[1:-1] if when else parts[1:])
+    return parts[0], place, when, [l.partition(" — ")[0].strip() for l in lines[1:]]
+
+
+def months(label):
+    """"October 2025", "October–November 2025" or "December 2025–January 2026" as (first, last) month."""
+    try:
+        first, _, last = label.partition("–")
+        last = datetime.strptime((last or first).strip(), "%B %Y")
+        first = first.strip()
+        first = datetime.strptime(first if first[-4:].isdigit() else f"{first} {last.year}", "%B %Y")
+        return first, last
+    except ValueError:
+        return None
+
+
+def month_range(first, last):
+    if (first.year, first.month) == (last.year, last.month):
+        return f"{first:%B %Y}"
+    return f"{first:%B}–{last:%B %Y}" if first.year == last.year else f"{first:%B %Y}–{last:%B %Y}"
 
 
 def cdn(url, width):
@@ -127,18 +134,18 @@ def cdn(url, width):
 
 
 def describe(photos):
-    """Group photos into sets by their Note's heading (or by month), latest set first."""
+    """Group photos into sets by their Note's title (or by month), latest set first."""
     sets = {}
     for p in photos:
-        title, place = p["set"]
-        key = title or f"{p['taken']:%B %Y}"
-        sets.setdefault(key, {"title": key, "place": place, "photos": []})["photos"].append(p)
+        key = p["title"] or f"{p['start']:%B %Y}"
+        s = sets.setdefault(key, {"title": key, "place": p["place"], "photos": []})
+        s["place"] = s["place"] or p["place"]
+        s["photos"].append(p)
     for s in sets.values():
-        s["photos"].sort(key=lambda p: (p["taken"], p["order"]))
-        first, last = s["photos"][0]["taken"], s["photos"][-1]["taken"]
-        s["when"] = (f"{first:%B %Y}" if (first.year, first.month) == (last.year, last.month) else
-                     f"{first:%B}–{last:%B %Y}" if first.year == last.year else f"{first:%B %Y}–{last:%B %Y}")
-    return sorted(sets.values(), key=lambda s: s["photos"][0]["taken"], reverse=True)  # by when each set starts
+        s["photos"].sort(key=lambda p: (p["start"], p["order"]))
+        s["start"] = min(p["start"] for p in s["photos"])
+        s["when"] = month_range(s["start"], max(p["end"] for p in s["photos"]))
+    return sorted(sets.values(), key=lambda s: s["start"], reverse=True)  # by when each set starts
 
 
 def first_image(markup):
@@ -190,9 +197,9 @@ def gallery_card(p, ind):
 
 
 def photo_figure(p, ind):
-    day = f"{p['taken']:%-d %b %Y}"
-    alt = p["caption"] or f"Photo, {p['taken']:%B %Y}"
-    settings = f'<span class="hidden sm:inline"> · {html.escape(p["short"])}</span>' if p["short"] else ""  # phones show these in the viewer
+    when = month_range(p["start"], p["end"])
+    alt = p["caption"] or f"Photo, {when}"
+    meta = " · ".join(x for x in [p["title"], p["place"], when] if x)
     caption = (f'\n{ind}        <p class="text-sm text-gray-800 leading-snug" title="{html.escape(p["caption"])}">'
                f'{html.escape(p["caption"])}</p>') if p["caption"] else ""
     ratio = f'{p["w"] / p["h"]:.3f}'
@@ -201,11 +208,10 @@ def photo_figure(p, ind):
     width = min(672, round(p["w"] / p["h"] * 220))
     return f'''
 {ind}<figure class="min-w-0" data-ratio="{ratio}" style="flex: {ratio} 1 calc({ratio} * var(--row))">
-{ind}    <a href="{html.escape(p["url"])}" data-photo data-caption="{html.escape(p["caption"])}" data-meta="{html.escape(" · ".join(x for x in [day, p["full"]] if x))}" data-note="{html.escape(p["link"])}" class="block overflow-hidden rounded-md bg-gray-100">
+{ind}    <a href="{html.escape(p["url"])}" data-photo data-caption="{html.escape(p["caption"])}" data-meta="{html.escape(meta)}" data-note="{html.escape(p["link"])}" class="block overflow-hidden rounded-md bg-gray-100">
 {ind}        <img src="{cdn(p["url"], 600)}" srcset="{cdn(p["url"], 400)} 400w, {cdn(p["url"], 800)} 800w, {cdn(p["url"], 1200)} 1200w" sizes="(min-width: 640px) {width}px, 100vw" width="{p["w"]}" height="{p["h"]}" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full h-auto hover:opacity-90 transition-opacity">
 {ind}    </a>
 {ind}    <figcaption class="mt-2">{caption}
-{ind}        <p class="text-xs text-gray-500 mt-0.5">{day}{settings}</p>
 {ind}    </figcaption>
 {ind}</figure>'''
 
