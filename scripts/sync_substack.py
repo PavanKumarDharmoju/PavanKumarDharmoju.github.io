@@ -10,8 +10,9 @@ into the HTML instead, between these markers:
 Photo posts are the ones whose title starts with "📷" or "[photo]"; they go
 to Photography with the marker removed. Everything else goes to Blogs.
 Notes that are only photos (no text) also go to Photography, grouped into
-sets with a caption and camera details for each photo from
-assets/data/photos.json (keyed by the image's file name on Substack).
+sets of justified rows that keep each photo's shape, with a caption and
+camera details for each photo from assets/data/photos.json (keyed by the
+image's file name on Substack).
 
     python3 scripts/sync_substack.py
 
@@ -161,15 +162,17 @@ def gallery_card(p, ind):
 def photo_figure(p, ind):
     day = f"{p['taken']:%-d %b %Y}"
     alt = p["caption"] or f"Photo, {p['taken']:%B %Y}"
-    sub = " · ".join(x for x in [day, p["short"]] if x)
+    settings = f'<span class="hidden sm:inline"> · {html.escape(p["short"])}</span>' if p["short"] else ""  # phones show these in the viewer
     caption = f'\n{ind}        <p class="text-sm text-gray-800 leading-snug">{html.escape(p["caption"])}</p>' if p["caption"] else ""
+    ratio = f'{p["w"] / p["h"]:.3f}'
+    # justified rows: each photo grows in proportion to its aspect ratio, so a row shares one height
     return f'''
-{ind}<figure>
+{ind}<figure class="min-w-0" style="flex: {ratio} 1 calc({ratio} * var(--row))">
 {ind}    <a href="{html.escape(p["url"])}" data-photo data-caption="{html.escape(p["caption"])}" data-meta="{html.escape(" · ".join(x for x in [day, p["full"]] if x))}" data-note="{html.escape(p["link"])}" class="block overflow-hidden rounded-md bg-gray-100">
-{ind}        <img src="{cdn(p["url"], 600)}" srcset="{cdn(p["url"], 400)} 400w, {cdn(p["url"], 800)} 800w" sizes="(min-width: 640px) 210px, 45vw" width="600" height="600" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full aspect-square object-cover hover:opacity-90 transition-opacity">
+{ind}        <img src="{cdn(p["url"], 600)}" srcset="{cdn(p["url"], 400)} 400w, {cdn(p["url"], 800)} 800w, {cdn(p["url"], 1200)} 1200w" sizes="(min-width: 640px) 300px, 60vw" width="{p["w"]}" height="{p["h"]}" alt="{html.escape(alt)}" loading="lazy" decoding="async" class="w-full h-auto hover:opacity-90 transition-opacity">
 {ind}    </a>
 {ind}    <figcaption class="mt-2">{caption}
-{ind}        <p class="text-xs text-gray-500 mt-0.5">{html.escape(sub)}</p>
+{ind}        <p class="text-xs text-gray-500 mt-0.5">{day}{settings}</p>
 {ind}    </figcaption>
 {ind}</figure>'''
 
@@ -182,7 +185,8 @@ def photo_set(s, ind):
 {ind}<section>
 {ind}    <h2 class="text-lg font-medium text-gray-900">{html.escape(s["title"])}</h2>
 {ind}    <p class="text-sm text-gray-500 mb-4">{html.escape(sub)}</p>
-{ind}    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6">{figures}
+{ind}    <div class="flex flex-wrap items-start gap-x-3 gap-y-5 [--row:140px] sm:[--row:150px]">{figures}
+{ind}        <div aria-hidden="true" style="flex-grow: 1000"></div>
 {ind}    </div>
 {ind}</section>'''
 
