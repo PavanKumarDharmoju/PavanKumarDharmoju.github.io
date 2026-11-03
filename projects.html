@@ -30,7 +30,7 @@
     <meta name="twitter:image" content="https://pixelsbypavan.com/assets/img/pavan-share.jpg">
     
     <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/site.css?v=b91091a5">
     <style>
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -44,26 +44,27 @@
 </head>
 <body class="bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-8">
-        <div class="flex flex-col sm:flex-row gap-8 pt-12">
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 pt-6 sm:pt-12">
             <!-- Sidebar -->
             <aside class="sm:w-24 shrink-0">
-                <div class="flex sm:flex-col justify-between sm:space-y-4 sm:sticky sm:top-12">
+                <div class="flex flex-col gap-3 sm:gap-0 sm:space-y-4 sm:sticky sm:top-12">
                     <div class="flex items-center sm:block">
                         <img src="/assets/img/pavan-avatar.jpg" width="80" height="80" 
                              alt="Pavan Kumar Dharmoju" 
-                             class="w-20 h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
+                             class="w-12 h-12 sm:w-20 sm:h-20 rounded-full object-cover transform hover:rotate-12 transition-all duration-300">
+                        <a href="/" class="sm:hidden ml-3 text-base font-medium text-gray-900">Pavan Kumar Dharmoju</a>
                     </div>
                     
                     <div class="flex sm:block">
-                        <nav class="flex sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base" role="navigation" aria-label="Main navigation">
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/">About</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/work">Work</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/blogs">Blogs</a>
-                            <a class="mr-4 text-gray-900 font-medium" href="/projects" aria-current="page">Projects</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/publications">Publications</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/photography">Photography</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/tools/">Tools</a>
-                            <a class="mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/contact">Contact</a>
+                        <nav class="flex flex-wrap gap-x-4 gap-y-1.5 sm:gap-0 sm:flex-col sm:space-y-1 sm:text-right text-sm sm:text-base" role="navigation" aria-label="Main navigation">
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/">About</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/work">Work</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/blogs">Blogs</a>
+                            <a class="sm:mr-4 text-gray-900 font-medium" href="/projects" aria-current="page">Projects</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/publications">Publications</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/photography">Photography</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/tools/">Tools</a>
+                            <a class="sm:mr-4 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded" href="/contact">Contact</a>
                         </nav>
                     </div>
                 </div>
@@ -101,7 +102,7 @@
                                 K-means clustering + LDA topic modeling achieved 85% alignment accuracy, reducing content mismatches by 67%.
                                 The system that actually solved the "needle in haystack" problem for brand-publisher partnerships.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">BERT</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">PyTorch</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">K-means</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">LDA</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Semantic Search</span>
                             </div>
                         </div>
@@ -122,7 +123,7 @@
                                 Deep Q-Learning agent learned optimal maintenance scheduling, cutting costs by 25% and extending tire life by 30%.
                                 When machine learning actually saves millions of dollars in the real world.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Deep Q-Learning</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">TensorFlow</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Apache Spark</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">IoT Sensors</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Predictive Maintenance</span>
                             </div>
                         </div>
@@ -143,7 +144,7 @@
                                 FAISS vector database + horizontal scaling reduced latency by 65% while maintaining research-grade accuracy.
                                 The system that makes 6 million papers actually searchable and useful.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">RAG</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">LLaMA 3.1</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">FAISS</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">PMC API</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Airflow</span>
                             </div>
                         </div>
@@ -164,7 +165,7 @@
                                 StyleGAN2-ADA synthetic data generation improved minority class robustness by 20%.
                                 Grad-CAM interpretability made models actually usable by medical staff in clinical settings.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">ResNet</span><span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">StyleGAN2</span><span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Grad-CAM</span><span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Medical Imaging</span><span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">PyTorch</span>
                             </div>
                         </div>
@@ -185,7 +186,7 @@
                                 DVC for experiment version control ensured reproducibility across demographic groups.
                                 Framework that revealed 20% accuracy gaps and actually fixed them.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">LLM Evaluation</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">AWS EC2</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">MLflow</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Docker</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">DVC</span>
                             </div>
                         </div>
@@ -206,7 +207,7 @@
                                 Lead scoring algorithms improved qualified conversion by 35%, budget allocation optimization boosted ROI by 27%.
                                 The system that proved which marketing dollars actually worked.
                             </p>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Bayesian Modeling</span><span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Marketing Mix</span><span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Tableau</span><span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Pipedrive</span><span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded">Google Analytics</span>
                             </div>
                         </div>

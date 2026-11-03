@@ -9,10 +9,17 @@ into the HTML instead, between these markers:
 
 Photo posts are the ones whose title starts with "📷" or "[photo]"; they go
 to Photography with the marker removed. Everything else goes to Blogs.
-Notes that are only photos (no text) also go to Photography, grouped into
-sets of justified rows that keep each photo's shape, with a caption and
-camera details for each photo from assets/data/photos.json (keyed by the
-image's file name on Substack).
+Photo Notes also go to Photography, in sets of justified rows that keep each
+photo's shape. A photo Note is one with images whose text is empty or written
+like this, one line per image in the order Substack lists them:
+
+    📷 Coorg · Karnataka, India
+    Kote Abbi Falls — 31 Oct 2025 · 61mm · f/5 · 1/400s · ISO 100
+    ...
+    Sony A7 III · Tamron 28–200mm f/2.8–5.6
+
+The first line names the set (and place), each "caption — date · settings"
+line describes one photo, and the last line is the gear.
 
     python3 scripts/sync_substack.py
 
@@ -37,7 +44,6 @@ AUTHOR_ID = 378084778  # the publication author's Substack user id; Notes are pe
 NOTES = f"https://substack.com/api/v1/reader/feed/profile/{AUTHOR_ID}?types%5B%5D=note"
 NOTE_PAGES = 10
 PHOTO_LIMIT = 120
-PHOTO_DATA = ROOT / "assets" / "data" / "photos.json"
 PHOTO_MARKER = re.compile(r"^\s*(?:📷|\[photos?\]|\[photography\])\s*", re.I)
 CONTENT_NS = "{http://purl.org/rss/1.0/modules/content/}encoded"
 BLOCK = re.compile(r"(<!-- substack:start -->)(.*?)(\n[ \t]*<!-- substack:end -->)", re.S)
@@ -64,7 +70,7 @@ def fetch_items():
 
 
 def fetch_photo_notes():
-    """Photos from Notes that have images and no text, newest first."""
+    """Photos from photo Notes (see the module docstring), newest Note first."""
     photos, cursor = [], None
     for _ in range(NOTE_PAGES):
         url = NOTES + ("&cursor=" + urllib.parse.quote(cursor) if cursor else "")
@@ -74,16 +80,45 @@ def fetch_photo_notes():
         for item in page.get("items", []):
             note = item.get("comment") or {}
             images = [a for a in note.get("attachments") or [] if a.get("type") == "image" and a.get("imageUrl")]
-            if note.get("user_id") != AUTHOR_ID or (note.get("body") or "").strip() or not images:
+            body = (note.get("body") or "").strip()
+            if note.get("user_id") != AUTHOR_ID or not images or (body and not PHOTO_MARKER.match(body)):
                 continue
             date = datetime.fromisoformat(note["date"].replace("Z", "+00:00"))
             link = f"https://substack.com/@{note.get('handle') or 'pixelsbypavan'}/note/c-{note['id']}"
-            photos += [{"link": link, "date": date, "url": a["imageUrl"],
-                        "w": a.get("imageWidth") or 4, "h": a.get("imageHeight") or 3} for a in images]
+            heading, lines, gear = read_note(body)
+            for i, a in enumerate(images):
+                caption, taken, settings = lines[i] if i < len(lines) else ("", None, [])
+                photos.append({"link": link, "date": date, "order": (note["id"], i), "url": a["imageUrl"],
+                               "w": a.get("imageWidth") or 4, "h": a.get("imageHeight") or 3,
+                               "set": heading, "caption": caption, "taken": taken or date.replace(tzinfo=None),
+                               "short": " · ".join(x for x in settings if not x.endswith("mm")),
+                               "full": " · ".join([gear] + settings if gear else settings)})
         cursor = page.get("nextCursor")
         if not cursor or len(photos) >= PHOTO_LIMIT:
             break
     return photos[:PHOTO_LIMIT]
+
+
+def read_note(body):
+    """(set title and place, [(caption, date, settings)] per photo, gear) from a photo Note's text."""
+    lines = [l.strip() for l in body.splitlines() if l.strip()]
+    if not lines:
+        return ("", ""), [], ""
+    title, _, place = PHOTO_MARKER.sub("", lines[0]).partition(" · ")
+    photos = []
+    for line in lines[1:]:
+        if " — " not in line:
+            continue
+        caption, _, rest = line.partition(" — ")
+        parts = [x.strip() for x in rest.split(" · ") if x.strip()]
+        try:
+            taken = datetime.strptime(parts[0], "%d %b %Y")
+            parts = parts[1:]
+        except (IndexError, ValueError):
+            taken = None
+        photos.append((caption.strip(), taken, parts))
+    gear = lines[-1] if len(lines) > 1 and " — " not in lines[-1] else ""
+    return (title.strip(), place.strip()), photos, gear
 
 
 def cdn(url, width):
@@ -92,23 +127,18 @@ def cdn(url, width):
 
 
 def describe(photos):
-    """Attach caption, date and camera details from PHOTO_DATA; group into sets, latest set first."""
-    data = json.loads(PHOTO_DATA.read_text(encoding="utf-8")) if PHOTO_DATA.exists() else {}
-    trips, known = data.get("trips", {}), data.get("photos", {})
+    """Group photos into sets by their Note's heading (or by month), latest set first."""
     sets = {}
     for p in photos:
-        info = known.get(p["url"].rsplit("/", 1)[-1], {})
-        taken = datetime.fromisoformat(info["date"]) if info.get("date") else p["date"]  # local time the photo was taken
-        key = info.get("trip") if info.get("trip") in trips else f"{p['date']:%Y-%m}"
-        trip = trips.get(key, {"title": f"{p['date']:%B %Y}", "place": "", "when": ""})
-        settings = [info.get(k) for k in ("focal", "aperture", "shutter")] + ([f"ISO {info['iso']}"] if info.get("iso") else [])
-        sets.setdefault(key, {**trip, "photos": []})["photos"].append(dict(
-            p, taken=taken, caption=info.get("caption", ""),
-            short=" · ".join(x for x in settings[1:] if x),
-            full=" · ".join(x for x in [info.get("camera"), info.get("lens")] + settings if x)))
+        title, place = p["set"]
+        key = title or f"{p['taken']:%B %Y}"
+        sets.setdefault(key, {"title": key, "place": place, "photos": []})["photos"].append(p)
     for s in sets.values():
-        s["photos"].sort(key=lambda p: p["taken"].replace(tzinfo=None))
-    return sorted(sets.values(), key=lambda s: s["photos"][0]["taken"].replace(tzinfo=None), reverse=True)  # by when each set starts
+        s["photos"].sort(key=lambda p: (p["taken"], p["order"]))
+        first, last = s["photos"][0]["taken"], s["photos"][-1]["taken"]
+        s["when"] = (f"{first:%B %Y}" if (first.year, first.month) == (last.year, last.month) else
+                     f"{first:%B}–{last:%B %Y}" if first.year == last.year else f"{first:%B %Y}–{last:%B %Y}")
+    return sorted(sets.values(), key=lambda s: s["photos"][0]["taken"], reverse=True)  # by when each set starts
 
 
 def first_image(markup):
@@ -185,7 +215,7 @@ def photo_set(s, ind):
 {ind}<section>
 {ind}    <h2 class="text-lg font-medium text-gray-900">{html.escape(s["title"])}</h2>
 {ind}    <p class="text-sm text-gray-500 mb-4">{html.escape(sub)}</p>
-{ind}    <div class="flex flex-wrap items-start gap-x-3 gap-y-5 [--row:140px] sm:[--row:150px]">{figures}
+{ind}    <div class="flex flex-wrap items-start gap-x-3 gap-y-5 [--row:160px] sm:[--row:180px]">{figures}
 {ind}        <div aria-hidden="true" style="flex-grow: 1000"></div>
 {ind}    </div>
 {ind}</section>'''
