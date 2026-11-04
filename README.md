@@ -128,6 +128,18 @@ The site is automatically deployed via GitHub Pages when changes are pushed to t
 3. Commit and push to `main` branch
 4. GitHub Pages will automatically deploy
 
+### Analytics
+
+`assets/js/analytics.js` loads PostHog on the live domain only. The contact form links a visitor's browsing to the name and email they submit (`posthog.identify`). Its message text is not sent to PostHog.
+
+Test traffic still reaches PostHog, tagged with `is_test`, `test_source` and `test_label` on every event:
+
+- `?test_device=<label>` on any page marks that browser until `?test_device=off`. Do this once per browser on each of your devices.
+- `?test_session=<label>` marks one tab as a Claude session. Use it when opening the live site with Claude in Chrome.
+- The Claude desktop app's browser and other browser automation mark themselves.
+
+To leave test traffic out of reports, add `is_test` "is not set" under PostHog's "Filter out internal and test users" setting.
+
 ### Custom Domain
 
 The `CNAME` file configures the custom domain. Update it if using a different domain.
