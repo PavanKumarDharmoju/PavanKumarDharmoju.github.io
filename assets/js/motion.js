@@ -1,20 +1,15 @@
 /**
- * Smooth scrolling (Lenis) and entrance animations (GSAP), on the main site pages.
+ * Smooth scrolling (Lenis) and a fade-up as content scrolls into view (GSAP), on
+ * the main site pages. The fade-up follows React Bits' AnimatedContent; the site
+ * has no React, so it's a small GSAP version rather than the component itself.
  *
- * The heading blurs in word by word and content fades up as it scrolls into view,
- * after React Bits' BlurText and AnimatedContent. The site has no React, so these
- * are small GSAP versions rather than the components themselves.
- *
- * Does nothing for visitors who ask for reduced motion. scripts/tailwind.input.css
- * hides the heading until this runs, and shows it anyway if this never loads.
+ * Does nothing for visitors who ask for reduced motion.
  */
 (function () {
     'use strict';
 
-    if (!window.gsap || !window.Lenis || !window.SplitText) return;
+    if (!window.gsap || !window.Lenis) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    gsap.registerPlugin(SplitText);
 
     var REVEAL = 'main .space-y-4 > p, main .space-y-6 > *, main .space-y-3 > a, main .pgrid > figure, main .grid > a, main .border.rounded-lg';
 
@@ -34,28 +29,6 @@
         }).observe(dialog, { attributes: true, attributeFilter: ['open'] });
     });
 
-    function blurInHeading() {
-        var heading = document.querySelector('main h1');
-        if (!heading) return;
-        var intro = heading.nextElementSibling && heading.nextElementSibling.tagName === 'P' ? heading.nextElementSibling : null;
-        gsap.set(intro ? [heading, intro] : heading, { visibility: 'visible' });
-
-        // On a slow load the stylesheet's fallback has already shown the heading.
-        if (performance.now() > 1400) return;
-
-        var split = SplitText.create(heading, { type: 'words' });
-        gsap.from(split.words, {
-            opacity: 0,
-            y: 10,
-            filter: 'blur(8px)',
-            duration: 0.7,
-            ease: 'power2.out',
-            stagger: 0.07,
-            onComplete: function () { split.revert(); }
-        });
-        if (intro) gsap.from(intro, { opacity: 0, y: 8, duration: 0.7, delay: 0.25, ease: 'power2.out' });
-    }
-
     function fadeUpContent() {
         var observer = new IntersectionObserver(function (entries) {
             var seen = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
@@ -74,6 +47,5 @@
         });
     }
 
-    blurInHeading();
     fadeUpContent();
 })();

@@ -44,19 +44,6 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
-/* assets/js/motion.js animates the heading in. Hidden until then so it doesn't flash, and shown anyway if the script never runs. */
-@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  main h1,
-  main h1 + p {
-    visibility: hidden;
-    animation: motion-fallback 0s linear 1.5s forwards;
-  }
-}
-@keyframes motion-fallback {
-  to {
-    visibility: visible;
-  }
-}
 @media print {
   main * {
     opacity: 1 !important;
