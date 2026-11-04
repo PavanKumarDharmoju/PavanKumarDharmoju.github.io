@@ -130,7 +130,7 @@ The site is automatically deployed via GitHub Pages when changes are pushed to t
 
 ### Analytics
 
-`assets/js/analytics.js` loads PostHog on the live domain only. The contact form links a visitor's browsing to the name and email they submit (`posthog.identify`). Its message text is not sent to PostHog.
+`assets/js/analytics.js` loads PostHog on the live domain only. The contact form links a visitor's browsing to the name and email they submit (`posthog.identify`). Its message text is not sent to PostHog; messages are stored in Firestore (see Contact form below).
 
 Test traffic still reaches PostHog, tagged with `is_test`, `test_source` and `test_label` on every event:
 
@@ -139,6 +139,10 @@ Test traffic still reaches PostHog, tagged with `is_test`, `test_source` and `te
 - The Claude desktop app's browser and other browser automation mark themselves.
 
 To leave test traffic out of reports, add `is_test` "is not set" under PostHog's "Filter out internal and test users" setting.
+
+### Contact form
+
+`contact.html` saves notes to the `messages` collection in the `pixelsbypavan-site` Firebase project, and you read them in the [Firebase console](https://console.firebase.google.com/project/pixelsbypavan-site/firestore/databases/-default-/data/~2Fmessages). `firebase/firestore.rules` lets visitors add a well-formed message and nothing else, and App Check with reCAPTCHA screens out most bots. To change the rules, run `firebase deploy --only firestore:rules` from `firebase/`.
 
 ### Custom Domain
 

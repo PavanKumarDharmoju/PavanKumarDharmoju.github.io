@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Contact form messages. Visitors can only add a well-formed message.
+    // Reading one takes the Firebase console, which these rules don't apply to.
+    match /messages/{id} {
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'message', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['name', 'email', 'message', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 200
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+$')
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 1
+        && request.resource.data.message.size() <= 1500
+        && request.resource.data.createdAt == request.time;
+    }
+  }
+}

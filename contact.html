@@ -31,7 +31,7 @@
     <meta name="twitter:description" content="Reach out to discuss AI projects, research collaborations, or interesting problems worth solving. Always interested in meaningful conversations about technology.">
     <meta name="twitter:image" content="https://pixelsbypavan.com/assets/img/pavan-share.jpg">
     <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/assets/css/site.css?v=86ba633e">
+    <link rel="stylesheet" href="/assets/css/site.css?v=52611fe1">
     <style>
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -117,10 +117,14 @@
                             </div>
                         </div>
 
-                        <!-- Contact form: drafts an email and tells PostHog who is writing -->
+                        <!-- Contact form: saves to Firestore (firebase/firestore.rules) and tells PostHog who is writing -->
                         <div class="border border-gray-200 rounded-lg p-6 mb-6">
                             <h2 class="text-lg font-semibold text-gray-900 mb-4">✍️ Send me a note</h2>
                             <form id="contact-form" class="ph-no-capture space-y-3">
+                                <!-- Left empty by people, filled in by spam bots -->
+                                <div class="absolute -left-[9999px]" aria-hidden="true">
+                                    <label>Website <input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+                                </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <label class="block text-sm text-gray-700">
                                         Name
@@ -139,14 +143,17 @@
                                               class="mt-1 block w-full border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                                 </label>
                                 <p class="text-xs text-gray-500">
-                                    This opens the note in your email app, ready to send. Your name and email also go to PostHog, my analytics tool, and get linked to your visits on this site in this browser. Your message doesn't.
+                                    Your note is stored in Firebase, Google's database service, so I can read it and reply, and Google's reCAPTCHA checks the form for spam. Your name and email also go to PostHog, my analytics tool, and get linked to your visits on this site in this browser. Your message doesn't.
                                 </p>
-                                <button type="submit" class="px-4 py-2 rounded-md bg-gray-900 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                    Write email
+                                <button id="contact-send" type="submit" class="px-4 py-2 rounded-md bg-gray-900 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    Send note
                                 </button>
                                 <p id="contact-sent" class="text-sm text-gray-700" role="status" hidden>
-                                    Your draft is ready in your email app. Nothing has been sent until you press send there.
-                                    <a id="contact-draft" class="text-blue-600 hover:text-blue-800" href="mailto:dharmojupavankumar@gmail.com">Open the draft again</a>
+                                    Thanks, your note reached me. I usually reply within 24 hours.
+                                </p>
+                                <p id="contact-failed" class="text-sm text-gray-700" role="alert" hidden>
+                                    Your note didn't go through, and an ad blocker can cause this.
+                                    <a id="contact-draft" class="text-blue-600 hover:text-blue-800" href="mailto:dharmojupavankumar@gmail.com">Send it by email instead</a>
                                 </p>
                             </form>
                         </div>
@@ -325,25 +332,80 @@
 
     <script>
     (function () {
+        var SDK = 'https://www.gstatic.com/firebasejs/12.5.0/';
+        var CONFIG = {
+            apiKey: 'AIzaSyBYBX2OQpskUnD4rrmAdY7om8W3wsgOvgc', // public by design; firebase/firestore.rules limit what it can do
+            projectId: 'pixelsbypavan-site',
+            appId: '1:122243066102:web:934ec5d98d6c8949a324d7'
+        };
+        var RECAPTCHA_KEY = '6LemVg8uAAAAAInUd3bxh2o-75bheLThG6Q1NNf4';
+
         var form = document.getElementById('contact-form');
-        var draft = document.getElementById('contact-draft');
+        var send = document.getElementById('contact-send');
+        var sent = document.getElementById('contact-sent');
+        var failed = document.getElementById('contact-failed');
+        var firebase;
+
+        // Loaded when someone starts the form, so other visitors never load Firebase or reCAPTCHA.
+        function loadFirebase() {
+            firebase = firebase || Promise.all([
+                import(SDK + 'firebase-app.js'),
+                import(SDK + 'firebase-app-check.js'),
+                import(SDK + 'firebase-firestore-lite.js')
+            ]).then(function (sdk) {
+                var app = sdk[0].initializeApp(CONFIG);
+                sdk[1].initializeAppCheck(app, { provider: new sdk[1].ReCaptchaEnterpriseProvider(RECAPTCHA_KEY) });
+                return { firestore: sdk[2], db: sdk[2].getFirestore(app) };
+            });
+            return firebase;
+        }
+
+        function saveNote(note) {
+            var timeout = new Promise(function (resolve, reject) {
+                setTimeout(function () { reject(new Error('timed out')); }, 15000);
+            });
+            var save = loadFirebase().then(function (fb) {
+                return fb.firestore.addDoc(fb.firestore.collection(fb.db, 'messages'), Object.assign({
+                    createdAt: fb.firestore.serverTimestamp()
+                }, note));
+            });
+            return Promise.race([save, timeout]);
+        }
+
+        function finish() {
+            form.reset();
+            sent.hidden = false;
+            send.disabled = false;
+        }
+
+        form.addEventListener('focusin', loadFirebase, { once: true });
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            var name = form.elements.name.value.trim();
-            var email = form.elements.email.value.trim().toLowerCase();
-            var message = form.elements.message.value.trim();
+            var note = {
+                name: form.elements.name.value.trim(),
+                email: form.elements.email.value.trim().toLowerCase(),
+                message: form.elements.message.value.trim()
+            };
 
-            if (window.posthog) {
-                posthog.identify(email, { name: name, email: email });
-                posthog.capture('contact_draft_opened');
-            }
+            sent.hidden = failed.hidden = true;
+            send.disabled = true;
+            if (form.elements.website.value) return finish();
 
-            draft.href = 'mailto:dharmojupavankumar@gmail.com'
-                + '?subject=' + encodeURIComponent('Note from ' + name)
-                + '&body=' + encodeURIComponent(message + '\n\n' + name + '\n' + email);
-            document.getElementById('contact-sent').hidden = false;
-            draft.click();
+            saveNote(note).then(function () {
+                if (window.posthog) {
+                    posthog.identify(note.email, { name: note.name, email: note.email });
+                    posthog.capture('contact_message_sent');
+                }
+                finish();
+            }).catch(function () {
+                if (window.posthog) posthog.capture('contact_message_failed');
+                document.getElementById('contact-draft').href = 'mailto:dharmojupavankumar@gmail.com'
+                    + '?subject=' + encodeURIComponent('Note from ' + note.name)
+                    + '&body=' + encodeURIComponent(note.message + '\n\n' + note.name + '\n' + note.email);
+                failed.hidden = false;
+                send.disabled = false;
+            });
         });
     })();
     </script>
