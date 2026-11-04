@@ -25,7 +25,7 @@
     <meta name="twitter:description" content="Personal projects and side experiments by Pavan Kumar Dharmoju. Real stories about building tools, learning new tech, and creative coding projects outside of work.">
     <meta name="twitter:image" content="https://pixelsbypavan.com/assets/img/pavan-share.jpg">
     <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/assets/css/site.css?v=b91091a5">
+    <link rel="stylesheet" href="/assets/css/site.css?v=454c011d">
     <style>
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -101,6 +101,134 @@
                             <div class="border-l-2 border-gray-200 pl-6 pb-6">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">ea104d9</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Nov 3, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: Substack photo Notes render as a justified gallery</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Photography now comes straight from Substack Notes. The daily sync reads each photo Note (a set, place and month on the first line, then one caption per image), groups Notes into sets and lays them out in justified rows that keep every photo's shape, with a full-size viewer. Images come through Substack's CDN at higher quality than its default compression.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Substack API</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">GitHub Actions</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">local</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Nov 3, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">build: SD card to Substack photo pipeline</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Clearing camera cards meant scrolling Google Photos by hand to see what was already backed up. Built a local index of the library's capture times, matched card files to it by EXIF timestamp, then culled the rest with sharpness scores and perceptual-hash burst groups. Videos are culled from sampled frames, 4K clips are re-encoded to 1080p HEVC on the Mac's media engine, and S-Log2 footage is graded through a Rec.709 LUT computed from Sony's published curve. Before anything is posted, Apple's Vision framework flags frames with people, and RAWs are developed with rawpy and a colour grade per set.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">ffmpeg</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Apple Vision</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Image Processing</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">92ccd44</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Nov 2, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: Bansuri and Singing Companion practice tools</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Browser-based practice partners for Indian classical music: a tanpura drone, a live pitch and tone coach, fingering charts, a sargam trainer, low-note drills and a daily riyaz timer, now with 20 ragas and a taal metronome. Everything runs in the browser and microphone audio never leaves the device.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Web Audio</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Pitch Detection</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">1e12636</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Oct 19, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">build: this site, rendered ahead of time and measurable</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    The Blogs and Photography pages fetched Substack in the browser through third-party proxies that stopped working, so visitors and Google saw nothing. A daily GitHub Action now renders the posts into the HTML. Also added privacy-friendly analytics, fixed Search Console discovery, let AI search crawlers in while keeping training crawlers out, sped up rendering, and drew a pixel-P logo and favicons.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">GitHub Actions</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">SEO</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Analytics</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">0b925fe</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Oct 16, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: Switchback, a routine app for the weeks that go wrong</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Habit apps assume every day is a normal day, so people quit them right when a trip or a rough week breaks the streak. Switchback bends instead of breaking: each routine has a Full and a Quick version, gaps get a gentle re-entry ramp, and nothing shames a missed day. Data stays on the phone in SQLite, reminders come from a pure notification planner, and the date logic is tested under six time zones. Getting it ready for the App Store and Play Store.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">React Native</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">TypeScript</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">SQLite</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Expo</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">c278549</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Aug 28, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: Shoot Sync, a post-shoot workflow app for Sony cameras</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    A local web app for the hour after a shoot: it detects the SD card, imports RAWs, builds previews, ranks bursts by blur (Laplacian variance) and lets you keep or reject with keyboard shortcuts. Keepers upload to Google Photos or, through OAuth, to Adobe Lightroom, after fixing Sony's in-camera crop metadata so RAWs don't arrive squished.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Flask</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Google Photos API</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Lightroom API</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">local</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Aug 3, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">wip: Pact, an accountability app for friends</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    Most accountability apps fail because strangers don't keep you honest. Pact is friends-only, and that's enforced in the database rather than the UI: Firestore rules and Cloud Functions decide who can see or join a quest, an invite code alone gets nobody in, and only the owner can edit a check-in. Expo on iOS and Android, heading to its first testers.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">React Native</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Firebase</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Cloud Functions</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
+                                    <span class="font-mono text-sm text-gray-500">local</span>
+                                    <span class="text-sm text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Apr 14, 2026</span>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-2">feat: YouTube Timestamp Sync, laptop to phone</h3>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    A browser extension saves where you are in every YouTube video and resumes there next time. A small phone web app pulls the in-progress list and opens the YouTube app at the exact second with a deep link. Vanilla JavaScript with no build step, and Firebase is reached through plain REST calls.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">Chrome Extension</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">PWA</span><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Firebase</span>
+                                </div>
+                            </div>
+            
+                            <div class="border-l-2 border-gray-200 pl-6 pb-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full -ml-7 border-2 border-white"></div>
                                     <span class="font-mono text-sm text-gray-500">d2488a3</span>
                                     <span class="text-sm text-gray-500">•</span>
                                     <span class="text-sm text-gray-500">Dec 14, 2025</span>
@@ -109,7 +237,7 @@
                                 <p class="text-gray-700 text-sm mb-3">
                                     Prioritized improvements include an enhanced user viewing experience, comprehensive image optimization strategies for faster loading times and reduced bandwidth usage, and the implementation of robust measures to effectively prevent spam and maintain the quality of the displayed content.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span>
                                 </div>
                             </div>
@@ -125,7 +253,7 @@
                                 <p class="text-gray-700 text-sm mb-3">
                                     Completed the photography page for the website and built the content management system for it
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Photos</span>
                                 </div>
                             </div>
@@ -141,7 +269,7 @@
                                 <p class="text-gray-700 text-sm mb-3">
                                     Refactor: Revamped folder structure for better module organization, resolved "src" naming conflicts, and solved some basic DSA problems in the terminal.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Pytest</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">DSA</span>
                                 </div>
                             </div>
@@ -167,7 +295,7 @@ Work done:
 Outcome: green tests, faster CLI workflow with `touch`, and better comfort with pytest exception handling.
 Commit:  | Status: Green (Completed) | Today: Yes
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Pytest</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">LeetCode</span>
                                 </div>
                             </div>
@@ -191,7 +319,7 @@ It's been so long since I used only command line for things like git (I mainly u
 
 Outcome: repo initialized, environment ready, and my first green test with pytest.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Pytest</span>
                                 </div>
                             </div>
@@ -210,7 +338,7 @@ Features include intelligent parsing of existing commit-style entries, real-time
 The tool maintains the git-aesthetic while providing a user-friendly interface for adding work entries, projects, publications, and photos. 
 Includes backup/restore functionality and works entirely client-side for privacy and speed.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">HTML</span><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span>
                                 </div>
                             </div>
@@ -227,7 +355,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Tired of writing "fix bug" for the 100th time. Built a tool that analyzes git diffs and suggests meaningful commit messages. 
                                     It's surprisingly good at understanding what actually changed. Works with conventional commits format.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">OpenAI API</span><span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">CLI Tool</span>
                                 </div>
                             </div>
@@ -244,7 +372,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Web scraper that tracks GPU prices across retailers. Not because I need a GPU, but curiosity about price patterns. 
                                     Discovered prices drop significantly on Sunday evenings. Data visualization shows clear weekly cycles.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Web Scraping</span><span class="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded">Data Viz</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span>
                                 </div>
                             </div>
@@ -262,7 +390,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Blocks posts containing configurable buzzwords. UI is terrible but functionality works. 
                                     Considering open-sourcing if I can make it presentable.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">Chrome Extension</span><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Content Filtering</span>
                                 </div>
                             </div>
@@ -280,7 +408,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Multi-strategy approach with iframe, proxy, and fallback content. 
                                     Handles X-Frame-Options blocking and CORS restrictions gracefully.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">JavaScript</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Iframe</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Web APIs</span>
                                 </div>
                             </div>
@@ -298,7 +426,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Trained on Git history and deploy logs. 90% accurate but just predicted "probably fine" for everything. 
                                     Turns out I don't break production that often. Good for confidence, bad for the model.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Failed Experiment</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Machine Learning</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Git Analysis</span>
                                 </div>
                             </div>
@@ -316,7 +444,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Went from digital chaos to actually findable files. Small wins count. 
                                     Friends started asking for copies after seeing my clean desktop.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Python</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">File Management</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Automation</span>
                                 </div>
                             </div>
@@ -334,7 +462,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Suggests meals based on what's in my fridge (manually entered, not magic). 
                                     Started using it myself, shared with friends, now 20+ people use it regularly.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-cyan-100 text-cyan-700 text-xs rounded">React</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Product</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">User Acquisition</span>
                                 </div>
                             </div>
@@ -352,7 +480,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     10x faster execution but 5x longer development time. Borrow checker and I are still not friends, 
                                     but starting to see why people love it.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Rust</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Performance</span><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">Learning</span>
                                 </div>
                             </div>
@@ -370,7 +498,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Weekly reports about habits. Spend 40% more on food when working late. 
                                     Most productive on Tuesdays for unknown reasons. Data-driven self-awareness.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Data Pipeline</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Analytics</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Self-Tracking</span>
                                 </div>
                             </div>
@@ -388,7 +516,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Spent weeks fighting PDF parsers and text extraction. Final system understood protein structures 
                                     and gene interactions. Academic research is slow but oddly satisfying.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">LLaMA 3.1</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">RAG</span><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Research</span>
                                 </div>
                             </div>
@@ -406,7 +534,7 @@ Includes backup/restore functionality and works entirely client-side for privacy
                                     Not my main expertise but learned computational biology. 
                                     Peer review process is brutal but educational. Now have academic publication credentials.
                                 </p>
-                                <div class="flex gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Publication</span><span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">CRISPR</span><span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Machine Learning</span>
                                 </div>
                             </div>
